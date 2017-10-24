@@ -17,6 +17,7 @@ namespace Icogram.DataAccessLayer.Repository
         public override Task<List<EmailMessage>> GetAll()
         {
             return GetAllQuery()
+                .AsNoTracking()
                 .Include(em => em.Sender)
                 .Include(em => em.Template)
                 .ToListAsync();
@@ -25,6 +26,15 @@ namespace Icogram.DataAccessLayer.Repository
         public override Task<EmailMessage> GetById(int id)
         {
             return GetAllQuery()
+                .Include(em => em.Sender)
+                .Include(em => em.Template)
+                .FirstOrDefaultAsync(em => em.Id == id);
+        }
+
+        public override Task<EmailMessage> GetByIdAsNoTracking(int id)
+        {
+            return GetAllQuery()
+                .AsNoTracking()
                 .Include(em => em.Sender)
                 .Include(em => em.Template)
                 .FirstOrDefaultAsync(em => em.Id == id);

@@ -17,6 +17,7 @@ namespace Icogram.DataAccessLayer.Repository
         public override Task<List<Command>> GetAll()
         {
             return GetAllQuery()
+                .AsNoTracking()
                 .Include(c => c.Bot)
                 .Include(c => c.Type)
                 .ToListAsync();
@@ -25,6 +26,15 @@ namespace Icogram.DataAccessLayer.Repository
         public override Task<Command> GetById(int id)
         {
             return GetAllQuery()
+                .Include(c => c.Bot)
+                .Include(c => c.Type)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public override Task<Command> GetByIdAsNoTracking(int id)
+        {
+            return GetAllQuery()
+                .AsNoTracking()
                 .Include(c => c.Bot)
                 .Include(c => c.Type)
                 .FirstOrDefaultAsync(c => c.Id == id);

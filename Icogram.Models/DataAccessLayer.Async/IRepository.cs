@@ -14,6 +14,8 @@ namespace DataAccessLayer.Async
 
         Task<T> GetById(int id);
 
+        Task<T> GetByIdAsNoTracking(int id);
+
         Task<List<T>> GetAll();
     }
 }

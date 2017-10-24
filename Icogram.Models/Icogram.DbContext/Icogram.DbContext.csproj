@@ -58,6 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IcogramDbContext.cs" />
+    <Compile Include="Migrations\201710241702039_Initial.cs" />
+    <Compile Include="Migrations\201710241702039_Initial.Designer.cs">
+      <DependentUpon>201710241702039_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +73,11 @@
       <Project>{B8D80C07-8986-4B2E-AD89-2CCADA275CEC}</Project>
       <Name>Icogram.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201710241702039_Initial.resx">
+      <DependentUpon>201710241702039_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

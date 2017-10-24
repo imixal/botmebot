@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram.DbContext", "Icogra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram.DataAccessLayer", "Icogram.DataAccessLayer\Icogram.DataAccessLayer.csproj", "{1003DC36-D7B4-4E86-A7C2-5477EECE1114}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram", "Icogram\Icogram.csproj", "{AED0ADB0-855D-4603-A5C4-98D8D2F5C59C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1003DC36-D7B4-4E86-A7C2-5477EECE1114}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1003DC36-D7B4-4E86-A7C2-5477EECE1114}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1003DC36-D7B4-4E86-A7C2-5477EECE1114}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AED0ADB0-855D-4603-A5C4-98D8D2F5C59C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AED0ADB0-855D-4603-A5C4-98D8D2F5C59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AED0ADB0-855D-4603-A5C4-98D8D2F5C59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AED0ADB0-855D-4603-A5C4-98D8D2F5C59C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

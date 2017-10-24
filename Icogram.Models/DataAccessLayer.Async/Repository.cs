@@ -33,9 +33,14 @@ namespace DataAccessLayer.Async
             DbContext.Entry(entity).State = EntityState.Deleted;
         }
 
+        public virtual Task<T> GetByIdAsNoTracking(int id)
+        {
+            return GetAllQuery().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+        }
+
         public virtual Task<List<T>> GetAll()
         {
-            return GetAllQuery().ToListAsync();
+            return GetAllQuery().AsNoTracking().ToListAsync();
         }
 
         public virtual Task<T> GetById(int id)
