@@ -16,7 +16,7 @@ namespace Icogram.Models.EmailModels
 
         public string PreviewText { get; set; }
 
-        public AplicationUser Creator { get; set; }
+        public ApplicationUser Creator { get; set; }
 
         public string CreatorId { get; set; }
 

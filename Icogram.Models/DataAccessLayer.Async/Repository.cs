@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using Icogram.Models.Abstract;
 
 namespace DataAccessLayer.Async
@@ -32,14 +33,14 @@ namespace DataAccessLayer.Async
             DbContext.Entry(entity).State = EntityState.Deleted;
         }
 
-        public virtual IReadOnlyCollection<T> GetAll()
+        public virtual Task<List<T>> GetAll()
         {
-            return new List<T>(GetAllQuery());
+            return GetAllQuery().ToListAsync();
         }
 
-        public virtual T GetById(int id)
+        public virtual Task<T> GetById(int id)
         {
-            var user = DbContext.Set<T>().Find(id);
+            var user = DbContext.Set<T>().FindAsync(id);
 
             return user;
         }

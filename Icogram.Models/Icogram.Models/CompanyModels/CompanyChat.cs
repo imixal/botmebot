@@ -1,6 +1,8 @@
-﻿namespace Icogram.Models.CompanyModels
+﻿using Icogram.Models.Abstract;
+
+namespace Icogram.Models.CompanyModels
 {
-    public class CompanyChat
+    public class CompanyChat : Entity
     {
         public string ChatId { get; set; }
 

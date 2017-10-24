@@ -20,7 +20,7 @@ namespace Icogram.Models.CompanyModels
 
         public List<CustomerBot> TelegramBots { get; set; }
 
-        public List<AplicationUser> Users { get; set; }
+        public List<ApplicationUser> Users { get; set; }
 
         public List<CompanyChat> Chats { get; set; }
     }

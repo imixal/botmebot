@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B8D80C07-8986-4B2E-AD89-2CCADA275CEC}</ProjectGuid>
+    <ProjectGuid>{1003DC36-D7B4-4E86-A7C2-5477EECE1114}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Icogram.Models</RootNamespace>
-    <AssemblyName>Icogram.Models</AssemblyName>
+    <RootNamespace>Icogram.DataAccessLayer</RootNamespace>
+    <AssemblyName>Icogram.DataAccessLayer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,35 +57,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\Entity.cs" />
-    <Compile Include="Abstract\IEntity.cs" />
-    <Compile Include="BotModels\CustomerBot.cs" />
-    <Compile Include="BotModels\IcogramBot.cs" />
-    <Compile Include="CompanyModels\Company.cs" />
-    <Compile Include="CompanyModels\CompanyChat.cs" />
-    <Compile Include="CompanyModels\CompanyTarif.cs" />
-    <Compile Include="EmailModels\EmailMessage.cs" />
-    <Compile Include="EmailModels\EmailVariable.cs" />
-    <Compile Include="EmailModels\EmailTemplate.cs" />
-    <Compile Include="ModuleModels\CommandModule\Command.cs" />
-    <Compile Include="ModuleModels\CommandModule\CommandType.cs" />
-    <Compile Include="ModuleModels\CustomMessageModule\CustomMessage.cs" />
-    <Compile Include="ModuleModels\WelcomeMessageModule\WelcomeMessage.cs" />
+    <Compile Include="EntityFramework\Identity\ApplicationRoleManager.cs" />
+    <Compile Include="EntityFramework\Identity\ApplicationUserManager.cs" />
+    <Compile Include="Repository\CommandRepository.cs" />
+    <Compile Include="Repository\CompanyChatRepository.cs" />
+    <Compile Include="Repository\CompanyRepository.cs" />
+    <Compile Include="Repository\CompanyTarifRepository.cs" />
+    <Compile Include="Repository\CustomMessageRepository.cs" />
+    <Compile Include="Repository\EmailMessageRepository.cs" />
+    <Compile Include="Repository\EmailTemplateRepository.cs" />
+    <Compile Include="Repository\WelcomeMessageRepository.cs" />
+    <Compile Include="UnitOfWork\IcogramUnitOfWork.cs" />
+    <Compile Include="Interfaces\IIcogramUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourcesModels\Resource.cs" />
-    <Compile Include="UserModels\ApplicationRole.cs" />
-    <Compile Include="UserModels\ApplicationUser.cs" />
+    <Compile Include="Repository\CustomerBotRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Icogram.Enums\Icogram.Enums.csproj">
-      <Project>{3C67A7E3-3C8B-42A2-8EFA-E054B95DE141}</Project>
-      <Name>Icogram.Enums</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer.Async\DataAccessLayer.Async.csproj">
+      <Project>{627524B9-F449-410D-AD4B-AC8382D1CDCC}</Project>
+      <Name>DataAccessLayer.Async</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icogram.DbContext\Icogram.DbContext.csproj">
+      <Project>{BC9F24B3-F585-4079-B91A-E00463222844}</Project>
+      <Name>Icogram.DbContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icogram.Models\Icogram.Models.csproj">
+      <Project>{B8D80C07-8986-4B2E-AD89-2CCADA275CEC}</Project>
+      <Name>Icogram.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

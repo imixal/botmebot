@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Icogram.Models.Abstract;
 
 namespace DataAccessLayer.Async
@@ -11,8 +12,8 @@ namespace DataAccessLayer.Async
 
         void Delete(T entity);
 
-        T GetById(int id);
+        Task<T> GetById(int id);
 
-        IReadOnlyCollection<T> GetAll();
+        Task<List<T>> GetAll();
     }
 }

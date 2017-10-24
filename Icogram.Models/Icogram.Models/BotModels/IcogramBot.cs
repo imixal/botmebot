@@ -1,6 +1,8 @@
-﻿namespace Icogram.Models.BotModels
+﻿using Icogram.Models.Abstract;
+
+namespace Icogram.Models.BotModels
 {
-    public class IcogramBot
+    public class IcogramBot : Entity
     {
         public int BotId { get; set; }
 

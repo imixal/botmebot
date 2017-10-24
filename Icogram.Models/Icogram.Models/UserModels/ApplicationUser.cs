@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Icogram.Models.UserModels
 {
-    public class AplicationUser : IdentityUser, IEntity<string>
+    public class ApplicationUser : IdentityUser, IEntity<string>
     {
         public string FirstName { get; set; }
 
@@ -17,7 +17,7 @@ namespace Icogram.Models.UserModels
 
         public DateTime DateCreation { get; }
 
-        public AplicationUser()
+        public ApplicationUser()
         {
             DateCreation = DateTime.UtcNow;
         }

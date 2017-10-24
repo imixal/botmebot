@@ -2,7 +2,7 @@
 
 namespace Icogram.Models.UserModels
 {
-    public class AplicationRole : IdentityRole
+    public class ApplicationRole : IdentityRole
     {
     }
 }

@@ -13,7 +13,7 @@ namespace Icogram.Models.EmailModels
 
         public string To { get; set; }
 
-        public AplicationUser Sender { get; set; }
+        public ApplicationUser Sender { get; set; }
 
         public string SenderId { get; set; }
 

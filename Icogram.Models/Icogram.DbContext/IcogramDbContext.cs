@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Icogram.DbContext
 {
-    public class IcogramDbContext : IdentityDbContext<AplicationUser>
+    public class IcogramDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<CustomerBot> CustomerBots { get; set; }
 
