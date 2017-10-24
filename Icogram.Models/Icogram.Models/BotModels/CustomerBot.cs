@@ -1,5 +1,7 @@
-﻿using Icogram.Models.Abstract;
+﻿using System.Collections.Generic;
+using Icogram.Models.Abstract;
 using Icogram.Models.CompanyModels;
+using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Models.ModuleModels.WelcomeMessageModule;
 
 namespace Icogram.Models.BotModels
@@ -23,5 +25,7 @@ namespace Icogram.Models.BotModels
         public WelcomeMessage WelcomeMessage { get; set; }
 
         public int? WelcomeMessageId { get; set; }
+
+        public List<Command> Commands { get; set; }
     }
 }

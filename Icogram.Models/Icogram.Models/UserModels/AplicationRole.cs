@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Icogram.Models.User
+namespace Icogram.Models.UserModels
 {
     public class AplicationRole : IdentityRole
     {
