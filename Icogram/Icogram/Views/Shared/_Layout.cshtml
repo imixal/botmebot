@@ -1,42 +1,211 @@
-﻿<!DOCTYPE html>
+﻿@using Icogram.Extensions
+@model Icogram.ViewModels.Layout.LayoutViewModel
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Libs/Gentelella/css/custom.min.css" rel="stylesheet" />
+
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="@Url.RouteUrl("Dashboard")" class="site_title"><i class="fa fa-paw"></i> <span>Icogram</span></a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- /menu profile quick info -->
+                    <br />
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-users"></i> Company<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="index.html">List</a></li>
+                                            <li><a href="index2.html">Add</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-user"></i> User<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="index.html">List</a></li>
+                                            <li><a href="index2.html">Add</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-comments"></i> Chat<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                            {
+                                                <li><a href="index.html">List</a></li>
+                                            }
+                                            @if (User.Identity.IsInRole("Customer"))
+                                            {
+                                                <li><a href="index.html">List</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-terminal"></i> Commands<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                            {
+                                                <li><a href="index.html">Support List</a></li>
+                                            }
+                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                            {
+                                                <li><a href="index.html">List</a></li>
+                                            }
+                                            @if (User.Identity.IsInRole("Customer"))
+                                            {
+                                                <li><a href="index.html">List</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-comment"></i> Message<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                            {
+                                                <li><a href="index.html">List</a></li>
+                                            }
+                                            @if (User.Identity.IsInRole("Customer"))
+                                            {
+                                                <li><a href="index.html">List</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-ban"></i> AntiSpam<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                            {
+                                                <li><a href="index.html">List Settings</a></li>
+                                                <li><a href="index.html">White Links</a></li>
+                                                <li><a href="index.html">Suspicious User List</a></li>
+                                            }
+                                            @if (User.Identity.IsInRole("Customer"))
+                                            {
+                                                <li><a href="index.html">Settings</a></li>
+                                                <li><a href="index.html">Suspicious Use List</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                 }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
+                                {
+                                    <li>
+                                        <a><i class="fa fa-line-chart"></i> Statistics<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                            {
+                                                <li><a href="index.html">Statistics</a></li>
+                                            }
+                                            @if (User.Identity.IsInRole("Customer"))
+                                            {
+                                                <li><a href="index.html">Message</a></li>
+                                                <li><a href="index.html">Users</a></li>
+                                                <li><a href="index.html">Commands</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="fa fa-user-circle"></span> @string.Format("{0}, {1} ( {2} )", Model.UserProfileViewModel.FirstName, Model.UserProfileViewModel.LastName, Model.UserProfileViewModel.Company.Name)
+                                    <span class="fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li><a href="javascript:;"> Profile</a></li>
+                                    <li><a href="javascript:;">Help</a></li>
+                                    <li><a href="@Url.Action("LogOut","Authentication")"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Plain Page</h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
+        <!-- /page content -->
+        <!-- footer content -->
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <div class="clearfix"></div>
         </footer>
+        <!-- /footer content -->
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/fastclick.js"></script>
+    <script src="~/Libs/Gentelella/js/custom.min.js"></script>
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)*@
 </body>
+
+
+
 </html>

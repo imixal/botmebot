@@ -13,26 +13,26 @@ namespace Icogram.DataAccessLayer.Repository
         {
         }
 
-        public override Task<List<ChatCommand>> GetAll()
+        public override async Task<List<ChatCommand>> GetAllAsync()
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .AsNoTracking()
                 .Include(cc => cc.Chat)
                 .Include(cc => cc.Command)
                 .ToListAsync();
         }
 
-        public override Task<ChatCommand> GetById(int id)
+        public override async Task<ChatCommand> GetByIdAsync(int id)
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .Include(cc => cc.Chat)
                 .Include(cc => cc.Command)
                 .FirstOrDefaultAsync(cc => cc.Id == id);
         }
 
-        public override Task<ChatCommand> GetByIdAsNoTracking(int id)
+        public override async Task<ChatCommand> GetByIdAsNoTrackingAsync(int id)
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .AsNoTracking()
                 .Include(cc => cc.Chat)
                 .Include(cc => cc.Command)

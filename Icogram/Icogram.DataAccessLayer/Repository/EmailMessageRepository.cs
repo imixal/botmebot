@@ -14,26 +14,26 @@ namespace Icogram.DataAccessLayer.Repository
         }
 
 
-        public override Task<List<EmailMessage>> GetAll()
+        public override async Task<List<EmailMessage>> GetAllAsync()
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .AsNoTracking()
                 .Include(em => em.Sender)
                 .Include(em => em.Template)
                 .ToListAsync();
         }
 
-        public override Task<EmailMessage> GetById(int id)
+        public override async Task<EmailMessage> GetByIdAsync(int id)
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .Include(em => em.Sender)
                 .Include(em => em.Template)
                 .FirstOrDefaultAsync(em => em.Id == id);
         }
 
-        public override Task<EmailMessage> GetByIdAsNoTracking(int id)
+        public override async Task<EmailMessage> GetByIdAsNoTrackingAsync(int id)
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .AsNoTracking()
                 .Include(em => em.Sender)
                 .Include(em => em.Template)

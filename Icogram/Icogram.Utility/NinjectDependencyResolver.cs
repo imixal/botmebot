@@ -7,6 +7,14 @@ using Icogram.Models.UserModels;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Ninject;
 using Ninject.Web.Common;
+using DataAccessLayer.Async;
+using Icogram.AutoMapper;
+using Icogram.DataAccessLayer.Interfaces;
+using Icogram.DataAccessLayer.UnitOfWork;
+using Icogram.Service.Login;
+using Icogram.Service.User;
+using Icogram.ViewModelBuilder;
+using Service;
 
 namespace Icogram.Utility
 {
@@ -35,8 +43,13 @@ namespace Icogram.Utility
         private static void AddBindings()
         {
             _kernel.Bind<IdentityDbContext<ApplicationUser>>().To<IcogramDbContext>().InRequestScope();
+            _kernel.Bind<IUnitOfWork>().To<IcogramUnitOfWork>().InRequestScope();
+            _kernel.Bind<IIcogramUnitOfWork>().To<IcogramUnitOfWork>().InRequestScope();
             _kernel.Bind<IMapper>().ToMethod(AutoMapperModule.AutoMapper).InRequestScope();
 
+            _kernel.Bind<IViewModelBuilder>().To<ViewModelBuilder.ViewModelBuilder>().InRequestScope();
+            _kernel.Bind<ILoginService>().To<LoginService>().InRequestScope();
+            _kernel.Bind<IUserService>().To<UserService>().InRequestScope();
         }
     }
 }

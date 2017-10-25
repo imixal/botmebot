@@ -12,10 +12,10 @@ namespace DataAccessLayer.Async
 
         void Delete(T entity);
 
-        Task<T> GetById(int id);
+        Task<T> GetByIdAsync(int id);
 
-        Task<T> GetByIdAsNoTracking(int id);
+        Task<T> GetByIdAsNoTrackingAsync(int id);
 
-        Task<List<T>> GetAll();
+        Task<List<T>> GetAllAsync();
     }
 }

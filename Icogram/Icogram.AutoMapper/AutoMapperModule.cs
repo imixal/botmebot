@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Icogram.Models.UserModels;
+using Icogram.ViewModels.User;
 using Ninject.Modules;
 
-namespace Icogram.Utility
+namespace Icogram.AutoMapper
 {
     public class AutoMapperModule : NinjectModule
     {
@@ -14,8 +16,9 @@ namespace Icogram.Utility
         {
             Mapper.Initialize(config =>
             {
-
+                config.CreateMap<ApplicationUser, UserProfileViewModel>();
             });
+
             return Mapper.Instance;
         }
     }

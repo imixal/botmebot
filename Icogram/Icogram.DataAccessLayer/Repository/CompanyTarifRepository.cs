@@ -14,24 +14,24 @@ namespace Icogram.DataAccessLayer.Repository
         }
 
 
-        public override Task<List<CompanyTarif>> GetAll()
+        public override async Task<List<CompanyTarif>> GetAllAsync()
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .AsNoTracking()
                 .Include(ct => ct.Company)
                 .ToListAsync();
         }
 
-        public override Task<CompanyTarif> GetById(int id)
+        public override async Task<CompanyTarif> GetByIdAsync(int id)
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .Include(ct => ct.Company)
                 .FirstOrDefaultAsync(ct => ct.Id == id);
         }
 
-        public override Task<CompanyTarif> GetByIdAsNoTracking(int id)
+        public override async Task<CompanyTarif> GetByIdAsNoTrackingAsync(int id)
         {
-            return GetAllQuery()
+            return await GetAllQuery()
                 .AsNoTracking()
                 .Include(ct => ct.Company)
                 .FirstOrDefaultAsync(ct => ct.Id == id);

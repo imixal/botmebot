@@ -97,7 +97,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMapperModule.cs" />
     <Compile Include="NinjectDependencyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -106,6 +105,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer.Async\DataAccessLayer.Async.csproj">
+      <Project>{627524B9-F449-410D-AD4B-AC8382D1CDCC}</Project>
+      <Name>DataAccessLayer.Async</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icogram.AutoMapper\Icogram.AutoMapper.csproj">
+      <Project>{B0B33012-C9E3-480A-B8E5-DE2F09C5E1A9}</Project>
+      <Name>Icogram.AutoMapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icogram.DataAccessLayer\Icogram.DataAccessLayer.csproj">
+      <Project>{1003DC36-D7B4-4E86-A7C2-5477EECE1114}</Project>
+      <Name>Icogram.DataAccessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Icogram.DbContext\Icogram.DbContext.csproj">
       <Project>{BC9F24B3-F585-4079-B91A-E00463222844}</Project>
       <Name>Icogram.DbContext</Name>
@@ -113,6 +124,18 @@
     <ProjectReference Include="..\Icogram.Models\Icogram.Models.csproj">
       <Project>{B8D80C07-8986-4B2E-AD89-2CCADA275CEC}</Project>
       <Name>Icogram.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icogram.Service\Icogram.Service.csproj">
+      <Project>{902F43CA-54AB-4868-AAB8-6CA4AD00FB9B}</Project>
+      <Name>Icogram.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Icogram.ViewModelBuilder\Icogram.ViewModelBuilder.csproj">
+      <Project>{14A14284-2D53-4DA0-9E9D-130059B5F348}</Project>
+      <Name>Icogram.ViewModelBuilder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{AA302E06-F6AF-4647-BBF4-AB70C738433C}</Project>
+      <Name>Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
