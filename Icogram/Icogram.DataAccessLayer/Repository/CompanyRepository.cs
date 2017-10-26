@@ -18,8 +18,8 @@ namespace Icogram.DataAccessLayer.Repository
         {
             return await GetAllQuery()
                 .AsNoTracking()
+                .Include(c => c.Users)
                 .Include(c => c.Chats)
-                .Include(c => c.Tarif)
                 .ToListAsync();
         }
 
@@ -27,7 +27,7 @@ namespace Icogram.DataAccessLayer.Repository
         {
             return await DbContext.Set<Company>()
                 .Include(c => c.Chats)
-                .Include(c => c.Tarif)
+                .Include(c => c.Users)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -36,7 +36,7 @@ namespace Icogram.DataAccessLayer.Repository
             return await DbContext.Set<Company>()
                 .AsNoTracking()
                 .Include(c => c.Chats)
-                .Include(c => c.Tarif)
+                .Include(c => c.Users)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
     }

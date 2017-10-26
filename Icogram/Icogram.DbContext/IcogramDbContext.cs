@@ -16,8 +16,6 @@ namespace Icogram.DbContext
     {
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<CompanyTarif> CompanyTarifs { get; set; }
-
         public DbSet<EmailMessage> EmailMessages { get; set; }
 
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
@@ -57,11 +55,6 @@ namespace Icogram.DbContext
                 .WithMany(c => c.Chats)
                 .WillCascadeOnDelete(true);
 
-            modelBuilder.Entity<CompanyTarif>()
-                .HasRequired(cb => cb.Company)
-                .WithOptional(c => c.Tarif)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<EmailMessage>()
                 .HasOptional(em => em.Sender);
             modelBuilder.Entity<EmailMessage>()
@@ -91,6 +84,9 @@ namespace Icogram.DbContext
 
             modelBuilder.Entity<ChatStatistic>()
                 .HasRequired(cs => cs.Chat);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOptional(au => au.Company);
         }
     }
 }

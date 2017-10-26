@@ -1,0 +1,52 @@
+﻿@model Icogram.ViewModels.User.MyUserProfilePageViewModel
+@{
+    ViewBag.Title = "Me";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="col-lg-4 col-md-6 col-sm-12">
+    @using (Html.BeginForm("UpdateMyUserProfileCommand", "User", FormMethod.Post, new { }))
+    {
+        <div class="x_title">
+            <h2>My User Profile</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="form-group">
+                <input class="form-control" value="@Model.FirstName" placeholder="First Name" name="firstName" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" value="@Model.LastName" placeholder="Last Name" name="lastName" />
+            </div>
+            <div class="form-group">
+                <input class="btn btn-success" value="Save" type="submit"/>
+                <input class="btn btn-info" value="Reset Password" data-toggle="modal" data-target="#reset"/>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="reset">
+    <div class="modal-dialog modal-md">
+        @using (Html.BeginForm("ResetMyPasswordCommand", "User", FormMethod.Post, new { }))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="ResetModalLabel">Reset Password</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control" type="password" autocomplete="off" placeholder="New Password" name="newPassword" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Save changes">
+                </div>
+            </div>
+        }
+    </div>
+</div>

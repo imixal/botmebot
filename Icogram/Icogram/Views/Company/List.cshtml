@@ -1,0 +1,227 @@
+﻿@using Icogram.Extensions
+@model Icogram.ViewModels.CompanyModels.CompanyPageViewModel
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/Libs/Gentelella/vendors/select2/dist/css/select2.css" />
+}
+@section stylesCustom
+{
+    <style>
+        textarea {
+            width: 100% !important;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/select2/dist/js/select2.full.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        function setDeleteData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#delete").find("#deleteModalLabel").text("Delete " + $row.parent().parent().find("input[Name=Name]").val());
+        }
+
+        function deleteCompany() {
+            var $row = $(localStorage.getItem("row"));
+            $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function saveUpdates(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("EditCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                Name: $row.find("input[Name=Name]").val(),
+                Description: $row.find("textarea[Name=Description]").val(),
+                IsCommandModuleActivated: $row.find("input[Name=IsCommandModuleActivated]").is(':checked'),
+                IsCustomMessageModuleActivated: $row.find("input[Name=IsCustomMessageModuleActivated]").is(':checked'),
+                IsWelcomeMessageModuleActivated: $row.find("input[Name=IsWelcomeMessageModuleActivated]").is(':checked'),
+                IsAntiSpamModuleActivated: $row.find("input[Name=IsAntiSpamModuleActivated]").is(':checked'),
+                End: $row.find("input[Name=End]").val(),
+                Price: $row.find("input[Name=Price]").val()
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        $("#deleteCompany").on('click', deleteCompany);
+
+        function createCompany() {
+            table.row.add([
+                'new',
+                '<td><input class="form-control" type="text" name="Name" placeholder="Name"/></td>',
+                '<textarea name="Description" placeholder="Description" class="form-control"></textarea>',
+                '0',
+                '0',
+                '<input class="form-control" name="IsCommandModuleActivated" type="checkbox"/>',
+                '<input class="form-control" name="IsCustomMessageModuleActivated" type="checkbox"/>',
+                '<input class="form-control" name="IsWelcomeMessageModuleActivated" type="checkbox"/>',
+                '<input class="form-control" name="IsAntiSpamModuleActivated" type="checkbox"/>',
+                '<input class="form-control" type="date" name="End" value="@DateTime.Now.ToString("yyyy-MM-dd")" />',
+                '<input type="number" name="Price" value="0"/>',
+                '<a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a> <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>'
+            ]).draw(false);
+        }
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+    </script>
+}
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Companies</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="btn btn-success text-primary" onclick="createCompany()"><i class="fa fa-plus"></i> Create Company</a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table table-bordered" id="Table">
+                <thead>
+                    <tr class="headings">
+                        <th class="column-title">№</th>
+                        <th width="8%" class="column-title text-center">Name</th>
+                        <th width="16%" class="column-title text-center">Description</th>
+                        <th width="5%" class="column-title text-center">Users</th>
+                        <th width="5%" class="column-title text-center">Chats</th>
+                        <th width="5%" class="column-title text-center">Command</th>
+                        <th class="column-title text-center">Message</th>
+                        <th class="column-title text-center">Welcome</th>
+                        <th class="column-title text-center">AntiSpam</th>
+                        <th class="column-title text-center">Date End</th>
+                        <th class="column-title text-center">Prise</th>
+                        <th class="column-title text-center last">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var company in Model.Companies.Select((value, i) => new { j = i + 1, value }))
+                    {
+                        <tr class="">
+                            <td width="2%"><input class="hidden" name="Id" value="@company.value.Id" /> @company.j</td>
+                            <td width="10%"><input class="form-control" type="text" name="Name" value="@company.value.Name" /></td>
+                            <td width="25%"><textarea name="Description" class="form-control">@company.value.Description</textarea></td>
+                            <td width="5%" class="text-center">@company.value.Users.Count</td>
+                            <td width="5%" class="text-center">@company.value.Chats.Count </td>
+                            <td width="5%" class="text-center">
+                                @if (@company.value.IsCommandModuleActivated)
+                                {
+                                    <input class="form-control" name="IsCommandModuleActivated" type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input class="form-control" name="IsCommandModuleActivated" type="checkbox" />
+                                }
+                            </td>
+                            <td width="5%" class="text-center">
+                                @if (@company.value.IsCustomMessageModuleActivated)
+                                {
+                                    <input class="form-control" name="IsCustomMessageModuleActivated" type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input class="form-control" name="IsCustomMessageModuleActivated" type="checkbox" />
+                                }
+                            </td>
+                            <td width="5%" class="text-center">
+                                @if (@company.value.IsWelcomeMessageModuleActivated)
+                                {
+                                    <input class="form-control" name="IsWelcomeMessageModuleActivated" type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input class="form-control" name="IsWelcomeMessageModuleActivated" type="checkbox" />
+                                }
+                            </td>
+                            <td width="5%" class="text-center">
+                                @if (@company.value.IsAntiSpamModuleActivated)
+                                {
+                                    <input class="form-control" name="IsAntiSpamModuleActivated" type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input class="form-control" name="IsAntiSpamModuleActivated" type="checkbox" />
+                                }
+                            </td>
+                            <td width="5%" class="text-center">
+                                @if (company.value.End.HasValue)
+                                {
+                                    <input class="form-control" type="date" name="End" value="@company.value.End.Value.ToString("yyyy-MM-dd")" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="date" name="End" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                }
+                            </td>
+                            <td width="10%" class="text-center"><input type="number" name="Price" value="@company.value.Price" /></td>
+                            <td class="text-center" width="5%">
+                                <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                                <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="delete">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="deleteModalLabel">Delete</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="userId" />
+                <h4>Are you sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="deleteCompany" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

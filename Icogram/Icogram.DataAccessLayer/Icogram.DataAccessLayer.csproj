@@ -62,7 +62,6 @@
     <Compile Include="Repository\ChatCommandRepository.cs" />
     <Compile Include="Repository\ChatRepository.cs" />
     <Compile Include="Repository\CompanyRepository.cs" />
-    <Compile Include="Repository\CompanyTarifRepository.cs" />
     <Compile Include="Repository\CustomMessageRepository.cs" />
     <Compile Include="Repository\EmailMessageRepository.cs" />
     <Compile Include="Repository\EmailTemplateRepository.cs" />

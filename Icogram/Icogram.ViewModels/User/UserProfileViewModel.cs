@@ -8,6 +8,6 @@ namespace Icogram.ViewModels.User
 
         public string LastName { get; set; }
 
-        public Company Company { get; set; }
+        public Models.CompanyModels.Company Company { get; set; }
     }
 }

@@ -50,6 +50,7 @@ namespace Icogram.Utility
             _kernel.Bind<IViewModelBuilder>().To<ViewModelBuilder.ViewModelBuilder>().InRequestScope();
             _kernel.Bind<ILoginService>().To<LoginService>().InRequestScope();
             _kernel.Bind<IUserService>().To<UserService>().InRequestScope();
+            _kernel.Bind(typeof(ICrudService<>)).To(typeof(CrudService<>));
         }
     }
 }

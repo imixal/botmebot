@@ -39,7 +39,7 @@ namespace Icogram.DataAccessLayer.UnitOfWork
         {
             Type repositoryType;
             var repository = _entityTypeToRepositoryType.TryGetValue(typeof(TEntity), out repositoryType)
-                ? (Repository<TEntity>)Activator.CreateInstance(repositoryType, typeof(System.Data.Entity.DbContext))
+                ? (Repository<TEntity>)Activator.CreateInstance(repositoryType, DbContext)
                 : base.CreateRepository<TEntity>();
 
             return repository;
@@ -52,7 +52,6 @@ namespace Icogram.DataAccessLayer.UnitOfWork
             {
                 { typeof(Company), typeof(CompanyRepository) },
                 { typeof(Chat), typeof(ChatRepository) },
-                { typeof(CompanyTarif), typeof(CompanyTarifRepository) },
                 { typeof(EmailMessage), typeof(EmailMessageRepository) },
                 { typeof(EmailTemplate), typeof(EmailTemplateRepository) },
                 { typeof(EmailVariable), typeof(Repository<EmailVariable>) },

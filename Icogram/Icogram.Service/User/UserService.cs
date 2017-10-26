@@ -38,7 +38,7 @@ namespace Icogram.Service.User
 
         public async Task CreateAsync(UserCrendentialsViewModel userCrendentials)
         {
-            var result = await _applicationUserManager.CreateAsync(new ApplicationUser {UserName = userCrendentials.UserName}, userCrendentials.Password);
+            var result = await _applicationUserManager.CreateAsync(new ApplicationUser {UserName = userCrendentials.UserName, CompanyId = userCrendentials.CompanyId}, userCrendentials.Password);
             if (result.Succeeded)
             {
                 var user = await _applicationUserManager.FindByNameAsync(userCrendentials.UserName);

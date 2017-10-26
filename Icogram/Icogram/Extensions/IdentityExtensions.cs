@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Security.Principal;
+using Icogram.Models.UserModels;
+using Microsoft.AspNet.Identity;
 
 namespace Icogram.Extensions
 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Icogram.Enums;
 using Icogram.Models.Abstract;
 using Icogram.Models.ChatModels;
@@ -14,9 +15,17 @@ namespace Icogram.Models.CompanyModels
 
         public GlobalEnums.CompanyType Type { get; set; }
 
-        public CompanyTarif Tarif { get; set; }
+        public bool IsWelcomeMessageModuleActivated { get; set; }
 
-        public int? TarifId { get; set; }
+        public bool IsCommandModuleActivated { get; set; }
+
+        public bool IsAntiSpamModuleActivated { get; set; }
+
+        public bool IsCustomMessageModuleActivated { get; set; }
+
+        public DateTime? End { get; set; }
+
+        public double Price { get; set; }
 
         public List<ApplicationUser> Users { get; set; }
 

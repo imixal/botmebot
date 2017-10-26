@@ -13,7 +13,7 @@ namespace Icogram.Models.UserModels
 
         public Company Company { get; set; }
 
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         public DateTime DateCreation { get; }
 

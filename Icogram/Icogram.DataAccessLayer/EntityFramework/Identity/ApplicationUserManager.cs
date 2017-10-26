@@ -10,6 +10,7 @@ namespace Icogram.DataAccessLayer.EntityFramework.Identity
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
                 : base(store)
         {
+            PasswordValidator = new MinimumLengthValidator(1);
         }
 
 

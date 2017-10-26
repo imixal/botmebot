@@ -62,7 +62,6 @@
     <Compile Include="Abstract\IEntity.cs" />
     <Compile Include="CompanyModels\Company.cs" />
     <Compile Include="ChatModels\Chat.cs" />
-    <Compile Include="CompanyModels\CompanyTarif.cs" />
     <Compile Include="EmailModels\EmailMessage.cs" />
     <Compile Include="EmailModels\EmailVariable.cs" />
     <Compile Include="EmailModels\EmailTemplate.cs" />

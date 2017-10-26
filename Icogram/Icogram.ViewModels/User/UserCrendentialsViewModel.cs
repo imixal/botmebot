@@ -6,6 +6,8 @@
 
         public string Password { get; set; }
 
+        public int CompanyId { get; set; }
+
         public string Role { get; set; }
     }
 }
