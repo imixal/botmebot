@@ -36,7 +36,7 @@ namespace Icogram.Controllers
         #region Commands
 
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<int> EditCommand(Company company)
+        public async Task EditCommand(Company company)
         {
             if (company.Id == 0)
             {
@@ -46,8 +46,6 @@ namespace Icogram.Controllers
             {
                 await _companyCrudService.UpdateAsync(company);
             }
-
-            return company.Id;
         }
 
         [Authorize(Roles = "Admin, Manager")]

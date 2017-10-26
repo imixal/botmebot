@@ -51,6 +51,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat\ChatsPageViewModel.cs" />
+    <Compile Include="Command\CommandPageViewModel.cs" />
+    <Compile Include="Command\CustomerChatCommandsPageViewModel.cs" />
     <Compile Include="CompanyModels\CompanyPageViewModel.cs" />
     <Compile Include="Dashboard\DashboardViewModel.cs" />
     <Compile Include="Layout\LayoutViewModel.cs" />

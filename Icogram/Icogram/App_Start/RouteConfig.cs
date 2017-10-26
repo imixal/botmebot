@@ -9,6 +9,9 @@ namespace Icogram
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("Commands", "commands", new { controller = "Command", action = "List" });
+            routes.MapRoute("CCommands", "ccommands", new { controller = "CList", action = "CList" });
+            routes.MapRoute("CustomerCommands", "customerCommands", new { controller = "CustomerList", action = "List" });
             routes.MapRoute("Companies", "companies", new { controller = "Company", action = "List" });
             routes.MapRoute("Me", "me", new { controller = "User", action = "MyUserProfile" });
             routes.MapRoute("Users", "users", new { controller = "User", action = "List" });
