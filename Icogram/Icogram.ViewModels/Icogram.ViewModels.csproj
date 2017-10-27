@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chat\ChatsPageViewModel.cs" />
+    <Compile Include="Command\ChatCommandsPageViewModel.cs" />
     <Compile Include="Command\CommandPageViewModel.cs" />
     <Compile Include="Command\CustomerChatCommandsPageViewModel.cs" />
     <Compile Include="CompanyModels\CompanyPageViewModel.cs" />

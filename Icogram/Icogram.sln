@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram.ViewModelBuilder", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram.AutoMapper", "Icogram.AutoMapper\Icogram.AutoMapper.csproj", "{B0B33012-C9E3-480A-B8E5-DE2F09C5E1A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram.Telegram.Bot", "Icogram.Telegram.Bot\Icogram.Telegram.Bot.csproj", "{68CF9EDF-4C1F-46AA-B305-D70D72C2C128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icogram.Telegram.BotHandler", "Icogram.Telegram.BotHandler\Icogram.Telegram.BotHandler.csproj", "{D8B98874-CA3A-470A-B0FE-5EBE90651B72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{B0B33012-C9E3-480A-B8E5-DE2F09C5E1A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0B33012-C9E3-480A-B8E5-DE2F09C5E1A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0B33012-C9E3-480A-B8E5-DE2F09C5E1A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68CF9EDF-4C1F-46AA-B305-D70D72C2C128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68CF9EDF-4C1F-46AA-B305-D70D72C2C128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68CF9EDF-4C1F-46AA-B305-D70D72C2C128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68CF9EDF-4C1F-46AA-B305-D70D72C2C128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8B98874-CA3A-470A-B0FE-5EBE90651B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8B98874-CA3A-470A-B0FE-5EBE90651B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8B98874-CA3A-470A-B0FE-5EBE90651B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8B98874-CA3A-470A-B0FE-5EBE90651B72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

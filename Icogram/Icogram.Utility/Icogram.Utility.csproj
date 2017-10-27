@@ -129,6 +129,10 @@
       <Project>{902F43CA-54AB-4868-AAB8-6CA4AD00FB9B}</Project>
       <Name>Icogram.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Icogram.Telegram.BotHandler\Icogram.Telegram.BotHandler.csproj">
+      <Project>{D8B98874-CA3A-470A-B0FE-5EBE90651B72}</Project>
+      <Name>Icogram.Telegram.BotHandler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Icogram.ViewModelBuilder\Icogram.ViewModelBuilder.csproj">
       <Project>{14A14284-2D53-4DA0-9E9D-130059B5F348}</Project>
       <Name>Icogram.ViewModelBuilder</Name>

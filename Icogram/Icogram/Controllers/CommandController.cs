@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Icogram.Models.ChatModels;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Service.User;
 using Icogram.ViewModelBuilder;
@@ -17,13 +18,15 @@ namespace Icogram.Controllers
         private readonly IUserService _userService;
         private readonly ICrudService<Command> _commandCrudService;
         private readonly ICrudService<ChatCommand> _chatCommandCrudService;
+        private readonly ICrudService<Chat> _chatCrudService;
 
-        public CommandController(IViewModelBuilder viewModelBuilder, IUserService userService, ICrudService<Command> companyCrudService, ICrudService<ChatCommand> chatCommandCrudService)
+        public CommandController(IViewModelBuilder viewModelBuilder, IUserService userService, ICrudService<Command> companyCrudService, ICrudService<ChatCommand> chatCommandCrudService, ICrudService<Chat> chatCrudService)
         {
             _viewModelBuilder = viewModelBuilder;
             _userService = userService;
             _commandCrudService = companyCrudService;
             _chatCommandCrudService = chatCommandCrudService;
+            _chatCrudService = chatCrudService;
         }
 
 
@@ -49,9 +52,15 @@ namespace Icogram.Controllers
         public async Task<ActionResult> ChatCommands()
         {
             var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity.GetUserName());
-            var model = await _viewModelBuilder.GetPageViewModelAsync<CustomerChatCommandsPageViewModel>();
+            var model = await _viewModelBuilder.GetPageViewModelAsync<ChatCommandsPageViewModel>();
             model.ChatCommands = await _chatCommandCrudService.GetAllAsync();
+            model.ChatCommands =
+                model.ChatCommands.Where(cc => cc.Chat.CompanyId.HasValue)
+                    .Where(c => c.Chat.CompanyId == user.CompanyId && c.Chat.IsApproved)
+                    .ToList();
             model.Commands = await _commandCrudService.GetAllAsync();
+            model.Chats = await _chatCrudService.GetAllAsync();
+            model.Chats = model.Chats.Where(c => c.CompanyId.HasValue).Where(c => c.CompanyId == user.CompanyId && c.IsApproved).ToList();
 
             return View(model);
         }
@@ -88,6 +97,13 @@ namespace Icogram.Controllers
             {
                 await _chatCommandCrudService.UpdateAsync(chatCommand);
             }
+        }
+
+        public async Task ChatCommandUpdateCommand(int chatCommandId, string message)
+        {
+            var chatCommand = await _chatCommandCrudService.GetByIdAsync(chatCommandId);
+            chatCommand.Message = message;
+            await _chatCommandCrudService.UpdateAsync(chatCommand);
         }
 
         public async Task ChatCommandDeleteCommand(int id)

@@ -12,7 +12,7 @@
 @section stylesCustom
 {
     <style>
-        textarea {
+        table textarea, table select, table input:not([type='checkbox']) {
             width: 100% !important;
         }
     </style>
@@ -35,41 +35,58 @@
 @section scriptsCustom
 {
     <script>
-        var table = $("#Table").DataTable({
-            columnDefs: [{
-                targets: [0],
-                searchable: true
-            }],
-            scrollY: $(window).height() - 200,
-            scrollCollapse: true,
-            dom: '<"left"B> frtl',
-            buttons: []
-        });
+        var table = $("#Table")
+            .DataTable({
+                columnDefs: [
+                    {
+                        targets: [0],
+                        searchable: true
+                    }
+                ],
+                scrollY: $(window).height() - 200,
+                scrollCollapse: true,
+                dom: '<"left"B> frtl',
+                buttons: []
+            });
 
         function setDeleteData(row) {
             localStorage.setItem("row", $(row).parents('tr').html().toString());
             var $row = $(row);
-            $("#delete").find("#deleteModalLabel").text("Leave " + $row.parent().parent().find("input[Name=Name]").val());
+            $("#delete")
+                .find("#deleteModalLabel")
+                .text("Leave " + $row.parent().parent().find("input[Name=Name]").val());
         }
 
         function deletecommand() {
             var $row = $(localStorage.getItem("row"));
             $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
-            .done(function () {
-                location.reload();
-            });
+                .done(function () {
+                    location.reload();
+                });
         }
 
         function saveUpdates(row) {
-            var $row = $(row).parent().parent();
-            $.post('@Url.Action("EditCommand")', {
-                Id: $row.find("input[Name=Id]").val(),
-                Title: $row.find("input[Name=Title]").val(),
-                Type: $row.find("input[Name=Type]").val(),
-                CompanyId: $row.find("input[Name=CompanyId]").val(),
-                IsApproved: $row.find("input[Name=IsApproved]").is(':checked'),
-                TelegramChatId: $row.find("input[Name=TelegramChatId]").val(),
-                WelcomeUserMessage: $row.find("textarea[Name=WelcomeUserMessage]").val(),
+            var $row = $(row).parents('tr');
+            $.post('@Url.Action("EditCommand")',
+                {
+                    Id: $row.find("input[Name=Id]").val(),
+                    Title: $row.find("input[Name=Title]").val(),
+                    Type: $row.find("input[Name=Type]").val(),
+                    CompanyId: $row.find("select[Name=Company]").val(),
+                    IsApproved: $row.find("input[Name=IsApproved]").is(':checked'),
+                    TelegramChatId: $row.find("input[Name=TelegramChatId]").val(),
+                    WelcomeUserMessage: $row.find("textarea[Name=WelcomeUserMessage]").val(),
+                })
+                .done(function () {
+                    location.reload();
+                });
+        }
+
+        function refreshChat(row) {
+            var $row = $(row).parents('tr');
+            $.post('@Url.Action("UpdateChatCommand")',
+            {
+                id: $row.find("input[Name=Id]").val()
             }).done(function () {
                 location.reload();
             });
@@ -95,7 +112,6 @@
                 <thead>
                     <tr class="headings">
                         <th class="column-title">№</th>
-                        <th class="column-title hidden"></th>
                         <th class="column-title text-center">Title</th>
                         <th class="column-title text-center">Company Name</th>
                         <th class="column-title text-center">Type</th>
@@ -110,10 +126,34 @@
                     {
                         <tr class="">
                             <td width="5%"><input class="hidden" name="Id" value="@chat.value.Id" /> @chat.j</td>
-                            <td class="hidden"><input class="hidden" name="CompanyId" value="@chat.value.CompanyId" /> @chat.j</td>
                             <td width="15%"><input class="form-control" type="text" name="Title" value="@chat.value.Title" /></td>
-                            <td width="15%">@chat.value.Company.Name</td>
-                            <td width="15%"><input class="form-control" type="text" name="Type" value="@chat.value.Type" /></td>
+                            <td width="15%">
+                                <select class="form-control" name="Company">
+                                    @if (!chat.value.CompanyId.HasValue)
+                                    {
+                                        <option value="null" disabled selected>Undefined</option>
+                                        foreach (var company in Model.Companies)
+                                        {
+                                            <option value="@company.Id">@company.Name</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var company in Model.Companies)
+                                        {
+                                            if (company.Id == chat.value.CompanyId.Value)
+                                            {
+                                                <option selected="selected" value="@company.Id">@company.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@company.Id">@company.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td width="15%"><input class="form-control" disabled="disabled" type="text" name="Type" value="@chat.value.Type" /></td>
                             <td width="5%" class="text-center">
                                 @if (@chat.value.IsApproved)
                                 {
@@ -124,10 +164,11 @@
                                     <input class="form-control" name="IsApproved" type="checkbox" />
                                 }
                             </td>
-                            <td width="15%"><input class="form-control" disabled="disabled" type="text" name="TelegramChatId" value="@chat.value.TelegramChatId"/></td>
+                            <td width="13%"><input class="form-control" disabled="disabled" type="text" name="TelegramChatId" value="@chat.value.TelegramChatId" /></td>
                             <td width="15%"><textarea class="form-control" disabled="disabled" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
-                            <td class="text-center" width="5%">
-                                <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                            <td class="text-center" width="7%">
+                                <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                                <a class="label label-md label-warning" onclick="refreshChat(this)"><span class="fa fa-refresh"></span></a>
                                 <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
                             </td>
                         </tr>

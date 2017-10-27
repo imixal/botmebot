@@ -1,0 +1,171 @@
+﻿@model Icogram.ViewModels.Chat.ChatsPageViewModel
+@{
+    ViewBag.Title = "My Chats";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/Libs/Gentelella/vendors/select2/dist/css/select2.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table select, table input:not([type='checkbox']) {
+            width: 100% !important;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/select2/dist/js/select2.full.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table")
+            .DataTable({
+                columnDefs: [
+                    {
+                        targets: [0],
+                        searchable: true
+                    }
+                ],
+                scrollY: $(window).height() - 200,
+                scrollCollapse: true,
+                dom: '<"left"B> frtl',
+                buttons: []
+            });
+
+        function setSendMessageData(row) {
+            var $row = $(row);
+            $("#sendMessage")
+                .find("#sendMessageLabel")
+                .text("Send message to " + $row.parents('tr').find("input[Name=Title]").val());
+            $("#sendMessage")
+                .find("input[Name=icogramChatId]")
+                .attr("value", $row.parents('tr').find("input[Name=icogramChatId]").val());
+        }
+
+        function saveUpdates(row) {
+            var $row = $(row).parents('tr');
+            $.post('@Url.Action("UpdateWelcomMesage")',
+                {
+                    icogramChatId: $row.find("input[Name=icogramChatId]").val(),
+                    message: $row.find("textarea[Name=WelcomeUserMessage]").val(),
+                })
+                .done(function () {
+                    location.reload();
+                });
+        }
+
+        function refreshChat(row) {
+            var $row = $(row).parents('tr');
+            $.post('@Url.Action("UpdateChatCommand")',
+            {
+                id: $row.find("input[Name=Id]").val()
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        function sendCommand() {
+            $.post('@Url.Action("SendMessageCommand")',
+            {
+                icogramChatId: $("#sendMessage").find("input[Name=icogramChatId]").val(),
+                message: $("#sendMessage").find("textarea[Name=message]").val(),
+            });
+        }
+
+        $("#sendCommand").on('click', sendCommand);
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+    </script>
+}
+@Html.Partial("~/Views/Global/Help.cshtml")
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Chats</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table table-bordered" id="Table">
+                <thead>
+                <tr class="headings">
+                    <th class="column-title">№</th>
+                    <th class="column-title text-center">Title</th>
+                    <th class="column-title text-center">Type</th>
+                    @if (Model.UserProfileViewModel.Company.IsWelcomeMessageModuleActivated)
+                    {
+                        <th class="column-title text-center">Welcome Message</th>
+                    }
+                    <th class="column-title text-center last">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var chat in Model.Chats.Select((value, i) => new {j = i + 1, value}))
+                {
+                    <tr class="">
+                        <td width="5%"><input class="hidden" name="icogramChatId" value="@chat.value.Id"/> @chat.j</td>
+                        <td width="15%"><input class="form-control" disabled="disabled" type="text" name="Title" value="@chat.value.Title"/></td>
+                        <td width="15%"><input class="form-control" disabled="disabled" type="text" name="Type" value="@chat.value.Type"/></td>
+                        @if (Model.UserProfileViewModel.Company.IsWelcomeMessageModuleActivated)
+                        {
+                            <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
+                        }
+                        <td class="text-center" width="7%">
+                            <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-save"></span></a>
+                            <a class="label label-md label-warning" onclick="refreshChat(this)"><span class="fa fa-refresh"></span></a>
+                            @if (Model.UserProfileViewModel.Company.IsCustomMessageModuleActivated && Model.UserProfileViewModel.Company.End.HasValue)
+                            {
+                                if (Model.UserProfileViewModel.Company.End > DateTime.UtcNow)
+                                {
+                                    <a class="label label-md label-info" onclick="setSendMessageData(this)" data-toggle="modal" data-target="#sendMessage"><span class="fa fa-send"></span></a>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="sendMessage">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="sendMessageModalLabel">Send</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="icogramChatId" />
+                <textarea class="form-control" name="message"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="sendCommand" class="btn btn-danger" data-dismiss="modal">Send</button>
+            </div>
+        </div>
+    </div>
+</div>

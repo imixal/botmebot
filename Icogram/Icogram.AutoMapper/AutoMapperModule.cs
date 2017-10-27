@@ -16,7 +16,8 @@ namespace Icogram.AutoMapper
         {
             Mapper.Initialize(config =>
             {
-                config.CreateMap<ApplicationUser, UserProfileViewModel>();
+                config.CreateMap<ApplicationUser, UserProfileViewModel>()
+                .ForMember(up => up.Company, d => d.MapFrom(au => au.Company));
             });
 
             return Mapper.Instance;

@@ -22,7 +22,7 @@ namespace Icogram.ViewModelBuilder
 
         public async Task<TViewModel> GetPageViewModelAsync<TViewModel>() where TViewModel : LayoutViewModel, new()
         {
-            var user = await _userService.GetUserByNameAsync(HttpContext.Current.User.Identity.Name);
+            var user = await _userService.GetByUserNameAsync(HttpContext.Current.User.Identity.Name);
             var userProfile = _mapper.Map<UserProfileViewModel>(user);
             var viewModel = new TViewModel {UserProfileViewModel = userProfile};
 

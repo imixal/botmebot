@@ -5,7 +5,7 @@ namespace Icogram.Models.ChatModels
 {
     public class Chat : Entity
     {
-        public string TelegramChatId { get; set; }
+        public long TelegramChatId { get; set; }
 
         public string Type { get; set; }
 

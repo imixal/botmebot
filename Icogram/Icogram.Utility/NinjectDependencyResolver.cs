@@ -13,6 +13,7 @@ using Icogram.DataAccessLayer.Interfaces;
 using Icogram.DataAccessLayer.UnitOfWork;
 using Icogram.Service.Login;
 using Icogram.Service.User;
+using Icogram.Telegram.BotHandler;
 using Icogram.ViewModelBuilder;
 using Service;
 
@@ -51,6 +52,7 @@ namespace Icogram.Utility
             _kernel.Bind<ILoginService>().To<LoginService>().InRequestScope();
             _kernel.Bind<IUserService>().To<UserService>().InRequestScope();
             _kernel.Bind(typeof(ICrudService<>)).To(typeof(CrudService<>));
+            _kernel.Bind<IBotHandler>().To<BotHandler>().InRequestScope();
         }
     }
 }
