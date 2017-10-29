@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Icogram.Enums;
+using Icogram.Models.ModuleModels.AntiSpamModule;
 using Service;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Telegram.Bot.Bot;
@@ -17,13 +19,22 @@ namespace Icogram.Telegram.BotHandler
     {
         private readonly ICrudService<Chat> _chatCrudService;
         private readonly ICrudService<Command> _commandCrudService;
+        private readonly ICrudService<AntiSpamSetting> _antiSpamSettingsCrudService;
+        private readonly ICrudService<WhiteLink> _whiteLinkCrudService;
+        private readonly ICrudService<SuspiciousUser> _suspiciousUserCrudService;
         private readonly TelegramBotClient _telegramBotClient;
         private Chat _chat;
 
-        public BotHandler(ICrudService<Chat> chatCrudService, ICrudService<Command> commandCrudService)
+        public BotHandler(ICrudService<Chat> chatCrudService, ICrudService<Command> commandCrudService,
+            ICrudService<SuspiciousUser> suspiciousUser, ICrudService<WhiteLink> whiteLinkCrudService,
+            ICrudService<AntiSpamSetting> antiSpamSettingsCrudService,
+            ICrudService<SuspiciousUser> suspiciousUserCrudService)
         {
             _chatCrudService = chatCrudService;
             _commandCrudService = commandCrudService;
+            _whiteLinkCrudService = whiteLinkCrudService;
+            _antiSpamSettingsCrudService = antiSpamSettingsCrudService;
+            _suspiciousUserCrudService = suspiciousUserCrudService;
             _telegramBotClient = IcogramBot.GetClient();
         }
 
@@ -92,8 +103,15 @@ namespace Icogram.Telegram.BotHandler
 
         public async Task LeaveChatAsync(int icogramChatId)
         {
-            var icogramChat = await _chatCrudService.GetByIdAsNoTrackingAsync(icogramChatId);
-            await _telegramBotClient.LeaveChatAsync(icogramChat.TelegramChatId);
+            try
+            {
+                var icogramChat = await _chatCrudService.GetByIdAsNoTrackingAsync(icogramChatId);
+                await _telegramBotClient.LeaveChatAsync(icogramChat.TelegramChatId);
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         public async Task SendMessageAsync(int icogramChatId, string message)
@@ -102,6 +120,35 @@ namespace Icogram.Telegram.BotHandler
             var mess = new StringBuilder(message);
             mess.Replace("[ChatName]", icogramChat.Title);
             await _telegramBotClient.SendTextMessageAsync(icogramChat.TelegramChatId, mess.ToString());
+        }
+
+        public async Task BanUserAsync(SuspiciousUser user)
+        {
+            try
+            {
+                await _telegramBotClient.KickChatMemberAsync(user.Chat.TelegramChatId, user.TelegramUserId, DateTime.UtcNow.AddDays(30));
+                user.IsUserBanned = true;
+                user.BannedDate = DateTime.UtcNow;
+                await _suspiciousUserCrudService.UpdateAsync(user);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public async Task UnBanUserAsync(SuspiciousUser user)
+        {
+            try
+            {
+                await _telegramBotClient.UnbanChatMemberAsync(user.Chat.TelegramChatId, user.TelegramUserId);
+                user.IsUserBanned = false;
+                user.BannedDate = DateTime.UtcNow;
+                await _suspiciousUserCrudService.UpdateAsync(user);
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
 
@@ -140,15 +187,87 @@ namespace Icogram.Telegram.BotHandler
 
         private async Task LinkCheck(Update update)
         {
-            try
+            var whiteLinks = await _whiteLinkCrudService.GetAllAsync();
+            var settings = await _antiSpamSettingsCrudService.GetAllAsync();
+            var setting = settings.FirstOrDefault(s => s.ChatId == _chat.Id);
+            if (setting != null && setting.IsModuleIncluded)
             {
-                await _telegramBotClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
-                await
-                    _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id,
-                        $"Please, don't send a link, {update.Message.From.FirstName} {update.Message.From.LastName}");
-            }
-            catch (Exception)
-            {
+
+                whiteLinks = whiteLinks.Where(wl => wl.ChatId == _chat.Id).ToList();
+                try
+                {
+                    var isNeedToDelete = false;
+
+                    foreach (
+                        Match item in
+                        Regex.Matches(update.Message.Text, @"\b(?:https?://|www\.)[^ \f\n\r\t\v\]]+\b",
+                            RegexOptions.Compiled | RegexOptions.IgnoreCase))
+                    {
+                        var url = item.Value.StartsWith("www.") ? new Uri("http://" + item.Value) : new Uri(item.Value);
+                        var link = url.GetLeftPart(UriPartial.Path).Remove(url.GetLeftPart(UriPartial.Path).Length - 1);
+                        var isWhiteLink = whiteLinks.Any(
+                            wl => wl.Link == link ||
+                                  $"http://{wl.Link}" == link ||
+                                  $"https://{wl.Link}" == link ||
+                                  wl.Link == link.Replace("www.", "") ||
+                                  wl.Link == link.Replace("http://", "") ||
+                                  wl.Link == link);
+                        if (setting.IsInvertMode)
+                        {
+                            if (isWhiteLink)
+                            {
+                                isNeedToDelete = true;
+                            }
+                        }
+                        else
+                        {
+                            if (!isWhiteLink)
+                            {
+                                isNeedToDelete = true;
+                            }
+                        }
+                    }
+
+                    if (isNeedToDelete)
+                    {
+                        await _telegramBotClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
+                        await
+                            _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id,
+                                setting.WarningMessage.Replace("[UserName]",
+                                    $"{update.Message.From.FirstName} {update.Message.From.LastName}"));
+
+                        var users = await _suspiciousUserCrudService.GetAllAsync();
+                        var user = users.FirstOrDefault(u => u.TelegramUserId == update.Message.From.Id);
+                        if (user == null)
+                        {
+                            user = new SuspiciousUser
+                            {
+                                FirstName = update.Message.From.FirstName ?? "",
+                                LastName = update.Message.From.LastName ?? "",
+                                UserName = update.Message.From.Username ?? "",
+                                ChatId = _chat.Id,
+                                NumberOfAttempts = 1,
+                                TelegramUserId = update.Message.From.Id
+                            };
+
+                            await _suspiciousUserCrudService.CreateAsync(user);
+                        }
+                        else
+                        {
+                            user.NumberOfAttempts++;
+                            await _suspiciousUserCrudService.UpdateAsync(user);
+                        }
+
+                        if (setting.IsNeededToBanUser && setting.NumberOfAttempts <= user.NumberOfAttempts)
+                        {
+                            await BanUserAsync(user);
+                        }
+
+                    }
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 

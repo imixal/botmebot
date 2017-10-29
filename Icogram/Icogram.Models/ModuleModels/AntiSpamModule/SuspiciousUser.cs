@@ -10,12 +10,18 @@ namespace Icogram.Models.ModuleModels.AntiSpamModule
 
         public int ChatId { get; set; }
 
-        public string TelegramUserId { get; set; }
+        public int TelegramUserId { get; set; }
+
+        public string UserName { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public int NumberOfAttempts { get; set; }
 
         public bool IsUserBanned { get; set; }
 
-        public DateTime BannedDate { get; set; }
+        public DateTime? BannedDate { get; set; }
     }
 }

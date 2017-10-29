@@ -64,13 +64,19 @@ namespace Icogram.DbContext
                 .HasRequired(et => et.Creator);
 
             modelBuilder.Entity<AntiSpamSetting>()
-                .HasRequired(ass => ass.Chat);
+                .HasRequired(ass => ass.Chat)
+                .WithMany()
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<SuspiciousUser>()
-                .HasRequired(su=>su.Chat);
+                .HasRequired(su=>su.Chat)
+                .WithMany()
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<WhiteLink>()
-                .HasRequired(wl => wl.Chat);
+                .HasRequired(wl => wl.Chat)
+                .WithMany()
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<CustomMessage>()
                 .HasRequired(cm => cm.Chat);
@@ -83,7 +89,8 @@ namespace Icogram.DbContext
 
             modelBuilder.Entity<Command>()
                 .HasRequired(c => c.Chat)
-                .WithMany(chat => chat.Commands);
+                .WithMany(chat => chat.Commands)
+                .WillCascadeOnDelete(true);
         }
     }
 }

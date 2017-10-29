@@ -1,0 +1,187 @@
+﻿@model Icogram.ViewModels.AntiSpam.WhiteLinkPageViewModel
+@{
+    ViewBag.Title = "WhiteLinks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: none;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        function setDeleteData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#delete").find("#deleteModalLabel").text("Delete " + $row.parent().parent().find("input[Name=Link]").val());
+        }
+
+        function saveUpdates(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("CreateWhiteLinkCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                ChatId: $row.find("select[Name=ChatId]").val(),
+                Link: $row.find("input[Name=Link]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        function createLink() {
+            table.row.add([
+                'new',
+                $('#Chat').clone().removeClass('hidden').prop('outerHTML'),
+                '<input class="form-control" name="Link" placeholder="Link" />',
+                '<a class="label label-md label-info" onclick="create(this)"><span class="fa fa-plus"></span></a>'
+            ]).draw(false);
+        }
+
+        function create(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("CreateWhiteLinkCommand")', {
+                Id: 0,
+                ChatId: $row.find("select[Name=ChatId]").val(),
+                Link: $row.find("input[Name=Link]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+
+        $("#deletecommand").on('click', deletecommand);
+
+        function deletecommand() {
+            var $row = $(localStorage.getItem("row"));
+            $.post('@Url.Action("DeleteWhiteLinkCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+    </script>
+}
+
+<div class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>White Links</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="btn btn-success text-primary" onclick="createLink()"><i class="fa fa-plus"></i>Create Link</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table table-bordered" id="Table">
+                    <thead>
+                        <tr class="headings">
+                            <th width="5%" class="column-title">№</th>
+                            <th width="10%" class="column-title text-center">Chat Title</th>
+                            <th width="10%" class="column-title text-center">Link</th>
+                            <th width="5%" class="column-title text-center last">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var link in Model.WhiteLinks.Select((value, i) => new { j = i + 1, value }))
+                    {
+                            <tr class="">
+                                <td width="5%"><input class="hidden" name="Id" value="@link.value.Id" /> @link.j</td>
+                                <td width="10%" class="text-center">
+                                    <select class="form-control" name="ChatId">
+                                        @foreach (var chat in Model.Chats)
+                                    {
+                                        if (chat.Id == link.value.ChatId)
+                                        {
+                                                <option value="@chat.Id" selected="selected">@chat.Title</option>
+                                        }
+                                        else
+                                        {
+                                                <option value="@chat.Id">@chat.Title</option>
+                                        }
+                                    }
+                                    </select>
+                                </td>
+                                <td width="5%"><input class="form-control" name="Link" value="@link.value.Link" /></td>
+                                <td width="5%" class="text-center">
+                                    <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                                    <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                                </td>
+                            </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="delete">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="deleteModalLabel">Leave</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="userId" />
+                <h4>Are you sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="deletecommand" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<select class="form-control hidden" id="Chat" name="ChatId">
+    <option value="0" selected="selected">All</option>
+    @foreach (var chat in Model.Chats)
+    {
+        <option value="@chat.Id">@chat.Title</option>
+    }
+</select>

@@ -1,0 +1,186 @@
+﻿@model Icogram.ViewModels.AntiSpam.SettingsPageViewModel
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: none;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        function setDeleteData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#delete").find("#deleteModalLabel").text("Leave " + $row.parent().parent().find("input[Name=Name]").val());
+        }
+
+        function saveUpdates(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("UpdateSettingsCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                ChatId: $row.find("input[Name=ChatId]").val(),
+                IsModuleIncluded: $row.find("input[Name=IsModuleIncluded]").is(':checked'),
+                IsInvertMode: $row.find("input[Name=IsInvertMode]").is(':checked'),
+                IsNeededToBanUser: $row.find("input[Name=IsNeededToBanUser]").is(':checked'),
+                NumberOfAttempts: $row.find("input[Name=NumberOfAttempts]").val(),
+                WarningMessage: $row.find("textarea[Name=WarningMessage]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+    </script>
+}
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-question"></i> Help!</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <p>Bot can ban users and can delete only when he is <span class="label label-md label-info">admin</span></p>
+        <p>Bot can't kick <span class="label label-md label-info">group creaor</span> and delete his messages</p>
+        <p>Bot can unban users only in supergroup<span class="label label-md label-info">group creaor</span></p>
+        <p>For <span class="label label-warning label-md">Warning Message</span> you can use params: <span class="label label-info label-md">[UserName]</span></p>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>AntiSpam Settings</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table table-bordered" id="Table">
+                <thead>
+                    <tr class="headings">
+                        <th class="hidden"></th>
+                        <th class="hidden">ChatId</th>
+                        <th width="10%" class="column-title text-center">Chat Title</th>
+                        <th width="10%" class="column-title text-center">Iclude</th>
+                        <th width="25%" class="column-title text-center">Invert Mode</th>
+                        <th width="5%" class="column-title text-center">Ban User</th>
+                        <th width="10%" class="column-title text-center">Number of Attempts</th>
+                        <th width="10%" class="column-title text-center">Warning Message</th>
+                        <th width="5%" class="column-title text-center last">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var setting in Model.Settings.Select((value, i) => new { j = i + 1, value }))
+                    {
+                        <tr class="">
+                            <td class="hidden"><input class="hidden" name="Id" value="@setting.value.Id" /> @setting.j</td>
+                            <td class="hidden"><input class="hidden" name="ChatId" value="@setting.value.ChatId" /> </td>
+                            <td width="10%" class="text-center">@setting.value.Chat.Title</td>
+                            <td width="5%" class="text-center">
+                                @if (setting.value.IsModuleIncluded)
+                                    {
+                                <input class="form-control" name="IsModuleIncluded" type="checkbox" checked />
+                                    }
+                                    else
+                                    {
+                                <input class="form-control" name="IsModuleIncluded" type="checkbox" />
+                                    }
+                            </td>
+                            <td width="5%" class="text-center">
+                                @if (setting.value.IsInvertMode)
+                                    {
+                                <input class="form-control" name="IsInvertMode" type="checkbox" checked />
+                                    }
+                                    else
+                                    {
+                                <input class="form-control" name="IsInvertMode" type="checkbox" />
+                                    }
+                            </td>
+                            <td width="5%" class="text-center">
+                                @if (setting.value.IsNeededToBanUser)
+                                    {
+                                <input class="form-control" name="IsNeededToBanUser" type="checkbox" checked />
+                                    }
+                                    else
+                                    {
+                                <input class="form-control" name="IsNeededToBanUser" type="checkbox" />
+                                    }
+                            </td>
+                            <td width="5%"><input class="form-control" type="number" name="NumberOfAttempts" value="@setting.value.NumberOfAttempts" /></td>
+                            <td width="25%"><textarea class="form-control" type="text" name="WarningMessage" placeholder="Message">@setting.value.WarningMessage</textarea></td>
+                            <td width="5%" class="text-center">
+                                <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var chat in Model.Chats.Where(c => Model.Settings.All(s => s.Chat.Id != c.Id)))
+                    {
+                        <tr class="">
+                            <td class="hidden"><input  name="Id" value="0" /></td>
+                            <td class="hidden"><input class="hidden" name="ChatId" value="@chat.Id" /> </td>
+                            <td width="10%" class="text-center">@chat.Title</td>
+                            <td width="5%" class="text-center">
+                                <input class="form-control" name="IsModuleIncluded" type="checkbox" />
+                            </td>
+                            <td width="5%" class="text-center">
+                                <input class="form-control" name="IsInvertMode" type="checkbox" />
+                            </td>
+                            <td width="5%" class="text-center">
+                                <input class="form-control" name="IsNeededToBanUser" type="checkbox" />
+                            </td>
+                            <td width="5%"><input class="form-control" type="number" name="NumberOfAttempts" value="5" /></td>
+                            <td width="25%"><textarea class="form-control" type="text" name="WarningMessage" placeholder="Message"></textarea></td>
+                            <td width="5%" class="text-center">
+                                <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

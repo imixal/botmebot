@@ -1,0 +1,150 @@
+﻿@model Icogram.ViewModels.AntiSpam.SuspiciousUsersPageViewModel
+@{
+    ViewBag.Title = "Suspicious Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: none;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table")
+            .DataTable({
+                columnDefs: [
+                    {
+                        targets: [0],
+                        searchable: true
+                    }
+                ],
+                responsive: true,
+                scrollY: $(window).height() - 200,
+                scrollCollapse: true,
+                dom: '<"left"B> frtl',
+                buttons: []
+            });
+
+
+        $(document)
+            .ready(function() {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+
+        function kick(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("KickCommand")',
+            {
+                id: $row.find("input[Name=Id]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+        function unban(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("UnBanCommand")',
+            {
+                id: $row.find("input[Name=Id]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+    </script>
+}
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-question"></i> Help!</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <p>Bot can ban users and can delete only when he is <span class="label label-md label-info">admin</span></p>
+        <p>Bot can't kick <span class="label label-md label-info">group creaor</span> and delete his messages</p>
+        <p>Bot can unban users only in supergroup<span class="label label-md label-info">group creaor</span></p>
+    </div>
+</div>
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Ban user</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table table-bordered" id="Table">
+                <thead>
+                    <tr class="headings">
+                        <th class="hidden"></th>
+                        <th width="10%" class="column-title text-center">Chat Title</th>
+                        <th width="10%" class="column-title text-center">User Name</th>
+                        <th width="25%" class="column-title text-center">First Name</th>
+                        <th width="5%" class="column-title text-center">Last Name</th>
+                        <th width="10%" class="column-title text-center">Number of Attempts</th>
+                        <th width="10%" class="column-title text-center">Bann User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.SuspiciousUsers)
+                    {
+                        <tr class="">
+                            <td class="hidden"><input name="Id" value="@user.Id" /></td>
+                            <td width="10%" class="text-center">@user.Chat.Title</td>
+                            <td width="10%" class="text-center"><input class="form-control" disabled="disabled" name="UserName" type="text" value="@user.UserName" /></td>
+                            <td width="10%" class="text-center"><input class="form-control" disabled="disabled" name="FirstName" type="text" value="@user.FirstName" /></td>
+                            <td width="10%" class="text-center"><input class="form-control" disabled="disabled" name="LastName" type="text" value="@user.LastName" /></td>
+                            <td width="5%" class="text-center"><input class="form-control" type="number" disabled="disabled" name="NumberOfAttempts"value="@user.NumberOfAttempts" /></td>
+                            <td width="10%" class="text-center">
+                                @if (!user.IsUserBanned)
+                                {
+                                    <input class="btn btn-danger" onclick="kick(this)" type="button" value="Kick"/>
+                                    if (user.BannedDate.HasValue)
+                                    {
+                                        <span>Was unbanned @user.BannedDate.Value.ToShortDateString()</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <input class="btn btn-success" onclick="unban(this)" type="button" value="Unban" />
+                                    if (user.BannedDate.HasValue)
+                                    {
+                                        <span>Was kicked @user.BannedDate.Value.ToShortDateString()</span>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

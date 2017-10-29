@@ -58,9 +58,9 @@ namespace Icogram.DataAccessLayer.UnitOfWork
                 { typeof(Command), typeof(CommandRepository) },
                 { typeof(CustomMessage), typeof(CustomMessageRepository) },
                 { typeof(Resource), typeof(Repository<Resource>) },
-                { typeof(AntiSpamSetting), typeof(Repository<AntiSpamSetting>) },
-                { typeof(SuspiciousUser), typeof(Repository<SuspiciousUser>) },
-                { typeof(WhiteLink), typeof(Repository<WhiteLink>) },
+                { typeof(AntiSpamSetting), typeof(AntiSpamSettingsRepository) },
+                { typeof(SuspiciousUser), typeof(SuspiciousUserRepository) },
+                { typeof(WhiteLink), typeof(WhiteLinkRepository) },
                 { typeof(ChatStatistic), typeof(Repository<ChatStatistic>) }
             };
         }

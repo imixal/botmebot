@@ -59,12 +59,15 @@
   <ItemGroup>
     <Compile Include="EntityFramework\Identity\ApplicationRoleManager.cs" />
     <Compile Include="EntityFramework\Identity\ApplicationUserManager.cs" />
+    <Compile Include="Repository\AntiSpamSettingsRepository.cs" />
     <Compile Include="Repository\ChatRepository.cs" />
     <Compile Include="Repository\CommandRepository.cs" />
     <Compile Include="Repository\CompanyRepository.cs" />
     <Compile Include="Repository\CustomMessageRepository.cs" />
     <Compile Include="Repository\EmailMessageRepository.cs" />
     <Compile Include="Repository\EmailTemplateRepository.cs" />
+    <Compile Include="Repository\SuspiciousUserRepository.cs" />
+    <Compile Include="Repository\WhiteLinkRepository.cs" />
     <Compile Include="UnitOfWork\IcogramUnitOfWork.cs" />
     <Compile Include="Interfaces\IIcogramUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

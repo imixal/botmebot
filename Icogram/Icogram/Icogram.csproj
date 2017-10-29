@@ -1379,11 +1379,13 @@
     <Content Include="Views\Command\MyCommands.cshtml" />
     <Content Include="Views\Chat\MyChats.cshtml" />
     <Content Include="Views\Global\Help.cshtml" />
+    <Content Include="Views\AntiSpam\Settings.cshtml" />
+    <Content Include="Views\AntiSpam\WhiteLinks.cshtml" />
+    <Content Include="Views\AntiSpam\SuspiciousUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\AntiSpam\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
