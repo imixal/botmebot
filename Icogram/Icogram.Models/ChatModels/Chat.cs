@@ -1,5 +1,7 @@
-﻿using Icogram.Models.Abstract;
+﻿using System.Collections.Generic;
+using Icogram.Models.Abstract;
 using Icogram.Models.CompanyModels;
+using Icogram.Models.ModuleModels.CommandModule;
 
 namespace Icogram.Models.ChatModels
 {
@@ -18,5 +20,9 @@ namespace Icogram.Models.ChatModels
         public bool IsApproved { get; set; }
 
         public string WelcomeUserMessage { get; set; }
+
+        public int CommandTimeOut { get; set; }
+
+        public List<Command> Commands { get; set; }
     }
 }

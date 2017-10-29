@@ -55,13 +55,12 @@ namespace Icogram.DataAccessLayer.UnitOfWork
                 { typeof(EmailMessage), typeof(EmailMessageRepository) },
                 { typeof(EmailTemplate), typeof(EmailTemplateRepository) },
                 { typeof(EmailVariable), typeof(Repository<EmailVariable>) },
-                { typeof(Command), typeof(Repository<Command>) },
+                { typeof(Command), typeof(CommandRepository) },
                 { typeof(CustomMessage), typeof(CustomMessageRepository) },
                 { typeof(Resource), typeof(Repository<Resource>) },
                 { typeof(AntiSpamSetting), typeof(Repository<AntiSpamSetting>) },
                 { typeof(SuspiciousUser), typeof(Repository<SuspiciousUser>) },
                 { typeof(WhiteLink), typeof(Repository<WhiteLink>) },
-                { typeof(ChatCommand), typeof(ChatCommandRepository) },
                 { typeof(ChatStatistic), typeof(Repository<ChatStatistic>) }
             };
         }

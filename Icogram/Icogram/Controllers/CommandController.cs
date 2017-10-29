@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Icogram.Extensions;
 using Icogram.Models.ChatModels;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Service.User;
 using Icogram.ViewModelBuilder;
 using Icogram.ViewModels.Command;
-using Microsoft.AspNet.Identity;
 using Service;
 
 namespace Icogram.Controllers
@@ -17,99 +17,52 @@ namespace Icogram.Controllers
         private readonly IViewModelBuilder _viewModelBuilder;
         private readonly IUserService _userService;
         private readonly ICrudService<Command> _commandCrudService;
-        private readonly ICrudService<ChatCommand> _chatCommandCrudService;
         private readonly ICrudService<Chat> _chatCrudService;
 
-        public CommandController(IViewModelBuilder viewModelBuilder, IUserService userService, ICrudService<Command> companyCrudService, ICrudService<ChatCommand> chatCommandCrudService, ICrudService<Chat> chatCrudService)
+        public CommandController(IViewModelBuilder viewModelBuilder, IUserService userService, ICrudService<Command> companyCrudService, ICrudService<Chat> chatCrudService)
         {
             _viewModelBuilder = viewModelBuilder;
             _userService = userService;
             _commandCrudService = companyCrudService;
-            _chatCommandCrudService = chatCommandCrudService;
             _chatCrudService = chatCrudService;
         }
 
-
-        [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult> List()
+        public async Task<ActionResult> MyCommands()
         {
-            var model = await _viewModelBuilder.GetPageViewModelAsync<CommandPageViewModel>();
-            model.Commands = await _commandCrudService.GetAllAsync();
-
-            return View(model);
-        }
-
-        [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult> CustomerChatCommands()
-        {
-            var model = await _viewModelBuilder.GetPageViewModelAsync<CustomerChatCommandsPageViewModel>();
-            model.ChatCommands = await _chatCommandCrudService.GetAllAsync();
-            model.Commands = await _commandCrudService.GetAllAsync();
-
-            return View(model);
-        }
-
-        public async Task<ActionResult> ChatCommands()
-        {
-            var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity.GetUserName());
-            var model = await _viewModelBuilder.GetPageViewModelAsync<ChatCommandsPageViewModel>();
-            model.ChatCommands = await _chatCommandCrudService.GetAllAsync();
-            model.ChatCommands =
-                model.ChatCommands.Where(cc => cc.Chat.CompanyId.HasValue)
-                    .Where(c => c.Chat.CompanyId == user.CompanyId && c.Chat.IsApproved)
-                    .ToList();
-            model.Commands = await _commandCrudService.GetAllAsync();
-            model.Chats = await _chatCrudService.GetAllAsync();
-            model.Chats = model.Chats.Where(c => c.CompanyId.HasValue).Where(c => c.CompanyId == user.CompanyId && c.IsApproved).ToList();
+            var user = await _userService.GetByUserNameAsync(HttpContext.User.Identity.Name);
+            var model = await _viewModelBuilder.GetPageViewModelAsync<MyCommandsPageViewModel>();
+            var chats = await _chatCrudService.GetAllAsync();
+            model.Chats = HttpContext.User.Identity.IsInRole("Customer") ? chats.Where(c => c.CompanyId == user.CompanyId).Where(c => c.IsApproved).ToList() : chats;
 
             return View(model);
         }
 
         #region Commands
 
-        [Authorize(Roles = "Admin, Manager")]
-        public async Task EditCommand(Command command)
-        {
-            if (command.Id == 0)
-            {
-                await _commandCrudService.CreateAsync(command);
-            }
-            else
-            {
-                await _commandCrudService.UpdateAsync(command);
-            }
-        }
-
-        [Authorize(Roles = "Admin, Manager")]
         public async Task DeleteCommand(int id)
         {
             var command = await _commandCrudService.GetByIdAsync(id);
             await _commandCrudService.DeleteAsync(command);
         }
 
-        public async Task ChatCommandEditCommand(ChatCommand chatCommand)
+        public async Task UpdateMyCommand(UpdateMyCommandViewModel model)
         {
-            if (chatCommand.Id == 0)
-            {
-                await _chatCommandCrudService.CreateAsync(chatCommand);
-            }
-            else
-            {
-                await _chatCommandCrudService.UpdateAsync(chatCommand);
-            }
+            var command = await _commandCrudService.GetByIdAsync(model.Id);
+            command.CommandName = model.CommandName;
+            command.IsCommandShowInList = model.IsCommandShowInList;
+            command.ActionMessage = model.ActionMessage;
+            await _commandCrudService.UpdateAsync(command);
         }
 
-        public async Task ChatCommandUpdateCommand(int chatCommandId, string message)
+        public async Task CreateMyCommand(CreateMyCommandViewModel model)
         {
-            var chatCommand = await _chatCommandCrudService.GetByIdAsync(chatCommandId);
-            chatCommand.Message = message;
-            await _chatCommandCrudService.UpdateAsync(chatCommand);
-        }
-
-        public async Task ChatCommandDeleteCommand(int id)
-        {
-            var chatCommand = await _chatCommandCrudService.GetByIdAsync(id);
-            await _chatCommandCrudService.DeleteAsync(chatCommand);
+            await _commandCrudService.CreateAsync(new Command
+            {
+                CommandName = model.CommandName,
+                ActionMessage = model.ActionMessage,
+                ChatId = model.ChatId,
+                IsCommandShowInList =  model.IsCommandShowInList
+            });
         }
         #endregion
     }

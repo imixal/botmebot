@@ -68,7 +68,6 @@
     <Compile Include="ModuleModels\AntiSpamModule\AntiSpamSetting.cs" />
     <Compile Include="ModuleModels\AntiSpamModule\SuspiciousUser.cs" />
     <Compile Include="ModuleModels\AntiSpamModule\WhiteLink.cs" />
-    <Compile Include="ModuleModels\CommandModule\ChatCommand.cs" />
     <Compile Include="ModuleModels\CommandModule\Command.cs" />
     <Compile Include="ModuleModels\CustomMessageModule\CustomMessage.cs" />
     <Compile Include="ModuleModels\StatisticsModule\ChatStatistic.cs" />

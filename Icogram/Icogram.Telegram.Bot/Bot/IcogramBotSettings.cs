@@ -2,7 +2,7 @@
 {
     public class IcogramBotSettings
     {
-        public static string Url { get; set; } = "https://a40ab504.ngrok.io:443/{0}";
+        public static string Url { get; set; } = "https://cf2fd947.ngrok.io:443/{0}";
 
         public static string Name { get; set; } = "ImixalBot";
 

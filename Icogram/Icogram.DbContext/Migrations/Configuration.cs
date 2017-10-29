@@ -45,7 +45,7 @@ namespace Icogram.DbContext.Migrations
             {
                 var company = new Company
                 {
-                    Name = "Icogram",
+                    Name = "ManageCompany",
                     Type = GlobalEnums.CompanyType.ManagementCompany
                 };
                 context.Companies.Add(company);
@@ -58,7 +58,7 @@ namespace Icogram.DbContext.Migrations
                 var user = new ApplicationUser { UserName = "imixal" };
                 if (context.Companies.Any(c => c.Name == "Icogram"))
                 {
-                    user.CompanyId = context.Companies.First(c => c.Name == "Icogram").Id;
+                    user.CompanyId = 1;
                 }
 
                 manager.Create(user, "ilya9511");

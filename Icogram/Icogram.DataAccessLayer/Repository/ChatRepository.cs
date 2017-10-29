@@ -17,6 +17,7 @@ namespace Icogram.DataAccessLayer.Repository
         {
             return await GetAllQuery()
                 .AsNoTracking()
+                .Include(cc => cc.Commands)
                 .Include(cc => cc.Company)
                 .ToListAsync();
         }
@@ -25,6 +26,7 @@ namespace Icogram.DataAccessLayer.Repository
         {
             return await GetAllQuery()
                 .Include(cc => cc.Company)
+                .Include(cc => cc.Commands)
                 .FirstOrDefaultAsync(cc => cc.Id == id);
         }
 
@@ -33,6 +35,7 @@ namespace Icogram.DataAccessLayer.Repository
             return await GetAllQuery()
                 .AsNoTracking()
                 .Include(cc => cc.Company)
+                .Include(cc => cc.Commands)
                 .FirstOrDefaultAsync(cc => cc.Id == id);
         }
     }

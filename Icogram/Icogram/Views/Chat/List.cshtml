@@ -76,6 +76,7 @@
                     IsApproved: $row.find("input[Name=IsApproved]").is(':checked'),
                     TelegramChatId: $row.find("input[Name=TelegramChatId]").val(),
                     WelcomeUserMessage: $row.find("textarea[Name=WelcomeUserMessage]").val(),
+                    CommandTimeOut: $row.find("input[Name=CommandTimeOut]").val()
                 })
                 .done(function () {
                     location.reload();
@@ -118,6 +119,7 @@
                         <th class="column-title text-center">Is Approved?</th>
                         <th class="column-title text-center">Telegram ID</th>
                         <th class="column-title text-center">Welcome Message</th>
+                        <th class="column-title text-center">Command Time out</th>
                         <th class="column-title text-center last">Actions</th>
                     </tr>
                 </thead>
@@ -127,7 +129,7 @@
                         <tr class="">
                             <td width="5%"><input class="hidden" name="Id" value="@chat.value.Id" /> @chat.j</td>
                             <td width="15%"><input class="form-control" type="text" name="Title" value="@chat.value.Title" /></td>
-                            <td width="15%">
+                            <td width="10%">
                                 <select class="form-control" name="Company">
                                     @if (!chat.value.CompanyId.HasValue)
                                     {
@@ -153,7 +155,7 @@
                                     }
                                 </select>
                             </td>
-                            <td width="15%"><input class="form-control" disabled="disabled" type="text" name="Type" value="@chat.value.Type" /></td>
+                            <td width="10%"><input class="form-control" disabled="disabled" type="text" name="Type" value="@chat.value.Type" /></td>
                             <td width="5%" class="text-center">
                                 @if (@chat.value.IsApproved)
                                 {
@@ -165,7 +167,8 @@
                                 }
                             </td>
                             <td width="13%"><input class="form-control" disabled="disabled" type="text" name="TelegramChatId" value="@chat.value.TelegramChatId" /></td>
-                            <td width="15%"><textarea class="form-control" disabled="disabled" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
+                            <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
+                            <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" value="@chat.value.CommandTimeOut" /></td>
                             <td class="text-center" width="7%">
                                 <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
                                 <a class="label label-md label-warning" onclick="refreshChat(this)"><span class="fa fa-refresh"></span></a>

@@ -64,18 +64,7 @@
                                 @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
                                 {
                                     <li>
-                                        <a><i class="fa fa-terminal"></i> Commands<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
-                                            {
-                                                <li><a href="@Url.Action("List", "Command")">Support Commands</a></li>
-                                            }
-                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
-                                            {
-                                                <li><a href="@Url.Action("CustomerChatCommands", "Command")">Customer Chat Commands</a></li>
-                                            }
-                                                <li><a href="@Url.Action("ChatCommands", "Command")">My Commands</a></li>
-                                        </ul>
+                                        <a href="@Url.Action("MyCommands","Command")"><i class="fa fa-terminal"></i>My Commands</a>
                                     </li>
                                 }
                                 @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
@@ -83,17 +72,9 @@
                                     <li>
                                         <a><i class="fa fa-ban"></i> AntiSpam<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
-                                            {
-                                                <li><a href="index.html">List Settings</a></li>
-                                                <li><a href="index.html">White Links</a></li>
-                                                <li><a href="index.html">Suspicious User List</a></li>
-                                            }
-                                            @if (User.Identity.IsInRole("Customer"))
-                                            {
-                                                <li><a href="index.html">Settings</a></li>
-                                                <li><a href="index.html">Suspicious Use List</a></li>
-                                            }
+                                                <li><a href="@Url.Action("Settings", "AntiSpam")">List Settings</a></li>
+                                                <li><a href="@Url.Action("WhiteLinks", "AntiSpam")">White Links</a></li>
+                                                <li><a href="@Url.Action("SuspiciousUsers", "AntiSpam")">Suspicious User List</a></li>
                                         </ul>
                                     </li>
                                  }

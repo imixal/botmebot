@@ -1,0 +1,204 @@
+﻿@model Icogram.ViewModels.Command.MyCommandsPageViewModel
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/Libs/Gentelella/vendors/select2/dist/css/select2.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: none;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/select2/dist/js/select2.full.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        function setDeleteData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#delete").find("#deleteModalLabel").text("Leave " + $row.parent().parent().find("input[Name=Name]").val());
+        }
+
+        function deletecommand() {
+            var $row = $(localStorage.getItem("row"));
+            $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function create(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("CreateMyCommand")', {
+                ChatId: $row.find("select[Name=Chat]").val(),
+                ActionMessage: $row.find("textarea[Name=Message]").val(),
+                CommandName: $row.find("input[Name=CommandName]").val(),
+                IsCommandShowInList: $row.find("input[Name=IsCommandShowInList]").is(':checked'),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        function createCommand() {
+            table.row.add([
+                'new',
+                $('select[name=Chat]').clone().removeClass('hidden').prop('outerHTML'),
+                '<input class="form-control" name="CommandName" placeholder="Command Name" />',
+                '<textarea class="form-control" type="text" name="ActionMessage" placeholder="Action Message"></textarea>',
+                '<input class="form-control" name="IsCommandShowInList" type="checkbox" checked />',
+                'Not Usage',
+                '<a class="label label-md label-info" onclick="create(this)"><span class="fa fa-plus"></span></a>'
+            ]).draw(false);
+        }
+
+        function saveUpdates(row) {
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("UpdateMyCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                ActionMessage: $row.find("textarea[Name=Message]").val(),
+                CommandName: $row.find("input[Name=CommandName]").val(),
+                IsCommandShowInList: $row.find("input[Name=IsCommandShowInList]").is(':checked'),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        $("#deletecommand").on('click', deletecommand);
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+    </script>
+}
+<div class="x_panel">
+    <div class="x_title">
+        <h2>My Commands</h2>
+        @if (Model.UserProfileViewModel.Company.IsCommandModuleActivated)
+        {
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="btn btn-success text-primary" onclick="createCommand()"><i class="fa fa-plus"></i> Create Command</a>
+                </li>
+            </ul>
+        }
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table table-bordered" id="Table">
+                <thead>
+                    <tr class="headings">
+                        <th width="5%" class="column-title">№</th>
+                        <th width="10%" class="column-title text-center">Chat Title</th>
+                        <th width="10%" class="column-title text-center">Command Name</th>
+                        <th width="25%" class="column-title text-center">Action Message</th>
+                        <th width="5%" class="column-title text-center">Show in List</th>
+                        <th width="10%" class="column-title text-center">Last Date Usage</th>
+                        <th width="5%" class="column-title text-center last">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var chat in Model.Chats)
+                {
+                    foreach (var chatCommand in chat.Commands.Select((value, i) => new {j = i + 1, value}))
+                     {
+                         <tr class="">
+                             <td width="5%"><input class="hidden" name="Id" value="@chatCommand.value.Id"/> @chatCommand.j</td>
+                             <td width="10%" class="text-center">@chatCommand.value.Chat.Title</td>
+                             <td width="10%"><input class="form-control" name="CommandName" value="@chatCommand.value.CommandName" /></td>
+                             <td width="25%"><textarea class="form-control" type="text" name="Message" placeholder="Message">@chatCommand.value.ActionMessage</textarea></td>
+                             <td width="5%" class="text-center">
+                                 @if (@chatCommand.value.IsCommandShowInList)
+                                 {
+                                     <input class="form-control" name="IsCommandShowInList" type="checkbox" checked />
+                                 }
+                                 else
+                                 {
+                                     <input class="form-control" name="IsCommandShowInList" type="checkbox" />
+                                 }
+                             </td>
+                             @if (@chatCommand.value.LastUsage.HasValue)
+                             {
+                                 <td class="text-center" width="10%">@chatCommand.value.LastUsage</td>
+                             }
+                             else
+                             {
+                                <td class="text-center" width="10%">Not used</td>
+                             }
+                             <td width="5%" class="text-center" >
+                                 <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                                 <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                             </td>
+                         </tr>
+                     }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="delete">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="deleteModalLabel">Leave</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="userId" />
+                <h4>Are you sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="deletecommand" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<select class="form-control hidden" name="Chat">
+    @foreach (var chat in Model.Chats)
+    {
+        <option value="@chat.Id">@chat.Title</option>
+    }
+</select>

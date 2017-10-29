@@ -287,6 +287,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AntiSpamController.cs" />
     <Compile Include="Controllers\BotController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
@@ -1374,16 +1375,15 @@
     <Content Include="Views\User\List.cshtml" />
     <Content Include="Views\User\MyUserProfile.cshtml" />
     <Content Include="Views\Company\List.cshtml" />
-    <Content Include="Views\Command\List.cshtml" />
     <Content Include="Views\Chat\List.cshtml" />
-    <Content Include="Views\Command\CustomerChatCommands.cshtml" />
+    <Content Include="Views\Command\MyCommands.cshtml" />
     <Content Include="Views\Chat\MyChats.cshtml" />
-    <Content Include="Views\Command\ChatCommands.cshtml" />
     <Content Include="Views\Global\Help.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\AntiSpam\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

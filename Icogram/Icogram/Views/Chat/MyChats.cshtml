@@ -61,10 +61,11 @@
 
         function saveUpdates(row) {
             var $row = $(row).parents('tr');
-            $.post('@Url.Action("UpdateWelcomMesage")',
+            $.post('@Url.Action("UpdateMyChat")',
                 {
                     icogramChatId: $row.find("input[Name=icogramChatId]").val(),
                     message: $row.find("textarea[Name=WelcomeUserMessage]").val(),
+                    commandTimeOut: $row.find("input[Name=CommandTimeOut]").val(),
                 })
                 .done(function () {
                     location.reload();
@@ -116,6 +117,7 @@
                     {
                         <th class="column-title text-center">Welcome Message</th>
                     }
+                    <th class="column-title text-center">Command Time out</th>
                     <th class="column-title text-center last">Actions</th>
                 </tr>
                 </thead>
@@ -130,6 +132,7 @@
                         {
                             <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
                         }
+                        <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" value="@chat.value.CommandTimeOut" /></td>
                         <td class="text-center" width="7%">
                             <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-save"></span></a>
                             <a class="label label-md label-warning" onclick="refreshChat(this)"><span class="fa fa-refresh"></span></a>

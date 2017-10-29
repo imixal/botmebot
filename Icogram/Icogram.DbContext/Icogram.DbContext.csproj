@@ -58,13 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IcogramDbContext.cs" />
-    <Compile Include="Migrations\201710261520080_Initial.cs" />
-    <Compile Include="Migrations\201710261520080_Initial.Designer.cs">
-      <DependentUpon>201710261520080_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710271050297_ChatId-long.cs" />
-    <Compile Include="Migrations\201710271050297_ChatId-long.Designer.cs">
-      <DependentUpon>201710271050297_ChatId-long.cs</DependentUpon>
+    <Compile Include="Migrations\201710291152380_Init.cs" />
+    <Compile Include="Migrations\201710291152380_Init.Designer.cs">
+      <DependentUpon>201710291152380_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,11 +79,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710261520080_Initial.resx">
-      <DependentUpon>201710261520080_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710271050297_ChatId-long.resx">
-      <DependentUpon>201710271050297_ChatId-long.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710291152380_Init.resx">
+      <DependentUpon>201710291152380_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

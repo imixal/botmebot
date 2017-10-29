@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using Telegram.Bot.Args;
+﻿using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using Chat = Icogram.Models.ChatModels.Chat;
 
 namespace Icogram.Telegram.BotHandler
 {
     public interface IBotHandler
     {
-        Task<bool> IsChatApprovedAsync(long telegramChatId);
+        Task<Chat> GetApprovedChatAsync(long telegramChatId);
 
         Task UpdateChatFieldsAsync(int icogramChatId);
 
@@ -15,6 +14,6 @@ namespace Icogram.Telegram.BotHandler
 
         Task SendMessageAsync(int icogramChatId, string message);
 
-        Task MessageHandler(Update update);
+        Task MessageHandler(Update update, Chat chat);
     }
 }

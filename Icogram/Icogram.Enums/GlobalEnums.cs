@@ -7,5 +7,14 @@
             ManagementCompany = 1,
             CustomerCompany = 2
         }
+
+        public enum ModuleType
+        {
+            NotSet,
+            WelcomeMessageModule,
+            CommandModule,
+            AntiSpamModule,
+            CustomMessageModule
+        }
     }
 }

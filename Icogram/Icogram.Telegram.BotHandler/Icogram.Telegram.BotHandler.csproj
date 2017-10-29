@@ -127,6 +127,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Icogram.Enums\Icogram.Enums.csproj">
+      <Project>{3C67A7E3-3C8B-42A2-8EFA-E054B95DE141}</Project>
+      <Name>Icogram.Enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Icogram.Models\Icogram.Models.csproj">
       <Project>{B8D80C07-8986-4B2E-AD89-2CCADA275CEC}</Project>
       <Name>Icogram.Models</Name>

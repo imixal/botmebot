@@ -73,10 +73,11 @@ namespace Icogram.Controllers
             await _chatCrudService.DeleteAsync(chat);
         }
 
-        public async Task UpdateWelcomMesage(string message, int icogramChatId)
+        public async Task UpdateMyChat(string message, int icogramChatId, int commandTimeOut)
         {
             var chat = await _chatCrudService.GetByIdAsync(icogramChatId);
             chat.WelcomeUserMessage = message;
+            chat.CommandTimeOut = commandTimeOut;
             await _chatCrudService.UpdateAsync(chat);
         }
 

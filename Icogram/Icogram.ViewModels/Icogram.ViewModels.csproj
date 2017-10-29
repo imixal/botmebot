@@ -51,10 +51,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntiSpam\SettingsPageViewModel.cs" />
+    <Compile Include="AntiSpam\SuspiciousUsersPageViewModel.cs" />
+    <Compile Include="AntiSpam\WhiteLinkPageViewModel.cs" />
     <Compile Include="Chat\ChatsPageViewModel.cs" />
-    <Compile Include="Command\ChatCommandsPageViewModel.cs" />
-    <Compile Include="Command\CommandPageViewModel.cs" />
-    <Compile Include="Command\CustomerChatCommandsPageViewModel.cs" />
+    <Compile Include="Command\CreateMyCommandViewModel.cs" />
+    <Compile Include="Command\MyCommandsPageViewModel.cs" />
+    <Compile Include="Command\UpdateMyCommandViewModel.cs" />
     <Compile Include="CompanyModels\CompanyPageViewModel.cs" />
     <Compile Include="Dashboard\DashboardViewModel.cs" />
     <Compile Include="Layout\LayoutViewModel.cs" />

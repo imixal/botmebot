@@ -36,8 +36,6 @@ namespace Icogram.DbContext
 
         public DbSet<Chat> Chats { get; set; }
 
-        public DbSet<ChatCommand> ChatCommands { get; set; }
-
         public DbSet<ChatStatistic> ChatStatistics { get; set; }
 
         public IcogramDbContext() : base("Connection")
@@ -74,11 +72,6 @@ namespace Icogram.DbContext
             modelBuilder.Entity<WhiteLink>()
                 .HasRequired(wl => wl.Chat);
 
-            modelBuilder.Entity<ChatCommand>()
-                .HasRequired(cc => cc.Command);
-            modelBuilder.Entity<ChatCommand>()
-                .HasRequired(cc => cc.Chat);
-
             modelBuilder.Entity<CustomMessage>()
                 .HasRequired(cm => cm.Chat);
 
@@ -87,6 +80,10 @@ namespace Icogram.DbContext
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasOptional(au => au.Company);
+
+            modelBuilder.Entity<Command>()
+                .HasRequired(c => c.Chat)
+                .WithMany(chat => chat.Commands);
         }
     }
 }

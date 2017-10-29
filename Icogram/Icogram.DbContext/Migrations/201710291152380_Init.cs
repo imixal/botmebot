@@ -3,7 +3,7 @@ namespace Icogram.DbContext.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class Init : DbMigration
     {
         public override void Up()
         {
@@ -28,16 +28,32 @@ namespace Icogram.DbContext.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        TelegramChatId = c.String(),
+                        TelegramChatId = c.Long(nullable: false),
                         Type = c.String(),
                         Title = c.String(),
                         CompanyId = c.Int(),
                         IsApproved = c.Boolean(nullable: false),
                         WelcomeUserMessage = c.String(),
+                        CommandTimeOut = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
                 .Index(t => t.CompanyId);
+            
+            CreateTable(
+                "dbo.Commands",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        CommandName = c.String(),
+                        ActionMessage = c.String(),
+                        ChatId = c.Int(nullable: false),
+                        IsCommandShowInList = c.Boolean(nullable: false),
+                        LastUsage = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
+                .Index(t => t.ChatId);
             
             CreateTable(
                 "dbo.Companies",
@@ -118,33 +134,6 @@ namespace Icogram.DbContext.Migrations
                 .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
-            
-            CreateTable(
-                "dbo.ChatCommands",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        CommandId = c.Int(nullable: false),
-                        ChatId = c.Int(nullable: false),
-                        Message = c.String(),
-                        NumberOfUsage = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
-                .ForeignKey("dbo.Commands", t => t.CommandId, cascadeDelete: true)
-                .Index(t => t.CommandId)
-                .Index(t => t.ChatId);
-            
-            CreateTable(
-                "dbo.Commands",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        CommandName = c.String(),
-                        CommandDescription = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.ChatStatistics",
@@ -285,14 +274,13 @@ namespace Icogram.DbContext.Migrations
             DropForeignKey("dbo.EmailMessages", "SenderId", "dbo.AspNetUsers");
             DropForeignKey("dbo.CustomMessages", "ChatId", "dbo.Chats");
             DropForeignKey("dbo.ChatStatistics", "ChatId", "dbo.Chats");
-            DropForeignKey("dbo.ChatCommands", "CommandId", "dbo.Commands");
-            DropForeignKey("dbo.ChatCommands", "ChatId", "dbo.Chats");
             DropForeignKey("dbo.AntiSpamSettings", "ChatId", "dbo.Chats");
             DropForeignKey("dbo.Chats", "CompanyId", "dbo.Companies");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUsers", "CompanyId", "dbo.Companies");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Commands", "ChatId", "dbo.Chats");
             DropIndex("dbo.WhiteLinks", new[] { "ChatId" });
             DropIndex("dbo.SuspiciousUsers", new[] { "ChatId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
@@ -302,14 +290,13 @@ namespace Icogram.DbContext.Migrations
             DropIndex("dbo.EmailMessages", new[] { "SenderId" });
             DropIndex("dbo.CustomMessages", new[] { "ChatId" });
             DropIndex("dbo.ChatStatistics", new[] { "ChatId" });
-            DropIndex("dbo.ChatCommands", new[] { "ChatId" });
-            DropIndex("dbo.ChatCommands", new[] { "CommandId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUsers", new[] { "CompanyId" });
+            DropIndex("dbo.Commands", new[] { "ChatId" });
             DropIndex("dbo.Chats", new[] { "CompanyId" });
             DropIndex("dbo.AntiSpamSettings", new[] { "ChatId" });
             DropTable("dbo.WhiteLinks");
@@ -321,13 +308,12 @@ namespace Icogram.DbContext.Migrations
             DropTable("dbo.EmailMessages");
             DropTable("dbo.CustomMessages");
             DropTable("dbo.ChatStatistics");
-            DropTable("dbo.Commands");
-            DropTable("dbo.ChatCommands");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.Companies");
+            DropTable("dbo.Commands");
             DropTable("dbo.Chats");
             DropTable("dbo.AntiSpamSettings");
         }

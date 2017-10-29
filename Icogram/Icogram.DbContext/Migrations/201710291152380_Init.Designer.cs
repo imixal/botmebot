@@ -7,13 +7,13 @@ namespace Icogram.DbContext.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class ChatIdlong : IMigrationMetadata
+    public sealed partial class Init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ChatIdlong));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710271050297_ChatId-long"; }
+            get { return "201710291152380_Init"; }
         }
         
         string IMigrationMetadata.Source
