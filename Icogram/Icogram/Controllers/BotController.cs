@@ -24,8 +24,7 @@ namespace Icogram.Controllers
         public async Task<OkResult> Update([FromBody]Update update)
         {
             if (!await _botHandler.IsChatApprovedAsync(update.Message.Chat.Id)) return Ok();
-            var client = IcogramBot.GetClient();
-            await _botHandler.ExecuteCommandAsync(update);
+            await _botHandler.MessageHandler(update);
 
             return Ok();
         }

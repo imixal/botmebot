@@ -15,6 +15,6 @@ namespace Icogram.Telegram.BotHandler
 
         Task SendMessageAsync(int icogramChatId, string message);
 
-        Task ExecuteCommandAsync(Update update);
+        Task MessageHandler(Update update);
     }
 }
