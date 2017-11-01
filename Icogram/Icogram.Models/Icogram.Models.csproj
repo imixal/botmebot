@@ -71,6 +71,8 @@
     <Compile Include="ModuleModels\CommandModule\Command.cs" />
     <Compile Include="ModuleModels\CustomMessageModule\CustomMessage.cs" />
     <Compile Include="ModuleModels\StatisticsModule\ChatStatistic.cs" />
+    <Compile Include="Payments\Payment.cs" />
+    <Compile Include="Payments\PaymentType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesModels\Resource.cs" />
     <Compile Include="UserModels\ApplicationRole.cs" />

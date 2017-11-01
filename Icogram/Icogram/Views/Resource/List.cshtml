@@ -1,0 +1,230 @@
+﻿@model Icogram.ViewModels.Layout.LayoutViewModel
+@{
+    ViewBag.Title = "List";
+}
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: vertical;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        function setDeleteResData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#delete").find("#deleteModalLabel").text("Delete " + $row.parent().parent().find("input[name=Name]").val());
+        }
+
+
+        function saveRes(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("UpdateResourceCommand")', {
+                Id: $row.find("input[name=Id]").val(),
+                Name: $row.find("input[name=Name]").val(),
+                DefaultValue: $row.find("textarea[name=DefaultValue]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        function createRes() {
+            table.row.add([
+                'new',
+                '<input class="form-control" name="Name" placeholder="Name"/>',
+                '<textarea class="form-control" name="DefaultValue" rows="3"></textarea>',
+                '<p class="view-value"></p>',
+                '<a class="label label-md label-success" onclick="createResCommand(this)"><span class="fa fa-plus"></span></a>',
+            ]).draw(false);
+        }
+
+        function createResCommand(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("CreateResourceCommand")', {
+                Id: 0,
+                Name: $row.find("input[name=Name]").val(),
+                DefaultValue: $row.find("textarea[name=DefaultValue]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+
+        $("#deletecommand").on('click', deleteTypeCommand);
+
+        function deleteTypeCommand() {
+            var $row = $(localStorage.getItem("row"));
+            setSpinner($row);
+            $.post('@Url.Action("DeleteResourceCommand")', { id: $row.find("input[name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function refreshRes(row) {
+            var $row = $(row).parents('tr');
+            var $content = $($row.find("textarea[name=DefaultValue]").val());
+            $row.find('.view-value').empty();
+            $content.appendTo($row.find('.view-value'));
+        }
+
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
+
+    </script>
+}
+<div class="x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-question"></i> Help</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <p>
+            <b>bold text</b> - <code>&lt;b&gt;bold text&lt;/b&gt;</code>
+            <i>italic text</i> - <code>&lt;i&gt;bold text&lt;/i&gt;</code>
+            <u>underline text</u> - <code>&lt;u&gt;bold text&lt;/u&gt;</code>
+            <s>strikethrough text</s> - <code>&lt;s&gt;bold text&lt;/s&gt;</code>
+            <s>paragraph</s> - <code>&lt;p&gt;paragraph&lt;/p&gt;</code>
+        </p>
+        <p>
+            <span class="label label-md label-success">label- green</span> - <code>&lt;span class="label label-md label-success"&gt;label&lt;/span&gt;</code>
+        </p>
+        <p>
+            <span class="label label-md label-danger">label - red</span> - <code>&lt;span class="label label-md label-danger"&gt;label&lt;/span&gt;</code>
+        </p>
+        <p>
+            <span class="label label-md label-warning">label - yellow</span> - <code>&lt;span class="label label-md label-warning"&gt;label&lt;/span&gt;</code>
+        </p>
+        <p>
+            <span class="label label-md label-info">label - blue</span> - <code>&lt;span class="label label-md label-warning"&gt;label&lt;/span&gt;</code>
+        </p>
+        <p>
+            <span class="label label-md label-primary">label - primary</span> - <code>&lt;span class="label label-md label-warning"&gt;label&lt;/span&gt;</code>
+        </p>
+        <p>
+            <code>code</code> - <code>&lt;code"&gt;code&lt;/code&gt;</code>
+        </p>
+    </div>
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Resources</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="btn btn-success text-primary" onclick="createRes()"><i class="fa fa-plus"></i> Add Resource</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table table-bordered" id="Table">
+                    <thead>
+                        <tr class="headings">
+                            <th width="5%" class="column-title text-center">Id</th>
+                            <th width="15%" class="column-title text-center">Name</th>
+                            <th width="35%" class="column-title text-center">Value</th>
+                            <th width="35%" class="column-title text-center">View</th>
+                            <th width="5%" class="column-title text-center last">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var res in Model.Resources)
+                        {
+                            <tr class="">
+                                <td width="5%"><input name="Id" value="@res.Id" disabled="disabled" /></td>
+                                <td width="10%"><input class="form-control" name="Name" value="@res.Name" /></td>
+                                <td width="35%">
+                                    <textarea class="form-control" name="DefaultValue" rows="4">@res.DefaultValue</textarea>
+                                </td>
+                                <td width="35%">
+                                    <p class="view-value">
+                                        @{ var myHtmlString = new HtmlString(res.DefaultValue);}
+                                        @myHtmlString
+                                    </p>
+                                </td>
+                                <td width="10%" class="text-center">
+                                    <a class="label label-md label-primary" onclick="refreshRes(this)"><span class="fa fa-refresh"></span></a>
+                                    <a class="label label-md label-info" onclick="saveRes(this)"><span class="fa fa-floppy-o"></span></a>
+                                    <a class="label label-md label-danger" onclick="setDeleteResData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                                </td>
+                            </tr>
+                                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="delete">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="deleteModalLabel">Delete type</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="userId" />
+                <h4>Are you sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="deletecommand" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

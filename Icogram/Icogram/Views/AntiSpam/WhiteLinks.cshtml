@@ -53,6 +53,7 @@
         }
 
         function saveUpdates(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("CreateWhiteLinkCommand")', {
                 Id: $row.find("input[Name=Id]").val(),
@@ -73,6 +74,7 @@
         }
 
         function create(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("CreateWhiteLinkCommand")', {
                 Id: 0,
@@ -92,13 +94,17 @@
         $("#deletecommand").on('click', deletecommand);
 
         function deletecommand() {
+            setSpinner(row);
             var $row = $(localStorage.getItem("row"));
             $.post('@Url.Action("DeleteWhiteLinkCommand")', { id: $row.find("input[Name=Id]").val() })
             .done(function () {
                 location.reload();
             });
         }
-
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
     </script>
 }
 

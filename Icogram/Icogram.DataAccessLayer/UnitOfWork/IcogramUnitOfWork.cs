@@ -12,6 +12,7 @@ using Icogram.Models.ModuleModels.AntiSpamModule;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Models.ModuleModels.CustomMessageModule;
 using Icogram.Models.ModuleModels.StatisticsModule;
+using Icogram.Models.Payments;
 using Icogram.Models.ResourcesModels;
 using Icogram.Models.UserModels;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -61,7 +62,9 @@ namespace Icogram.DataAccessLayer.UnitOfWork
                 { typeof(AntiSpamSetting), typeof(AntiSpamSettingsRepository) },
                 { typeof(SuspiciousUser), typeof(SuspiciousUserRepository) },
                 { typeof(WhiteLink), typeof(WhiteLinkRepository) },
-                { typeof(ChatStatistic), typeof(Repository<ChatStatistic>) }
+                { typeof(ChatStatistic), typeof(Repository<ChatStatistic>) },
+                { typeof(Payment), typeof(PaymentRepository) },
+                { typeof(PaymentType), typeof(Repository<PaymentType>) }
             };
         }
     }

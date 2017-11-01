@@ -6,5 +6,7 @@ namespace Icogram.ViewModelBuilder
     public interface IViewModelBuilder
     {
         Task<TViewModel> GetPageViewModelAsync<TViewModel>() where TViewModel : LayoutViewModel, new();
+
+        Task<LayoutViewModel> GetPageViewModelAsync();
     }
 }

@@ -20,6 +20,7 @@ namespace DataAccessLayer.Async
 
         public virtual void Create(T entity)
         {
+            entity.CreationDate = DateTime.UtcNow;
             DbContext.Entry(entity).State = EntityState.Added;
         }
 

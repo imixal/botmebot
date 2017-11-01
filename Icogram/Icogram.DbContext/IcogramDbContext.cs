@@ -6,6 +6,7 @@ using Icogram.Models.ModuleModels.AntiSpamModule;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Models.ModuleModels.CustomMessageModule;
 using Icogram.Models.ModuleModels.StatisticsModule;
+using Icogram.Models.Payments;
 using Icogram.Models.ResourcesModels;
 using Icogram.Models.UserModels;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -37,6 +38,10 @@ namespace Icogram.DbContext
         public DbSet<Chat> Chats { get; set; }
 
         public DbSet<ChatStatistic> ChatStatistics { get; set; }
+
+        public DbSet<PaymentType> PaymentTypes { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
 
         public IcogramDbContext() : base("Connection")
         {
@@ -90,6 +95,15 @@ namespace Icogram.DbContext
             modelBuilder.Entity<Command>()
                 .HasRequired(c => c.Chat)
                 .WithMany(chat => chat.Commands)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Payment>()
+                .HasRequired(p => p.Company)
+                .WithMany(c => c.Payments)
+                .WillCascadeOnDelete(true);
+            modelBuilder.Entity<Payment>()
+                .HasRequired(p => p.PaymentType)
+                .WithMany()
                 .WillCascadeOnDelete(true);
         }
     }

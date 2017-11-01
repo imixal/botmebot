@@ -57,6 +57,7 @@
             });
 
         function kick(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("KickCommand")',
             {
@@ -66,6 +67,7 @@
             });
         }
         function unban(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("UnBanCommand")',
             {
@@ -73,6 +75,22 @@
             }).done(function () {
                 location.reload();
             });
+        }
+
+        function reset(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("ResetAttempts")',
+            {
+                id: $row.find("input[Name=Id]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        function setSpinner(btn) {
+            var $btn = $(btn);
+            $btn.addClass("hidden").after('<i class="fa fa-refresh fa-spin" style="font-size:24px"></i>');
         }
     </script>
 }
@@ -109,6 +127,7 @@
                         <th width="25%" class="column-title text-center">First Name</th>
                         <th width="5%" class="column-title text-center">Last Name</th>
                         <th width="10%" class="column-title text-center">Number of Attempts</th>
+                        <th width="10%" class="column-title text-center">Reset Attempts</th>
                         <th width="10%" class="column-title text-center">Bann User</th>
                     </tr>
                 </thead>
@@ -122,6 +141,7 @@
                             <td width="10%" class="text-center"><input class="form-control" disabled="disabled" name="FirstName" type="text" value="@user.FirstName" /></td>
                             <td width="10%" class="text-center"><input class="form-control" disabled="disabled" name="LastName" type="text" value="@user.LastName" /></td>
                             <td width="5%" class="text-center"><input class="form-control" type="number" disabled="disabled" name="NumberOfAttempts"value="@user.NumberOfAttempts" /></td>
+                            <td width="10%" class="text-center"><input class="btn btn-info" onclick="reset(this)" type="button" value="Reset" /></td>
                             <td width="10%" class="text-center">
                                 @if (!user.IsUserBanned)
                                 {

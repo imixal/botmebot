@@ -26,7 +26,10 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="@Url.RouteUrl("Dashboard")" class="site_title"><i class="fa fa-paw"></i> <span>Icogram</span></a>
+                        <a href="@Url.RouteUrl("Dashboard")" class="site_title">
+                            <img style="vertical-align: sub" alt="botico" src="@Url.Content("~/Content/brain.png")" />
+                            <span>Botico</span>
+                        </a>
                     </div>
                     <div class="clearfix"></div>
                     <!-- /menu profile quick info -->
@@ -36,6 +39,12 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("List", "Resource")"><i class="fa fa-info-circle"></i> Resource</a>
+                                    </li>
+                                }
                                 @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
                                 {
                                     <li>
@@ -57,14 +66,14 @@
                                             {
                                                 <li><a href="@Url.Action("List", "Chat")">List</a></li>
                                             }
-                                                <li><a href="@Url.Action("MyChats", "Chat")">My Chats</a></li>
+                                            <li><a href="@Url.Action("MyChats", "Chat")">My Chats</a></li>
                                         </ul>
                                     </li>
                                 }
                                 @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
                                 {
                                     <li>
-                                        <a href="@Url.Action("MyCommands","Command")"><i class="fa fa-terminal"></i>My Commands</a>
+                                        <a href="@Url.Action("MyCommands", "Command")"><i class="fa fa-terminal"></i>My Commands</a>
                                     </li>
                                 }
                                 @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
@@ -72,13 +81,25 @@
                                     <li>
                                         <a><i class="fa fa-ban"></i> AntiSpam<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                                <li><a href="@Url.Action("Settings", "AntiSpam")">List Settings</a></li>
-                                                <li><a href="@Url.Action("WhiteLinks", "AntiSpam")">White Links</a></li>
-                                                <li><a href="@Url.Action("SuspiciousUsers", "AntiSpam")">Suspicious User List</a></li>
+                                            <li><a href="@Url.Action("Settings", "AntiSpam")">List Settings</a></li>
+                                            <li><a href="@Url.Action("WhiteLinks", "AntiSpam")">White Links</a></li>
+                                            <li><a href="@Url.Action("SuspiciousUsers", "AntiSpam")">Suspicious User List</a></li>
                                         </ul>
                                     </li>
-                                 }
-                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
+                                }
+                                @if (User.Identity.IsInRole("Customer"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("MyPayments", "Payment")"><i class="fa fa-money"></i>Subscription</a>
+                                    </li>
+                                }
+                                @if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index", "Payment")"><i class="fa fa-money"></i>Payments</a>
+                                    </li>
+                                }
+                                @*@if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
                                 {
                                     <li>
                                         <a><i class="fa fa-line-chart"></i> Statistics<span class="fa fa-chevron-down"></span></a>
@@ -95,7 +116,8 @@
                                             }
                                         </ul>
                                     </li>
-                                }
+}
+                                *@
                             </ul>
                         </div>
                     </div>

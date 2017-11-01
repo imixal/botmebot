@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Icogram.Enums;
 using Icogram.Models.ModuleModels.AntiSpamModule;
@@ -154,19 +153,40 @@ namespace Icogram.Telegram.BotHandler
 
         private async Task TryToExecuteCommand(Update update)
         {
-            var command = _chat.Commands.FirstOrDefault(c => $"!{c.CommandName}" == update.Message.Text);
+            var command = _chat.Commands.FirstOrDefault(c => $"/{c.CommandName}" == update.Message.Text || $"/{c.CommandName}@{IcogramBotSettings.Name}" == update.Message.Text);
             var check = AccessCheck(GlobalEnums.ModuleType.CommandModule);
             if (check)
             {
-                if (command != null && string.IsNullOrEmpty(command.ActionMessage))
-                    await _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, command.ActionMessage);
+                if (!string.IsNullOrEmpty(command?.ActionMessage))
+                    if (command.LastUsage.HasValue)
+                    {
+                        if (command.LastUsage.Value.AddSeconds(command.Chat.CommandTimeOut) <= DateTime.UtcNow)
+                        {
+                            await
+                                _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, command.ActionMessage,
+                                    replyToMessageId: update.Message.MessageId);
+                            command =await _commandCrudService.GetByIdAsync(command.Id);
+                            command.LastUsage = DateTime.UtcNow;
+                            await _commandCrudService.UpdateAsync(command);
+                        }
+
+                    }
+                    else
+                    {
+                        await
+                                _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, command.ActionMessage,
+                                    replyToMessageId: update.Message.MessageId);
+                        command = await _commandCrudService.GetByIdAsync(command.Id);
+                        command.LastUsage = DateTime.UtcNow;
+                        await _commandCrudService.UpdateAsync(command);
+                    }
             }
         }
 
         private async Task ShowListCommandsAsync(Update update)
         {
             var check = AccessCheck(GlobalEnums.ModuleType.CommandModule);
-            if (update.Message.Text == $"/info@{IcogramBotSettings.Name}" || update.Message.Text == "/info" || update.Message.Text == "/help" || update.Message.Text == "/man")
+            if (update.Message.Text == $"/info@{IcogramBotSettings.Name}" || update.Message.Text == "/info")
             {
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append("You can use this command: \n");
@@ -176,7 +196,7 @@ namespace Icogram.Telegram.BotHandler
                     {
                         if (command.IsCommandShowInList)
                         {
-                            stringBuilder.Append($"!{command.CommandName} \n");
+                            stringBuilder.Append($"/{command.CommandName} \n");
                         }
                     }
                     await _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, stringBuilder.ToString());
@@ -198,20 +218,32 @@ namespace Icogram.Telegram.BotHandler
                 {
                     var isNeedToDelete = false;
 
-                    foreach (
-                        Match item in
-                        Regex.Matches(update.Message.Text, @"\b(?:https?://|www\.)[^ \f\n\r\t\v\]]+\b",
-                            RegexOptions.Compiled | RegexOptions.IgnoreCase))
+                    foreach (var entity in update.Message.Entities.Where(e => e.Type == MessageEntityType.Url))
                     {
-                        var url = item.Value.StartsWith("www.") ? new Uri("http://" + item.Value) : new Uri(item.Value);
-                        var link = url.GetLeftPart(UriPartial.Path).Remove(url.GetLeftPart(UriPartial.Path).Length - 1);
-                        var isWhiteLink = whiteLinks.Any(
-                            wl => wl.Link == link ||
-                                  $"http://{wl.Link}" == link ||
-                                  $"https://{wl.Link}" == link ||
-                                  wl.Link == link.Replace("www.", "") ||
-                                  wl.Link == link.Replace("http://", "") ||
-                                  wl.Link == link);
+                        var item = update.Message.Text.Substring(entity.Offset, entity.Length);
+                        var link = "";
+                        if (!item.Contains("http") && !item.Contains("https") && !item.Contains("www"))
+                        {
+                            link = "www." + item;
+                        }
+                        else
+                        {
+                            var url = item.StartsWith("www.") ? new Uri("http://" + item) : new Uri(item);
+                            link = url.Host;
+                        }
+                        var isWhiteLink = false;
+                        if (!string.IsNullOrEmpty(link) && link.Contains("."))
+                        {
+                            var words = link.Split('.');
+                            if (words.Length > 1)
+                            {
+                                var word = words[words.Length - 2];
+                                if (whiteLinks.Any(wl => wl.Link == word))
+                                {
+                                    isWhiteLink = true;
+                                }
+                            }
+                        }
                         if (setting.IsInvertMode)
                         {
                             if (isWhiteLink)

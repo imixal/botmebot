@@ -18,6 +18,7 @@ namespace Icogram.DbContext.Migrations
                         IsNeededToBanUser = c.Boolean(nullable: false),
                         NumberOfAttempts = c.Int(nullable: false),
                         WarningMessage = c.String(),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
@@ -35,6 +36,7 @@ namespace Icogram.DbContext.Migrations
                         IsApproved = c.Boolean(nullable: false),
                         WelcomeUserMessage = c.String(),
                         CommandTimeOut = c.Int(nullable: false),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
@@ -50,6 +52,7 @@ namespace Icogram.DbContext.Migrations
                         ChatId = c.Int(nullable: false),
                         IsCommandShowInList = c.Boolean(nullable: false),
                         LastUsage = c.DateTime(),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
@@ -69,6 +72,41 @@ namespace Icogram.DbContext.Migrations
                         IsCustomMessageModuleActivated = c.Boolean(nullable: false),
                         End = c.DateTime(),
                         Price = c.Double(nullable: false),
+                        CreationDate = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Payments",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        CompanyId = c.Int(nullable: false),
+                        TxTransaction = c.String(),
+                        Comment = c.String(),
+                        Email = c.String(),
+                        PaymentDate = c.DateTime(nullable: false),
+                        TelegramContact = c.String(),
+                        ChatCount = c.Int(nullable: false),
+                        IsAproved = c.Boolean(nullable: false),
+                        PaymentTypeId = c.Int(nullable: false),
+                        CreationDate = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
+                .ForeignKey("dbo.PaymentTypes", t => t.PaymentTypeId, cascadeDelete: true)
+                .Index(t => t.CompanyId)
+                .Index(t => t.PaymentTypeId);
+            
+            CreateTable(
+                "dbo.PaymentTypes",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Text = c.String(),
+                        NumberOfMonth = c.Int(nullable: false),
+                        Eth = c.Double(nullable: false),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -147,6 +185,7 @@ namespace Icogram.DbContext.Migrations
                         NumberOfUsers = c.Int(nullable: false),
                         NumberOfBannedUsers = c.Int(nullable: false),
                         NumberOfCommands = c.Int(nullable: false),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
@@ -159,6 +198,7 @@ namespace Icogram.DbContext.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Message = c.String(),
                         ChatId = c.Int(nullable: false),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
@@ -175,6 +215,7 @@ namespace Icogram.DbContext.Migrations
                         To = c.String(),
                         SenderId = c.String(maxLength: 128),
                         TemplateId = c.Int(nullable: false),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.SenderId)
@@ -193,6 +234,7 @@ namespace Icogram.DbContext.Migrations
                         PreviewTitle = c.String(),
                         PreviewText = c.String(),
                         CreatorId = c.String(nullable: false, maxLength: 128),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.CreatorId, cascadeDelete: true)
@@ -205,6 +247,7 @@ namespace Icogram.DbContext.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Variable = c.String(),
                         Description = c.String(),
+                        CreationDate = c.DateTime(),
                         EmailTemplate_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -220,6 +263,7 @@ namespace Icogram.DbContext.Migrations
                         DefaultValue = c.String(),
                         EnglishValue = c.String(),
                         RussianValue = c.String(),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -240,10 +284,14 @@ namespace Icogram.DbContext.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ChatId = c.Int(nullable: false),
-                        TelegramUserId = c.String(),
+                        TelegramUserId = c.Int(nullable: false),
+                        UserName = c.String(),
+                        FirstName = c.String(),
+                        LastName = c.String(),
                         NumberOfAttempts = c.Int(nullable: false),
                         IsUserBanned = c.Boolean(nullable: false),
-                        BannedDate = c.DateTime(nullable: false),
+                        BannedDate = c.DateTime(),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
@@ -256,6 +304,7 @@ namespace Icogram.DbContext.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ChatId = c.Int(nullable: false),
                         Link = c.String(),
+                        CreationDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Chats", t => t.ChatId, cascadeDelete: true)
@@ -280,6 +329,8 @@ namespace Icogram.DbContext.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUsers", "CompanyId", "dbo.Companies");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Payments", "PaymentTypeId", "dbo.PaymentTypes");
+            DropForeignKey("dbo.Payments", "CompanyId", "dbo.Companies");
             DropForeignKey("dbo.Commands", "ChatId", "dbo.Chats");
             DropIndex("dbo.WhiteLinks", new[] { "ChatId" });
             DropIndex("dbo.SuspiciousUsers", new[] { "ChatId" });
@@ -296,6 +347,8 @@ namespace Icogram.DbContext.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUsers", new[] { "CompanyId" });
+            DropIndex("dbo.Payments", new[] { "PaymentTypeId" });
+            DropIndex("dbo.Payments", new[] { "CompanyId" });
             DropIndex("dbo.Commands", new[] { "ChatId" });
             DropIndex("dbo.Chats", new[] { "CompanyId" });
             DropIndex("dbo.AntiSpamSettings", new[] { "ChatId" });
@@ -312,6 +365,8 @@ namespace Icogram.DbContext.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.PaymentTypes");
+            DropTable("dbo.Payments");
             DropTable("dbo.Companies");
             DropTable("dbo.Commands");
             DropTable("dbo.Chats");

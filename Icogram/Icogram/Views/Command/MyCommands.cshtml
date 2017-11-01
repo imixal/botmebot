@@ -55,6 +55,7 @@
         }
 
         function deletecommand() {
+            setSpinner(row);
             var $row = $(localStorage.getItem("row"));
             $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
             .done(function () {
@@ -63,10 +64,11 @@
         }
 
         function create(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("CreateMyCommand")', {
                 ChatId: $row.find("select[Name=Chat]").val(),
-                ActionMessage: $row.find("textarea[Name=Message]").val(),
+                ActionMessage: $row.find("textarea[Name=ActionMessage]").val(),
                 CommandName: $row.find("input[Name=CommandName]").val(),
                 IsCommandShowInList: $row.find("input[Name=IsCommandShowInList]").is(':checked'),
             }).done(function () {
@@ -87,6 +89,7 @@
         }
 
         function saveUpdates(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("UpdateMyCommand")', {
                 Id: $row.find("input[Name=Id]").val(),
@@ -105,6 +108,11 @@
                 $("thead").find("th").first().trigger("click");
                 $("thead").find("th").first().trigger("click");
             });
+
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
     </script>
 }
 <div class="x_panel">

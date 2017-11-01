@@ -20,6 +20,7 @@ namespace Icogram.DataAccessLayer.Repository
                 .AsNoTracking()
                 .Include(c => c.Users)
                 .Include(c => c.Chats)
+                .Include(c => c.Payments)
                 .ToListAsync();
         }
 
@@ -28,6 +29,7 @@ namespace Icogram.DataAccessLayer.Repository
             return await DbContext.Set<Company>()
                 .Include(c => c.Chats)
                 .Include(c => c.Users)
+                .Include(c => c.Payments)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -37,6 +39,7 @@ namespace Icogram.DataAccessLayer.Repository
                 .AsNoTracking()
                 .Include(c => c.Chats)
                 .Include(c => c.Users)
+                .Include(c => c.Payments)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
     }

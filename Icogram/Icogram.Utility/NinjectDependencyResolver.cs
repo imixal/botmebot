@@ -43,16 +43,16 @@ namespace Icogram.Utility
 
         private static void AddBindings()
         {
-            _kernel.Bind<IdentityDbContext<ApplicationUser>>().To<IcogramDbContext>().InRequestScope();
-            _kernel.Bind<IUnitOfWork>().To<IcogramUnitOfWork>().InRequestScope();
-            _kernel.Bind<IIcogramUnitOfWork>().To<IcogramUnitOfWork>().InRequestScope();
+            _kernel.Bind<IdentityDbContext<ApplicationUser>>().To<IcogramDbContext>().InSingletonScope();
+            _kernel.Bind<IUnitOfWork>().To<IcogramUnitOfWork>().InSingletonScope();
+            _kernel.Bind<IIcogramUnitOfWork>().To<IcogramUnitOfWork>().InSingletonScope();
             _kernel.Bind<IMapper>().ToMethod(AutoMapperModule.AutoMapper).InRequestScope();
 
             _kernel.Bind<IViewModelBuilder>().To<ViewModelBuilder.ViewModelBuilder>().InRequestScope();
             _kernel.Bind<ILoginService>().To<LoginService>().InRequestScope();
             _kernel.Bind<IUserService>().To<UserService>().InRequestScope();
             _kernel.Bind(typeof(ICrudService<>)).To(typeof(CrudService<>));
-            _kernel.Bind<IBotHandler>().To<BotHandler>().InRequestScope();
+            _kernel.Bind<IBotHandler>().To<BotHandler>().InSingletonScope();
         }
     }
 }

@@ -58,25 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IcogramDbContext.cs" />
-    <Compile Include="Migrations\201710291152380_Init.cs" />
-    <Compile Include="Migrations\201710291152380_Init.Designer.cs">
-      <DependentUpon>201710291152380_Init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710291751394_Ban.cs" />
-    <Compile Include="Migrations\201710291751394_Ban.Designer.cs">
-      <DependentUpon>201710291751394_Ban.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710291857594_Ban2.cs" />
-    <Compile Include="Migrations\201710291857594_Ban2.Designer.cs">
-      <DependentUpon>201710291857594_Ban2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710291909568_Ban3.cs" />
-    <Compile Include="Migrations\201710291909568_Ban3.Designer.cs">
-      <DependentUpon>201710291909568_Ban3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710291959294_Ban34.cs" />
-    <Compile Include="Migrations\201710291959294_Ban34.Designer.cs">
-      <DependentUpon>201710291959294_Ban34.cs</DependentUpon>
+    <Compile Include="Migrations\201711011652138_Init.cs" />
+    <Compile Include="Migrations\201711011652138_Init.Designer.cs">
+      <DependentUpon>201711011652138_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,20 +79,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710291152380_Init.resx">
-      <DependentUpon>201710291152380_Init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710291751394_Ban.resx">
-      <DependentUpon>201710291751394_Ban.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710291857594_Ban2.resx">
-      <DependentUpon>201710291857594_Ban2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710291909568_Ban3.resx">
-      <DependentUpon>201710291909568_Ban3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710291959294_Ban34.resx">
-      <DependentUpon>201710291959294_Ban34.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711011652138_Init.resx">
+      <DependentUpon>201711011652138_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

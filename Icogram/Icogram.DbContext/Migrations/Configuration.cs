@@ -56,12 +56,26 @@ namespace Icogram.DbContext.Migrations
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
                 var user = new ApplicationUser { UserName = "imixal" };
-                if (context.Companies.Any(c => c.Name == "Icogram"))
+                if (context.Companies.Any(c => c.Name == "ManageCompany"))
                 {
                     user.CompanyId = 1;
                 }
 
                 manager.Create(user, "ilya9511");
+                manager.AddToRole(user.Id, "Admin");
+            }
+
+            if (!context.Users.Any(u => u.UserName == "adminNikita"))
+            {
+                var store = new UserStore<ApplicationUser>(context);
+                var manager = new UserManager<ApplicationUser>(store);
+                var user = new ApplicationUser { UserName = "adminNikita" };
+                if (context.Companies.Any(c => c.Name == "ManageCompany"))
+                {
+                    user.CompanyId = 1;
+                }
+
+                manager.Create(user, "12345671");
                 manager.AddToRole(user.Id, "Admin");
             }
         }

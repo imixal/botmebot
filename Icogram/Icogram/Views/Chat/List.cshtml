@@ -59,6 +59,7 @@
         }
 
         function deletecommand() {
+            setSpinner(row);
             var $row = $(localStorage.getItem("row"));
             $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
                 .done(function () {
@@ -67,6 +68,7 @@
         }
 
         function saveUpdates(row) {
+            setSpinner(row);
             var $row = $(row).parents('tr');
             $.post('@Url.Action("EditCommand")',
                 {
@@ -85,6 +87,7 @@
         }
 
         function refreshChat(row) {
+            setSpinner(row);
             var $row = $(row).parents('tr');
             $.post('@Url.Action("UpdateChatCommand")',
             {
@@ -101,6 +104,11 @@
                 $("thead").find("th").first().trigger("click");
                 $("thead").find("th").first().trigger("click");
             });
+
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
     </script>
 }
 <div class="x_panel">
@@ -169,7 +177,7 @@
                             </td>
                             <td width="13%"><input class="form-control" disabled="disabled" type="text" name="TelegramChatId" value="@chat.value.TelegramChatId" /></td>
                             <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
-                            <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" value="@chat.value.CommandTimeOut" /></td>
+                            <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" min="0" value="@chat.value.CommandTimeOut" /></td>
                             <td class="text-center" width="7%">
                                 <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
                                 <a class="label label-md label-warning" onclick="refreshChat(this)"><span class="fa fa-refresh"></span></a>

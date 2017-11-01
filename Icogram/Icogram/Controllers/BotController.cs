@@ -9,7 +9,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace Icogram.Controllers
 {
-    [Route(@"api/botIcogramV1/update")] //webhook uri part
+    [Route(@"api/botIcogramV2/update")] //webhook uri part
     public class BotController : ApiController
     {
         private readonly IBotHandler _botHandler;

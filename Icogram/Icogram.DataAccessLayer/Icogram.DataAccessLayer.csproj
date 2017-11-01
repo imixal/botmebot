@@ -66,6 +66,7 @@
     <Compile Include="Repository\CustomMessageRepository.cs" />
     <Compile Include="Repository\EmailMessageRepository.cs" />
     <Compile Include="Repository\EmailTemplateRepository.cs" />
+    <Compile Include="Repository\PaymentRepository.cs" />
     <Compile Include="Repository\SuspiciousUserRepository.cs" />
     <Compile Include="Repository\WhiteLinkRepository.cs" />
     <Compile Include="UnitOfWork\IcogramUnitOfWork.cs" />

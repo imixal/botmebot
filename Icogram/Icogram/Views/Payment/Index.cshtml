@@ -1,0 +1,295 @@
+﻿@model Icogram.ViewModels.Payments.PaymentsPageViewModel
+@{
+    ViewBag.Title = "Index";
+}
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: none;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        var table2 = $("#Table2").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+        function setDeleteTypeData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#delete").find("#deleteModalLabel").text("Delete " + $row.parent().parent().find("input[Name=Text]").val());
+        }
+
+        function setDeletePaymentData(row) {
+            localStorage.setItem("row", $(row).parents('tr').html().toString());
+            var $row = $(row);
+            $("#deletePayment").find("#deletePaymentModalLabel").text("Delete " + $row.parent().parent().find("input[Name=Text]").val());
+        }
+
+        function saveType(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("UpdatePaymentTypeCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                Text: $row.find("input[Name=Text]").val(),
+                NumberOfMonth: $row.find("input[Name=NumberOfMonth]").val(),
+                Eth: $row.find("input[Name=Eth]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        function createType() {
+            table.row.add([
+                'new',
+                '<input class="form-control" name="Text" placeholder="Text"/>',
+                '<input class="form-control" type="number" min="1" max="24" name="NumberOfMonth" />',
+                '<input class="form-control" type="number" min="0" name="Eth" />',
+                '<a class="label label-md label-info" onclick="createTypeCommand(this)"><span class="fa fa-plus"></span></a>',
+            ]).draw(false);
+        }
+
+        function createTypeCommand(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("CreatePaymentTypeCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                Text: $row.find("input[Name=Text]").val(),
+                NumberOfMonth: $row.find("input[Name=NumberOfMonth]").val(),
+                Eth: $row.find("input[Name=Eth]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+        $(document)
+            .ready(function () {
+                table.find("th").first().trigger("click");
+                table.find("th").first().trigger("click");
+                table2.find("th").first().trigger("click");
+                table2.find("th").first().trigger("click");
+            });
+
+        $("#deletecommand").on('click', deleteTypeCommand);
+        $("#deletePaymentcommand").on('click', deletePaymentCommand);
+
+        function deleteTypeCommand() {
+            var $row = $(localStorage.getItem("row"));
+            setSpinner($row);
+            $.post('@Url.Action("DeletePaymentTypeCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function deletePaymentCommand() {
+            var $row = $(localStorage.getItem("row"));
+            setSpinner($row);
+            $.post('@Url.Action("DeletePaymentCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function aprove(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("AprovePaymentCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
+    </script>
+}
+
+<div class="col-lg-8 col-md-8 col-sm-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Payment Types</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="btn btn-success text-primary" onclick="createType()"><i class="fa fa-plus"></i> Create Type</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table table-bordered" id="Table">
+                    <thead>
+                    <tr class="headings">
+                        <th width="5%" class="column-title text-center">id</th>
+                        <th width="10%" class="column-title text-center">Text</th>
+                        <th width="10%" class="column-title text-center">Number Of Month</th>
+                        <th width="5%" class="column-title text-center">Eth</th>
+                        <th width="5%" class="column-title text-center last">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var type in Model.PaymentTypes)
+                    {
+                        <tr class=""> 
+                            <td width="5%"><input name="Id" value="@type.Id" disabled="disabled" /></td>
+                            <td width="10%"><input class="form-control" name="Text" value="@type.Text"/></td>
+                            <td width="5%"><input class="form-control" type="number" min="1" max="24" name="NumberOfMonth" value="@type.NumberOfMonth" /></td>
+                            <td width="5%"><input class="form-control" type="number"min="0" step=".01" name="Eth" value="@type.Eth" /></td>
+                            <td width="5%" class="text-center">
+                                <a class="label label-md label-info" onclick="saveType(this)"><span class="fa fa-floppy-o"></span></a>
+                                <a class="label label-md label-danger" onclick="setDeleteTypeData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Payments</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table table-bordered" id="Table2">
+                    <thead>
+                        <tr class="headings">
+                            <th class="hidden">id</th>
+                            <th width="10%" class="column-title text-center">Company</th>
+                            <th width="15%" class="column-title text-center">TxTransaction</th>
+                            <th width="15%" class="column-title text-center">Comment</th>
+                            <th width="5%" class="column-title text-center">Email</th>
+                            <th width="5%" class="column-title text-center">Telegram</th>
+                            <th width="5%" class="column-title text-center">Type</th>
+                            <th width="5%" class="column-title text-center">Month</th>
+                            <th width="5%" class="column-title text-center">Eth</th>
+                            <th width="5%" class="column-title text-center">Payment Date</th>
+                            <th width="5%" class="column-title text-center last">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var type in Model.Payments)
+                        {
+                            <tr class="">
+                                <td class="hidden"><input name="Id" value="@type.Id" disabled="disabled" /></td>
+                                <td width="10%">@type.Company.Name</td>
+                                <td width="20%">@type.TxTransaction</td>
+                                <td width="20%">@type.Comment</td>
+                                <td width="5%">@type.Email</td>
+                                <td width="5%">@type.TelegramContact</td>
+                                <td width="5%">@type.PaymentType.Text</td>
+                                <td width="5%">@type.PaymentType.NumberOfMonth</td>
+                                <td width="5%">@type.PaymentType.Eth</td>
+                                <td width="10%">@type.PaymentDate</td>
+                                <td width="10%" class="text-center">
+                                    @if (type.IsAproved)
+                                    {
+                                        <span class="label label-md label-success">Aproved</span>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-success" onclick="aprove(this)">Aprove</a>
+                                    }
+                                    <a class="label label-md label-danger" onclick="setDeletePaymentData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="delete">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="deleteModalLabel">Delete type</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="userId" />
+                <h4>Are you sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="deletecommand" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="deletePayment">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="deletePaymentModalLabel">Delete type</h4>
+            </div>
+            <div class="modal-body">
+                <input class="hidden" name="userId" />
+                <h4>Are you sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="deletePaymentcommand" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

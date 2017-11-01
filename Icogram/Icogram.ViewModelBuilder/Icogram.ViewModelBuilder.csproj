@@ -79,6 +79,10 @@
       <Project>{B4E13211-452A-44D9-8EA7-0DE8928E92B3}</Project>
       <Name>Icogram.ViewModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{AA302E06-F6AF-4647-BBF4-AB70C738433C}</Project>
+      <Name>Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Icogram</title>
+    <title>Botico</title>
     <!-- Bootstrap -->
     <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet">
     <!-- Font Awesome -->
@@ -35,7 +35,7 @@
 
                         <div>
                             <input type="submit" class="btn btn-default submit" value="Log in">
-                            <a class="reset_pass" href="#"><span class="text-danger">@Model.Error</span>. Lost your password?</a>
+                            <a class="text-left" href="#"><span class="text-danger" style="font-size: 18px">@Model.Error</span>.</a>
                         </div>
                     }
                     <div class="clearfix"></div>
@@ -43,7 +43,7 @@
                         <div class="clearfix"></div>
                         <br />
                         <div>
-                            <h1><i class="fa fa-paw"></i> Icogram!</h1>
+                            <h1><img style="vertical-align: sub" alt="botico" src="@Url.Content("~/Content/brain.png")" /> Botico</h1>
                             <p>©2017 All Rights Reserved.</p>
                         </div>
                     </div>

@@ -150,6 +150,13 @@ namespace Icogram.Controllers
             var user = await _suspiciousUsersCrudService.GetByIdAsync(id);
             await _botHandler.UnBanUserAsync(user);
         }
+
+        public async Task ResetAttempts(int id)
+        {
+            var user = await _suspiciousUsersCrudService.GetByIdAsync(id);
+            user.NumberOfAttempts = 0;
+            await _suspiciousUsersCrudService.UpdateAsync(user);
+        }
         #endregion
     }
 }

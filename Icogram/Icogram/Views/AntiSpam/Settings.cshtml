@@ -54,6 +54,7 @@
         }
 
         function saveUpdates(row) {
+            setSpinner(row);
             var $row = $(row).parent().parent();
             $.post('@Url.Action("UpdateSettingsCommand")', {
                 Id: $row.find("input[Name=Id]").val(),
@@ -73,6 +74,11 @@
                 $("thead").find("th").first().trigger("click");
                 $("thead").find("th").first().trigger("click");
             });
+
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
     </script>
 }
 <div class="x_panel">
@@ -106,7 +112,6 @@
                         <th class="hidden">ChatId</th>
                         <th width="10%" class="column-title text-center">Chat Title</th>
                         <th width="10%" class="column-title text-center">Iclude</th>
-                        <th width="25%" class="column-title text-center">Invert Mode</th>
                         <th width="5%" class="column-title text-center">Ban User</th>
                         <th width="10%" class="column-title text-center">Number of Attempts</th>
                         <th width="10%" class="column-title text-center">Warning Message</th>
@@ -128,16 +133,6 @@
                                     else
                                     {
                                 <input class="form-control" name="IsModuleIncluded" type="checkbox" />
-                                    }
-                            </td>
-                            <td width="5%" class="text-center">
-                                @if (setting.value.IsInvertMode)
-                                    {
-                                <input class="form-control" name="IsInvertMode" type="checkbox" checked />
-                                    }
-                                    else
-                                    {
-                                <input class="form-control" name="IsInvertMode" type="checkbox" />
                                     }
                             </td>
                             <td width="5%" class="text-center">

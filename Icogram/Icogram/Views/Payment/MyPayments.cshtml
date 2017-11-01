@@ -1,0 +1,176 @@
+﻿@model Icogram.ViewModels.Payments.PaymentsPageViewModel
+@{
+    ViewBag.Title = "My Payments";
+}
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+@section stylesCustom
+{
+    <style>
+        table textarea, table input:not([type='checkbox']) {
+            width: 100% !important;
+            resize: none;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/Libs/Gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var table = $("#Table").DataTable({
+            columnDefs: [{
+                targets: [0],
+                searchable: true
+            }],
+            responsive: true,
+            scrollY: $(window).height() - 200,
+            scrollCollapse: true,
+            dom: '<"left"B> frtl',
+            buttons: []
+        });
+
+
+        function saveType(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("UpdatePaymentTypeCommand")', {
+                Id: $row.find("input[Name=Id]").val(),
+                Text: $row.find("input[Name=Text]").val(),
+                NumberOfMonth: $row.find("input[Name=NumberOfMonth]").val(),
+                Eth: $row.find("input[Name=Eth]").val(),
+            }).done(function () {
+                location.reload();
+            });
+        }
+
+
+        $(document)
+            .ready(function () {
+                $("thead").find("th").first().trigger("click");
+                $("thead").find("th").first().trigger("click");
+            });
+
+        function cancel(row) {
+            setSpinner(row);
+            var $row = $(row).parent().parent();
+            $.post('@Url.Action("CancelPaymentCommand")', { id: $row.find("input[Name=Id]").val() })
+            .done(function () {
+                location.reload();
+            });
+        }
+
+        function setSpinner(row) {
+            var $btn = $(row);
+            $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
+        }
+    </script>
+}
+
+<div class="col-lg-6 col-md-6 col-sm-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Create Payment</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            @using (Html.BeginForm("CreatePaymentCommand", "Payment", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <select class="form-control" name="PaymentTypeId">
+                        @foreach (var type in Model.PaymentTypes)
+                        {
+                            <option value="@type.Id">@($"{type.Text}. End date: {DateTime.UtcNow.AddMonths(type.NumberOfMonth)}. Prise: {type.Eth}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="Insert your Transaction TX" name="TxTransaction" type="text" />
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="Comment" name="Comment" rows="3" style="resize: none;"></textarea>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="Email" name="Email" />
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="Telegram" name="TelegramContact" type="text" />
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-info" type="submit" value="Send"/>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>My Payments</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table table-bordered" id="Table">
+                    <thead>
+                        <tr class="headings">
+                            <th class="hidden column-title text-center">id</th>
+                            <th width="10%" class="column-title text-center">Company</th>
+                            <th width="20%" class="column-title text-center">TxTransaction</th>
+                            <th width="20%" class="column-title text-center">Comment</th>
+                            <th width="5%" class="column-title text-center">Email</th>
+                            <th width="5%" class="column-title text-center">Telegram</th>
+                            <th width="5%" class="column-title text-center">Type</th>
+                            <th width="5%" class="column-title text-center">Month</th>
+                            <th width="5%" class="column-title text-center">Eth</th>
+                            <th width="5%" class="column-title text-center">Payment Date</th>
+                            <th width="5%" class="column-title text-center last">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model.Payments)
+                            {
+                            <tr class="">
+                                <td class="hidden"><input name="Id" value="@payment.Id" disabled="disabled" /></td>
+                                <td width="10%">@payment.Company.Name</td>
+                                <td width="20%">@payment.TxTransaction</td>
+                                <td width="20%">@payment.Comment</td>
+                                <td width="5%">@payment.Email</td>
+                                <td width="5%">@payment.TelegramContact</td>
+                                <td width="5%">@payment.PaymentType.Text</td>
+                                <td width="5%">@payment.PaymentType.NumberOfMonth</td>
+                                <td width="5%">@payment.PaymentType.Eth</td>
+                                <td width="10%">@payment.PaymentDate</td>
+                                <td width="10%" class="text-center">
+                                    @if (payment.IsAproved)
+                                        {
+                                        <span class="label label-md label-success">Aproved</span>
+                                        }
+                                        else
+                                        {
+                                        <a class="btn btn-danger" onclick="cancel(this)">You can cansel</a>
+                                        }
+                                </td>
+                            </tr>
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

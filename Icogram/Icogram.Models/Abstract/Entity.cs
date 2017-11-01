@@ -6,12 +6,7 @@ namespace Icogram.Models.Abstract
     {
         public int Id { get; set; }
 
-        public DateTime CreationDate { get; }
+        public DateTime? CreationDate { get; set; }
 
-
-        public Entity()
-        {
-            CreationDate = DateTime.UtcNow;
-        }
     }
 }

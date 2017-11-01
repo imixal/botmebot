@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Icogram.Enums;
 using Icogram.Models.Abstract;
 using Icogram.Models.ChatModels;
+using Icogram.Models.Payments;
 using Icogram.Models.UserModels;
 
 namespace Icogram.Models.CompanyModels
@@ -30,5 +31,7 @@ namespace Icogram.Models.CompanyModels
         public List<ApplicationUser> Users { get; set; }
 
         public List<Chat> Chats { get; set; }
+
+        public List<Payment> Payments { get; set; }
     }
 }
