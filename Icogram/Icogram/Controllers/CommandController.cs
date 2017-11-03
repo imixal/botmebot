@@ -51,6 +51,7 @@ namespace Icogram.Controllers
             command.CommandName = model.CommandName;
             command.IsCommandShowInList = model.IsCommandShowInList;
             command.ActionMessage = model.ActionMessage;
+            command.CommandDescription = model.CommandDescription;
             await _commandCrudService.UpdateAsync(command);
         }
 
@@ -61,6 +62,7 @@ namespace Icogram.Controllers
                 CommandName = model.CommandName,
                 ActionMessage = model.ActionMessage,
                 ChatId = model.ChatId,
+                CommandDescription = model.CommandDescription,
                 IsCommandShowInList =  model.IsCommandShowInList
             });
         }

@@ -4,3 +4,16 @@
 .label-md {
     font-size: 100%;
 }
+.resource {
+    line-height: 2;
+    font-size: 16px;
+}
+.resource.x_content {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.collapse-resource {
+    display: none;
+}

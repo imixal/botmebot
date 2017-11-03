@@ -1,0 +1,22 @@
+﻿@model string
+    
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Help</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-resource-btn pull-right" style="color: #C5C7CB"><i class="fa fa-arrows-v"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content resource collapse-resource">
+        @if (!string.IsNullOrEmpty(Model))
+        {
+            var myHtmlString = new HtmlString(Model);
+            <div class="x_content">
+                @myHtmlString
+            </div>
+        }
+    </div>
+</div>

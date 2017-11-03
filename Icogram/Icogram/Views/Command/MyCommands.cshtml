@@ -14,7 +14,6 @@
     <style>
         table textarea, table input:not([type='checkbox']) {
             width: 100% !important;
-            resize: none;
         }
     </style>
 }
@@ -55,8 +54,8 @@
         }
 
         function deletecommand() {
-            setSpinner(row);
             var $row = $(localStorage.getItem("row"));
+            setSpinner($row);
             $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
             .done(function () {
                 location.reload();
@@ -70,6 +69,7 @@
                 ChatId: $row.find("select[Name=Chat]").val(),
                 ActionMessage: $row.find("textarea[Name=ActionMessage]").val(),
                 CommandName: $row.find("input[Name=CommandName]").val(),
+                CommandDescription: $row.find("input[Name=CommandDescription]").val(),
                 IsCommandShowInList: $row.find("input[Name=IsCommandShowInList]").is(':checked'),
             }).done(function () {
                 location.reload();
@@ -81,6 +81,7 @@
                 'new',
                 $('select[name=Chat]').clone().removeClass('hidden').prop('outerHTML'),
                 '<input class="form-control" name="CommandName" placeholder="Command Name" />',
+                '<input class="form-control" name="CommandDescription" placeholder="Command Description" />',
                 '<textarea class="form-control" type="text" name="ActionMessage" placeholder="Action Message"></textarea>',
                 '<input class="form-control" name="IsCommandShowInList" type="checkbox" checked />',
                 'Not Usage',
@@ -95,6 +96,7 @@
                 Id: $row.find("input[Name=Id]").val(),
                 ActionMessage: $row.find("textarea[Name=Message]").val(),
                 CommandName: $row.find("input[Name=CommandName]").val(),
+                CommandDescription: $row.find("input[Name=CommandDescription]").val(),
                 IsCommandShowInList: $row.find("input[Name=IsCommandShowInList]").is(':checked'),
             }).done(function () {
                 location.reload();
@@ -115,6 +117,8 @@
         }
     </script>
 }
+@Html.Partial("~/Views/Global/_Help.cshtml", Model.Resources.Any(r => r.Name == "MyCommands") ? Model.Resources.First(r => r.Name == "MyCommands").DefaultValue : "")
+
 <div class="x_panel">
     <div class="x_title">
         <h2>My Commands</h2>
@@ -136,6 +140,7 @@
                         <th width="5%" class="column-title">№</th>
                         <th width="10%" class="column-title text-center">Chat Title</th>
                         <th width="10%" class="column-title text-center">Command Name</th>
+                        <th width="10%" class="column-title text-center">Command Description</th>
                         <th width="25%" class="column-title text-center">Action Message</th>
                         <th width="5%" class="column-title text-center">Show in List</th>
                         <th width="10%" class="column-title text-center">Last Date Usage</th>
@@ -143,40 +148,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach (var chat in Model.Chats)
-                {
-                    foreach (var chatCommand in chat.Commands.Select((value, i) => new {j = i + 1, value}))
-                     {
-                         <tr class="">
-                             <td width="5%"><input class="hidden" name="Id" value="@chatCommand.value.Id"/> @chatCommand.j</td>
-                             <td width="10%" class="text-center">@chatCommand.value.Chat.Title</td>
-                             <td width="10%"><input class="form-control" name="CommandName" value="@chatCommand.value.CommandName" /></td>
-                             <td width="25%"><textarea class="form-control" type="text" name="Message" placeholder="Message">@chatCommand.value.ActionMessage</textarea></td>
-                             <td width="5%" class="text-center">
-                                 @if (@chatCommand.value.IsCommandShowInList)
-                                 {
-                                     <input class="form-control" name="IsCommandShowInList" type="checkbox" checked />
-                                 }
-                                 else
-                                 {
-                                     <input class="form-control" name="IsCommandShowInList" type="checkbox" />
-                                 }
-                             </td>
-                             @if (@chatCommand.value.LastUsage.HasValue)
-                             {
-                                 <td class="text-center" width="10%">@chatCommand.value.LastUsage</td>
-                             }
-                             else
-                             {
-                                <td class="text-center" width="10%">Not used</td>
-                             }
-                             <td width="5%" class="text-center" >
-                                 <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
-                                 <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
-                             </td>
-                         </tr>
-                     }
-                }
+                    @foreach (var chat in Model.Chats)
+                    {
+                        foreach (var chatCommand in chat.Commands.Select((value, i) => new { j = i + 1, value }))
+                        {
+                            <tr class="">
+                                <td width="5%"><input class="hidden" name="Id" value="@chatCommand.value.Id" /> @chatCommand.j</td>
+                                <td width="10%" class="text-center">@chatCommand.value.Chat.Title</td>
+                                <td width="10%"><input class="form-control" name="CommandName" value="@chatCommand.value.CommandName" /></td>
+                                <td width="10%"><input class="form-control" name="CommandDescription" value="@chatCommand.value.CommandDescription" /></td>
+                                <td width="25%"><textarea class="form-control" type="text" rows="5" name="Message" placeholder="Message">@chatCommand.value.ActionMessage</textarea></td>
+                                <td width="5%" class="text-center">
+                                    @if (@chatCommand.value.IsCommandShowInList)
+                                    {
+                                        <input class="form-control" name="IsCommandShowInList" type="checkbox" checked />
+                                    }
+                                    else
+                                    {
+                                        <input class="form-control" name="IsCommandShowInList" type="checkbox" />
+                                    }
+                                </td>
+                                @if (@chatCommand.value.LastUsage.HasValue)
+                                {
+                                    <td class="text-center" width="10%">@chatCommand.value.LastUsage</td>
+                                }
+                                else
+                                {
+                                    <td class="text-center" width="10%">Not used</td>
+                                }
+                                <td width="5%" class="text-center">
+                                    <a class="label label-md label-info" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
+                                    <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    }
                 </tbody>
             </table>
         </div>

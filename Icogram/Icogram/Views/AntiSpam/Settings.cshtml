@@ -83,19 +83,22 @@
 }
 <div class="x_panel">
     <div class="x_title">
-        <h2><i class="fa fa-question"></i> Help!</h2>
+        <h2>Help</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li>
-                <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
+                <a class="collapse-resource-btn pull-right" style="color: #C5C7CB"><i class="fa fa-arrows-v"></i></a>
             </li>
         </ul>
         <div class="clearfix"></div>
     </div>
-    <div class="x_content">
-        <p>Bot can ban users and can delete only when he is <span class="label label-md label-info">admin</span></p>
-        <p>Bot can't kick <span class="label label-md label-info">group creaor</span> and delete his messages</p>
-        <p>Bot can unban users only in supergroup<span class="label label-md label-info">group creaor</span></p>
-        <p>For <span class="label label-warning label-md">Warning Message</span> you can use params: <span class="label label-info label-md">[UserName]</span></p>
+    <div class="x_content resource collapse-resource">
+        @if (Model.Resources.Any(r => r.Name == "Antispam/settings"))
+            {
+                var myHtmlString = new HtmlString(Model.Resources.First(r => r.Name == "Antispam/settings").DefaultValue);
+            <div class="x_content">
+                @myHtmlString
+            </div>
+        }
     </div>
 </div>
 <div class="x_panel">
@@ -111,7 +114,7 @@
                         <th class="hidden"></th>
                         <th class="hidden">ChatId</th>
                         <th width="10%" class="column-title text-center">Chat Title</th>
-                        <th width="10%" class="column-title text-center">Iclude</th>
+                        <th width="5%" class="column-title text-center">Include</th>
                         <th width="5%" class="column-title text-center">Ban User</th>
                         <th width="10%" class="column-title text-center">Number of Attempts</th>
                         <th width="10%" class="column-title text-center">Warning Message</th>
@@ -160,9 +163,6 @@
                             <td width="10%" class="text-center">@chat.Title</td>
                             <td width="5%" class="text-center">
                                 <input class="form-control" name="IsModuleIncluded" type="checkbox" />
-                            </td>
-                            <td width="5%" class="text-center">
-                                <input class="form-control" name="IsInvertMode" type="checkbox" />
                             </td>
                             <td width="5%" class="text-center">
                                 <input class="form-control" name="IsNeededToBanUser" type="checkbox" />

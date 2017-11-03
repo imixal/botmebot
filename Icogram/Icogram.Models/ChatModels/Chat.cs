@@ -23,6 +23,10 @@ namespace Icogram.Models.ChatModels
 
         public int CommandTimeOut { get; set; }
 
+        public bool IsNeededToDeleteNewUserMessage { get; set; }
+
+        public bool IsNeededToDeleteLeaveUserMessage { get; set; }
+
         public List<Command> Commands { get; set; }
     }
 }

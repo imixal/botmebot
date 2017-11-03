@@ -94,22 +94,7 @@
         }
     </script>
 }
-<div class="x_panel">
-    <div class="x_title">
-        <h2><i class="fa fa-question"></i> Help!</h2>
-        <ul class="nav navbar-right panel_toolbox">
-            <li>
-                <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
-            </li>
-        </ul>
-        <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-        <p>Bot can ban users and can delete only when he is <span class="label label-md label-info">admin</span></p>
-        <p>Bot can't kick <span class="label label-md label-info">group creaor</span> and delete his messages</p>
-        <p>Bot can unban users only in supergroup<span class="label label-md label-info">group creaor</span></p>
-    </div>
-</div>
+@Html.Partial("~/Views/Global/_Help.cshtml", Model.Resources.Any(r => r.Name == "AntiSpam/SuspiciousUsers") ? Model.Resources.First(r => r.Name == "AntiSpam/SuspiciousUsers").DefaultValue : "")
 
 <div class="x_panel">
     <div class="x_title">

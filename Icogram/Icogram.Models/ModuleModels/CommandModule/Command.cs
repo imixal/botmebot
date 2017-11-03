@@ -8,6 +8,8 @@ namespace Icogram.Models.ModuleModels.CommandModule
     {
         public string CommandName { get; set; }
 
+        public string CommandDescription { get; set; }
+
         public string ActionMessage { get; set; }
 
         public Chat Chat { get; set; }

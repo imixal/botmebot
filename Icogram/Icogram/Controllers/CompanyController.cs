@@ -44,7 +44,17 @@ namespace Icogram.Controllers
             }
             else
             {
-                await _companyCrudService.UpdateAsync(company);
+                var oldCompany = await _companyCrudService.GetByIdAsync(company.Id);
+                oldCompany.Name = company.Name;
+                oldCompany.Description = company.Description;
+                oldCompany.End = company.End;
+                oldCompany.IsAntiSpamModuleActivated = company.IsAntiSpamModuleActivated;
+                oldCompany.IsCommandModuleActivated = company.IsCommandModuleActivated;
+                oldCompany.IsCustomMessageModuleActivated = company.IsCustomMessageModuleActivated;
+                oldCompany.IsWelcomeMessageModuleActivated = company.IsWelcomeMessageModuleActivated;
+                oldCompany.Price = company.Price;
+
+                await _companyCrudService.UpdateAsync(oldCompany);
             }
         }
 

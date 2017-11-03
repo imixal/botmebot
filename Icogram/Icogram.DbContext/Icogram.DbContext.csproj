@@ -62,6 +62,14 @@
     <Compile Include="Migrations\201711011652138_Init.Designer.cs">
       <DependentUpon>201711011652138_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711021739304_Command Description.cs" />
+    <Compile Include="Migrations\201711021739304_Command Description.Designer.cs">
+      <DependentUpon>201711021739304_Command Description.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711030931219_DeleteDefaultMessages.cs" />
+    <Compile Include="Migrations\201711030931219_DeleteDefaultMessages.Designer.cs">
+      <DependentUpon>201711030931219_DeleteDefaultMessages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -81,6 +89,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201711011652138_Init.resx">
       <DependentUpon>201711011652138_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711021739304_Command Description.resx">
+      <DependentUpon>201711021739304_Command Description.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711030931219_DeleteDefaultMessages.resx">
+      <DependentUpon>201711030931219_DeleteDefaultMessages.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

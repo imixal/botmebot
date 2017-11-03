@@ -65,9 +65,11 @@
             var $row = $(row).parents('tr');
             $.post('@Url.Action("UpdateMyChat")',
                 {
-                    icogramChatId: $row.find("input[Name=icogramChatId]").val(),
-                    message: $row.find("textarea[Name=WelcomeUserMessage]").val(),
-                    commandTimeOut: $row.find("input[Name=CommandTimeOut]").val(),
+                    Id: $row.find("input[Name=icogramChatId]").val(),
+                    WelcomeUserMessage: $row.find("textarea[Name=WelcomeUserMessage]").val(),
+                    CommandTimeOut: $row.find("input[Name=CommandTimeOut]").val(),
+                    IsNeededToDeleteLeaveUserMessage: $row.find("input[Name=IsNeededToDeleteLeaveUserMessage]").is(':checked'),
+                    IsNeededToDeleteNewUserMessage: $row.find("input[Name=IsNeededToDeleteLeaveUserMessage]").is(':checked'),
                 })
                 .done(function () {
                     location.reload();
@@ -99,6 +101,7 @@
             .ready(function () {
                 $("thead").find("th").first().trigger("click");
                 $("thead").find("th").first().trigger("click");
+                $(".collapse-link").trigger("click");
             });
 
         function setSpinner(row) {
@@ -107,7 +110,8 @@
         }
     </script>
 }
-@Html.Partial("~/Views/Global/Help.cshtml")
+@Html.Partial("~/Views/Global/_Help.cshtml", Model.Resources.Any(r => r.Name == "MyChats") ? Model.Resources.First(r => r.Name == "MyChats").DefaultValue : "")
+
 <div class="x_panel">
     <div class="x_title">
         <h2>Chats</h2>
@@ -125,6 +129,8 @@
                     {
                         <th class="column-title text-center">Welcome Message</th>
                     }
+                    <th class="column-title text-center">Delete New User Message</th>
+                    <th class="column-title text-center">Delete Leave User Message</th>
                     <th class="column-title text-center">Command Time out</th>
                     <th class="column-title text-center last">Actions</th>
                 </tr>
@@ -140,12 +146,32 @@
                         {
                             <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
                         }
+                        <td width="5%" class="text-center">
+                            @if (chat.value.IsNeededToDeleteNewUserMessage)
+                            {
+                                <input type="checkbox" name="IsNeededToDeleteNewUserMessage" checked="checked"/>
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="IsNeededToDeleteNewUserMessage" />
+                            }
+                        </td>
+                        <td width="5%" class="text-center">
+                            @if (chat.value.IsNeededToDeleteLeaveUserMessage)
+                            {
+                                <input type="checkbox" name="IsNeededToDeleteLeaveUserMessage" checked="checked" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="IsNeededToDeleteLeaveUserMessage" />
+                            }
+                        </td>
                         <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" min="0" value="@chat.value.CommandTimeOut" /></td>
                         <td class="text-center" width="7%">
                             <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-save"></span></a>
                             @if (Model.UserProfileViewModel.Company.IsCustomMessageModuleActivated && Model.UserProfileViewModel.Company.End.HasValue)
                             {
-                                if (Model.UserProfileViewModel.Company.End > DateTime.UtcNow)
+                                if (Model.UserProfileViewModel.Company.End.Value > DateTime.UtcNow)
                                 {
                                     <a class="label label-md label-info" onclick="setSendMessageData(this)" data-toggle="modal" data-target="#sendMessage"><span class="fa fa-send"></span></a>
                                 }

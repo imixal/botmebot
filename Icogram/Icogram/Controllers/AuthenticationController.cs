@@ -3,14 +3,17 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using System.Threading.Tasks;
+using Icogram.Models.ResourcesModels;
 using Icogram.Service.Login;
 using Icogram.ViewModels.Login;
+using Service;
 
 namespace Icogram.Controllers
 {
     public class AuthenticationController : Controller
     {
         private readonly ILoginService _loginService;
+        private readonly ICrudService<Resource> _resourceCrudService;
 
         private IAuthenticationManager _authenticationManager
         {
@@ -18,14 +21,21 @@ namespace Icogram.Controllers
         }
 
 
-        public AuthenticationController(ILoginService loginService)
+        public AuthenticationController(ILoginService loginService, ICrudService<Resource> resourceCrudService)
         {
             _loginService = loginService;
+            _resourceCrudService = resourceCrudService;
         }
 
         [HttpGet]
-        public ActionResult Login(ErrorViewModel model)
+        public async Task<ActionResult> Login(ErrorViewModel model)
         {
+            if (model == null)
+            {
+                model = new ErrorViewModel();
+            }
+            model.Resources =await _resourceCrudService.GetAllAsync();
+
             return View(model);
         }
 

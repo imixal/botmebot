@@ -1,8 +1,28 @@
-﻿@{
+﻿@model Icogram.ViewModels.Dashboard.DashboardViewModel
+@{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Partial("~/Views/Global/Help.cshtml")
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Help</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content resource">
+        @if (Model.Resources.Any(r => r.Name == "Dashboard"))
+        {
+            var myHtmlString = new HtmlString(Model.Resources.First(r => r.Name == "Dashboard").DefaultValue);
+            <div class="x_content">
+                @myHtmlString
+            </div>
+        }
+    </div>
+</div>
 
 

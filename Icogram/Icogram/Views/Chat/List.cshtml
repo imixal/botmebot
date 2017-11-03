@@ -59,8 +59,8 @@
         }
 
         function deletecommand() {
-            setSpinner(row);
             var $row = $(localStorage.getItem("row"));
+            setSpinner($row);
             $.post('@Url.Action("DeleteCommand")', { id: $row.find("input[Name=Id]").val() })
                 .done(function () {
                     location.reload();

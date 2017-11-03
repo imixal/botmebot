@@ -65,21 +65,34 @@
                 $("thead").find("th").first().trigger("click");
             });
 
-        function cancel(row) {
-            setSpinner(row);
-            var $row = $(row).parent().parent();
-            $.post('@Url.Action("CancelPaymentCommand")', { id: $row.find("input[Name=Id]").val() })
-            .done(function () {
-                location.reload();
-            });
-        }
-
         function setSpinner(row) {
             var $btn = $(row);
             $btn.addClass("hidden").after('<span class="fa fa-refresh fa-spin"></span>');
         }
     </script>
 }
+<div class="col-lg-6 col-md-6">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Help</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link pull-right" style="color: #C5C7CB"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content resource">
+            @if (Model.Resources.Any(r => r.Name == "PaymentInfo"))
+            {
+                var myHtmlString = new HtmlString(Model.Resources.First(r => r.Name == "PaymentInfo").DefaultValue);
+                <div class="x_content">
+                    @myHtmlString
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
 <div class="col-lg-6 col-md-6 col-sm-12">
     <div class="x_panel">
@@ -94,7 +107,7 @@
                     <select class="form-control" name="PaymentTypeId">
                         @foreach (var type in Model.PaymentTypes)
                         {
-                            <option value="@type.Id">@($"{type.Text}. End date: {DateTime.UtcNow.AddMonths(type.NumberOfMonth)}. Prise: {type.Eth}")</option>
+                            <option value="@type.Id">@($"{type.Text}. End date: {DateTime.UtcNow.AddMonths(type.NumberOfMonth)}. Price: {type.Eth}")</option>
                         }
                     </select>
                 </div>
@@ -163,7 +176,7 @@
                                         }
                                         else
                                         {
-                                        <a class="btn btn-danger" onclick="cancel(this)">You can cansel</a>
+                                        <a class="label label-md label-warning">Waiting aprove</a>
                                         }
                                 </td>
                             </tr>

@@ -10,6 +10,7 @@ using Icogram.Telegram.Bot.Bot;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using static System.String;
 using Chat = Icogram.Models.ChatModels.Chat;
 
 namespace Icogram.Telegram.BotHandler
@@ -44,7 +45,7 @@ namespace Icogram.Telegram.BotHandler
             {
                 if (update.Message != null)
                 {
-                    if (!string.IsNullOrEmpty(update.Message.Text))
+                    if (!IsNullOrEmpty(update.Message.Text))
                     {
                         if (update.Message.Entities != null)
                         {
@@ -59,7 +60,25 @@ namespace Icogram.Telegram.BotHandler
                         }
                         await TryToExecuteCommand(update);
                     }
-                    await NewUserCheck(update);
+                    try
+                    {
+                        if (update.Message.LeftChatMember != null)
+                        {
+                            await LeaveUserCheck(update);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    try
+                    {
+                        await NewUserCheck(update);
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
                 }
 
             }
@@ -109,7 +128,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception)
             {
-                
+
             }
         }
 
@@ -125,7 +144,9 @@ namespace Icogram.Telegram.BotHandler
         {
             try
             {
-                await _telegramBotClient.KickChatMemberAsync(user.Chat.TelegramChatId, user.TelegramUserId, DateTime.UtcNow.AddDays(30));
+                await
+                    _telegramBotClient.KickChatMemberAsync(user.Chat.TelegramChatId, user.TelegramUserId,
+                        DateTime.UtcNow.AddDays(30));
                 user.IsUserBanned = true;
                 user.BannedDate = DateTime.UtcNow;
                 await _suspiciousUserCrudService.UpdateAsync(user);
@@ -146,18 +167,22 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception)
             {
-                
+
             }
         }
 
 
         private async Task TryToExecuteCommand(Update update)
         {
-            var command = _chat.Commands.FirstOrDefault(c => $"/{c.CommandName}" == update.Message.Text || $"/{c.CommandName}@{IcogramBotSettings.Name}" == update.Message.Text);
+            var command =
+                _chat.Commands.FirstOrDefault(
+                    c =>
+                        $"/{c.CommandName}" == update.Message.Text ||
+                        $"/{c.CommandName}@{IcogramBotSettings.Name}" == update.Message.Text);
             var check = AccessCheck(GlobalEnums.ModuleType.CommandModule);
             if (check)
             {
-                if (!string.IsNullOrEmpty(command?.ActionMessage))
+                if (!IsNullOrEmpty(command?.ActionMessage))
                     if (command.LastUsage.HasValue)
                     {
                         if (command.LastUsage.Value.AddSeconds(command.Chat.CommandTimeOut) <= DateTime.UtcNow)
@@ -165,7 +190,7 @@ namespace Icogram.Telegram.BotHandler
                             await
                                 _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, command.ActionMessage,
                                     replyToMessageId: update.Message.MessageId);
-                            command =await _commandCrudService.GetByIdAsync(command.Id);
+                            command = await _commandCrudService.GetByIdAsync(command.Id);
                             command.LastUsage = DateTime.UtcNow;
                             await _commandCrudService.UpdateAsync(command);
                         }
@@ -174,8 +199,8 @@ namespace Icogram.Telegram.BotHandler
                     else
                     {
                         await
-                                _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, command.ActionMessage,
-                                    replyToMessageId: update.Message.MessageId);
+                            _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, command.ActionMessage,
+                                replyToMessageId: update.Message.MessageId);
                         command = await _commandCrudService.GetByIdAsync(command.Id);
                         command.LastUsage = DateTime.UtcNow;
                         await _commandCrudService.UpdateAsync(command);
@@ -186,17 +211,17 @@ namespace Icogram.Telegram.BotHandler
         private async Task ShowListCommandsAsync(Update update)
         {
             var check = AccessCheck(GlobalEnums.ModuleType.CommandModule);
-            if (update.Message.Text == $"/info@{IcogramBotSettings.Name}" || update.Message.Text == "/info")
+            if (update.Message.Text == $"/commands@{IcogramBotSettings.Name}" || update.Message.Text == "/commands")
             {
                 var stringBuilder = new StringBuilder();
-                stringBuilder.Append("You can use this command: \n");
+                stringBuilder.Append("You can use these commands: \n");
                 if (check)
                 {
                     foreach (var command in _chat.Commands)
                     {
                         if (command.IsCommandShowInList)
                         {
-                            stringBuilder.Append($"/{command.CommandName} \n");
+                            stringBuilder.Append($"/{command.CommandName} - {command.CommandDescription} \n");
                         }
                     }
                     await _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, stringBuilder.ToString());
@@ -232,41 +257,28 @@ namespace Icogram.Telegram.BotHandler
                             link = url.Host;
                         }
                         var isWhiteLink = false;
-                        if (!string.IsNullOrEmpty(link) && link.Contains("."))
+                        if (!IsNullOrEmpty(link) && link.Contains("."))
                         {
                             var words = link.Split('.');
                             if (words.Length > 1)
                             {
-                                var word = words[words.Length - 2];
-                                if (whiteLinks.Any(wl => wl.Link == word))
+                                var word = words[words.Length - 2].ToLower();
+                                var isAny = whiteLinks.Any(wl => wl.Link.ToLower() == word);
+                                if (isAny && whiteLinks.Count > 0)
                                 {
                                     isWhiteLink = true;
                                 }
                             }
                         }
-                        if (setting.IsInvertMode)
-                        {
-                            if (isWhiteLink)
-                            {
-                                isNeedToDelete = true;
-                            }
-                        }
-                        else
-                        {
                             if (!isWhiteLink)
                             {
                                 isNeedToDelete = true;
                             }
-                        }
                     }
 
                     if (isNeedToDelete)
                     {
-                        await _telegramBotClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
-                        await
-                            _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id,
-                                setting.WarningMessage.Replace("[UserName]",
-                                    $"{update.Message.From.FirstName} {update.Message.From.LastName}"));
+                        
 
                         var users = await _suspiciousUserCrudService.GetAllAsync();
                         var user = users.FirstOrDefault(u => u.TelegramUserId == update.Message.From.Id);
@@ -290,6 +302,13 @@ namespace Icogram.Telegram.BotHandler
                             await _suspiciousUserCrudService.UpdateAsync(user);
                         }
 
+                        await _telegramBotClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
+                        var mess = new StringBuilder(setting.WarningMessage);
+                        SetUserParams(ref mess, update.Message.From);
+                        mess.Replace("[NumberOfAttempts]", user.NumberOfAttempts.ToString());
+                        await
+                            _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, mess.ToString());
+
                         if (setting.IsNeededToBanUser && setting.NumberOfAttempts <= user.NumberOfAttempts)
                         {
                             await BanUserAsync(user);
@@ -309,8 +328,25 @@ namespace Icogram.Telegram.BotHandler
             if (update.Message.NewChatMember != null && check)
             {
                 var welcomeMessage = new StringBuilder(_chat.WelcomeUserMessage);
-                welcomeMessage.Replace("[UserName]", $"{update.Message.NewChatMember.FirstName} {update.Message.NewChatMember.LastName}");
-                await _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, welcomeMessage.ToString());
+                SetUserParams(ref welcomeMessage, update.Message.NewChatMember);
+                SetChatParams(ref welcomeMessage, update);
+                if (!IsNullOrEmpty(update.Message.NewChatMember.Username))
+                {
+                    welcomeMessage.Insert(0, $"@{update.Message.NewChatMember.Username} \n");
+                }
+                if (_chat.IsNeededToDeleteNewUserMessage)
+                {
+                    await _telegramBotClient.DeleteMessageAsync(_chat.TelegramChatId, update.Message.MessageId);
+                }
+                await _telegramBotClient.SendTextMessageAsync(_chat.TelegramChatId, welcomeMessage.ToString());
+            }
+        }
+
+        private async Task LeaveUserCheck(Update update)
+        {
+            if (_chat.IsNeededToDeleteLeaveUserMessage)
+            {
+                await _telegramBotClient.DeleteMessageAsync(_chat.TelegramChatId, update.Message.MessageId);
             }
         }
 
@@ -335,6 +371,41 @@ namespace Icogram.Telegram.BotHandler
                 default:
                     return result;
             }
+        }
+
+        private static void SetChatParams(ref StringBuilder message, Update update)
+        {
+            if (update.Message.Chat != null)
+            {
+                message.Replace("[ChatUserName]",
+                    IsNullOrEmpty(update.Message.Chat.Username) ? "" : update.Message.Chat.Username);
+                message.Replace("[ChatFirstName]",
+                    IsNullOrEmpty(update.Message.Chat.FirstName) ? "" : update.Message.Chat.FirstName);
+                message.Replace("[ChatLastName]",
+                    IsNullOrEmpty(update.Message.Chat.LastName) ? "" : update.Message.Chat.LastName);
+                message.Replace("[ChatTitle]",
+                    IsNullOrEmpty(update.Message.Chat.Title) ? "" : update.Message.Chat.Title);
+                message.Replace("[ChatInviteLink]",
+                    IsNullOrEmpty(update.Message.Chat.InviteLink) ? "" : update.Message.Chat.InviteLink);
+                message.Replace("[ChatDescription]",
+                    IsNullOrEmpty(update.Message.Chat.Description) ? "" : update.Message.Chat.Description);
+            }
+        }
+
+        private static void SetUserParams(ref StringBuilder message, User user)
+        {
+            message.Replace("[FirstName]",
+                    IsNullOrEmpty(user.FirstName)
+                        ? ""
+                        : user.FirstName);
+            message.Replace("[LastName]",
+                IsNullOrEmpty(user.LastName)
+                    ? ""
+                    : user.LastName);
+            message.Replace("[UserName]",
+                IsNullOrEmpty(user.Username)
+                    ? ""
+                    : user.Username);
         }
     }
 }

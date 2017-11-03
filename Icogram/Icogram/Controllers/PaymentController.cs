@@ -88,15 +88,6 @@ namespace Icogram.Controllers
             await _paymentCrudService.DeleteAsync(payment);
         }
 
-        public async Task CancelPaymentCommand(int id)
-        {
-            var payment = await _paymentCrudService.GetByIdAsync(id);
-            if (!payment.IsAproved)
-            {
-                await _paymentCrudService.DeleteAsync(payment);
-            }
-        }
-
         [Authorize(Roles = "Admin, Manager")]
         public async Task UpdatePaymentTypeCommand(PaymentType newPaymentType)
         {

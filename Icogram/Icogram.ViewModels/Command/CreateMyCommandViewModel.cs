@@ -10,6 +10,8 @@ namespace Icogram.ViewModels.Command
     {
         public string CommandName { get; set; }
 
+        public string CommandDescription { get; set; }
+
         public string ActionMessage { get; set; }
 
         public int ChatId { get; set; }

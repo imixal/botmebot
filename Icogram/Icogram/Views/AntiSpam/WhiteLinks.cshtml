@@ -107,7 +107,7 @@
         }
     </script>
 }
-
+@Html.Partial("~/Views/Global/_Help.cshtml", Model.Resources.Any(r => r.Name == "AntiSpam/WhiteLinks")? Model.Resources.First(r => r.Name == "AntiSpam/WhiteLinks").DefaultValue : "")
 <div class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12">
     <div class="x_panel">
         <div class="x_title">
