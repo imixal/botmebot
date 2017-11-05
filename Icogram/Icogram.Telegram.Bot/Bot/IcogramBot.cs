@@ -6,7 +6,7 @@ namespace Icogram.Telegram.Bot.Bot
     public class IcogramBot
     {
         private static TelegramBotClient _client;
-        private const string Url = "api/botIcogramV2/update";
+        private const string Url = "api/botIcogramV3/update";
 
         public static async Task SetWebhookAsync()
         {

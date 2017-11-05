@@ -40,56 +40,66 @@ namespace Icogram.Telegram.BotHandler
 
         public async Task MessageHandler(Update update, Chat chat)
         {
-            _chat = chat;
-            if (update.Type == UpdateType.MessageUpdate)
+            try
             {
-                if (update.Message != null)
+                _chat = chat;
+                if (update.Type == UpdateType.MessageUpdate)
                 {
-                    if (!IsNullOrEmpty(update.Message.Text))
+                    if (update.Message != null)
                     {
-                        if (update.Message.Entities != null)
+                        if (!IsNullOrEmpty(update.Message.Text))
                         {
-                            if (update.Message.Entities.Any(e => e.Type == MessageEntityType.BotCommand))
+                            if (update.Message.Entities != null)
                             {
-                                await ShowListCommandsAsync(update);
+                                if (update.Message.Entities.Any(e => e.Type == MessageEntityType.BotCommand))
+                                {
+                                    await ShowListCommandsAsync(update);
+                                }
+                                if (update.Message.Entities.Any(e => e.Type == MessageEntityType.Url))
+                                {
+                                    await LinkCheck(update);
+                                }
                             }
-                            if (update.Message.Entities.Any(e => e.Type == MessageEntityType.Url))
+                            await TryToExecuteCommand(update);
+                        }
+                        try
+                        {
+                            if (update.Message.LeftChatMember != null)
                             {
-                                await LinkCheck(update);
+                                await LeaveUserCheck(update);
                             }
                         }
-                        await TryToExecuteCommand(update);
-                    }
-                    try
-                    {
-                        if (update.Message.LeftChatMember != null)
+                        catch (Exception)
                         {
-                            await LeaveUserCheck(update);
-                        }
-                    }
-                    catch (Exception)
-                    {
 
+                        }
+                        try
+                        {
+                            await NewUserCheck(update);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
-                    try
-                    {
-                        await NewUserCheck(update);
-                    }
-                    catch (Exception)
-                    {
-                        
-                    }
+
                 }
+            }
+            catch (Exception)
+            {
 
             }
         }
 
         public async Task<Chat> GetApprovedChatAsync(long telegramChatId)
         {
+            try
+            {
             var chats = await _chatCrudService.GetAllAsync();
             var chat = chats.FirstOrDefault(c => c.TelegramChatId == telegramChatId);
             if (chat != null) return chat.IsApproved ? chat : null;
             var telegramChat = await _telegramBotClient.GetChatAsync(telegramChatId);
+            if (telegramChat == null) return null;
             var icogramChat = new Chat
             {
                 IsApproved = false,
@@ -98,7 +108,11 @@ namespace Icogram.Telegram.BotHandler
                 Type = telegramChat.Type.ToString()
             };
             await _chatCrudService.CreateAsync(icogramChat);
+            }
+            catch (Exception)
+            {
 
+            }
             return null;
         }
 
