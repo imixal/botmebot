@@ -1,0 +1,6 @@
+2017-11-07 11:00:58.8907|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-07 11:02:26.3157|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-07 11:05:01.6135|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-07 11:06:42.5743|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-07 11:09:53.6272|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-07 11:10:46.7043|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check

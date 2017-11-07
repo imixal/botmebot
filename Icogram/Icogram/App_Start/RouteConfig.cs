@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using Icogram.Controllers;
 
 namespace Icogram
 {
@@ -22,6 +23,10 @@ namespace Icogram
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                    "NotFound",
+                    "Error/NotFound",
+                    new { controller = "Error", action = "NotFound" });
         }
     }
 }

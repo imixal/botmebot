@@ -99,6 +99,9 @@
                                         <a href="@Url.Action("Index", "Payment")"><i class="fa fa-money"></i>Payments</a>
                                     </li>
                                 }
+                                    <li>
+                                        <a href="@Url.Action("MyStatistic", "Statistic")"><i class="fa fa-line-chart"></i>My statistic</a>
+                                    </li>
                                 @*@if (User.Identity.IsInRole("Manager") || User.Identity.IsInRole("Admin") || User.Identity.IsInRole("Customer"))
                                 {
                                     <li>

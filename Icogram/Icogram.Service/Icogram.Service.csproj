@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatStatistic\ChatStatisticService.cs" />
+    <Compile Include="ChatStatistic\IChatStatisticService.cs" />
     <Compile Include="Login\ILoginService.cs" />
     <Compile Include="Login\LoginService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

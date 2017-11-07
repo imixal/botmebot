@@ -62,7 +62,7 @@ namespace Icogram.DataAccessLayer.UnitOfWork
                 { typeof(AntiSpamSetting), typeof(AntiSpamSettingsRepository) },
                 { typeof(SuspiciousUser), typeof(SuspiciousUserRepository) },
                 { typeof(WhiteLink), typeof(WhiteLinkRepository) },
-                { typeof(ChatStatistic), typeof(Repository<ChatStatistic>) },
+                { typeof(IChatStatisticRepository), typeof(ChatStatisticRepository) },
                 { typeof(Payment), typeof(PaymentRepository) },
                 { typeof(PaymentType), typeof(Repository<PaymentType>) }
             };

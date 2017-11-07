@@ -29,15 +29,19 @@
     <div class="login_wrapper">
         <div class="animate form login_form">
             <section class="login_content">
+                <img style="vertical-align: sub" alt="botico" src="@Url.Content("~/Content/brain.png")" />
+                <h1 class="text-center">
+                    Botico
+                </h1>
                 <div class="form-login">
                     @using (Html.BeginForm("LoginCommand", "Authentication", FormMethod.Post))
                     {
                         <h1>Login Form</h1>
                         <div>
-                            <input type="text" class="form-control" name="Username" placeholder="Username" required="" />
+                            <input type="text" class="form-control" name="Username" placeholder="Username" required=""/>
                         </div>
                         <div>
-                            <input type="password" class="form-control" name="Password" placeholder="Password" required="" />
+                            <input type="password" class="form-control" name="Password" placeholder="Password" required=""/>
                         </div>
 
                         <div>
@@ -48,7 +52,7 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-lg-12 col-md-12">
-                    <div class="x_panel text-left" style="    font-size: 16px;">
+                    <div class="x_panel text-left" style="font-size: 16px;">
                         @if (Model.Resources.Any(r => r.Name == "Login"))
                         {
                             var myHtmlString = new HtmlString(Model.Resources.First(r => r.Name == "Login").DefaultValue);
@@ -63,8 +67,6 @@
                     <div class="clearfix"></div>
                     <br/>
                     <div>
-                        <h1><img style="vertical-align: sub" alt="botico" src="@Url.Content("~/Content/brain.png")"/> Botico
-                        </h1>
                         <p>©2017 All Rights Reserved.</p>
                     </div>
                 </div>

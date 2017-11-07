@@ -1,0 +1,253 @@
+﻿@model Icogram.ViewModels.ChatStatistic.MyStatisticPageViewModel
+
+@{
+    ViewBag.Title = "My Statistic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section stylesLib
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/Libs/Gentelella/vendors/select2/dist/css/select2.css" />
+}
+@section stylesCustom
+{
+    <style>
+        .panel_toolbox > li > a {
+            color: #73879C !important;
+        }
+    </style>
+}
+@section scriptsLib {
+    <script src="~/Libs/Gentelella/vendors/chartJs/Chart.min.js"></script>
+}
+@section scriptsCustom
+{
+    <script>
+        var messages = [];
+        var deletedMessages = [];
+        var messageSymbols = [];
+        var leavedUser = [];
+        var newUser = [];
+        var dates = [];
+        var commands = [];
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:messages.push("@stat.NumberOfMessages");
+                        }
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:dates.push("@stat.Date.ToString("dd MMMM")");
+                        }
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:messageSymbols.push("@stat.NumberOfSymbolsInMessage");
+                                            }
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:leavedUser.push("@stat.NumberOfLeavedUsers");
+                                        }
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:newUser.push("@stat.NumberOfNewUsers");
+                                            }
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:deletedMessages.push("@stat.NumberOfDeletedMessages");
+                                            }
+        @foreach (var stat in Model.ChatStats)
+        {
+            @:commands.push("@stat.NumberOfCommands");
+        }
+        var messageChartCtx = document.getElementById("messageChart");
+        var messageChart = new Chart(messageChartCtx, {
+            type: 'line',
+            data:
+            {
+                labels: dates,
+                datasets: [
+                {
+                    label: "Messages",
+                    data: messages,
+                    backgroundColor: "rgba(38, 185, 154, 0.31)",
+                    borderColor: "rgba(38, 185, 154, 0.7)",
+                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
+                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    pointHoverBackgroundColor: "#fff",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointBorderWidth: 1,
+                }, {
+                    label: "Deleted Messages",
+                    data: deletedMessages,
+                    backgroundColor: "rgba(38, 185, 154, 0.31)",
+                    borderColor: "rgba(38, 185, 154, 0.7)",
+                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
+                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    pointHoverBackgroundColor: "#fff",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointBorderWidth: 1,
+                }]
+            }
+        });
+        var messageSymbolsChartCtx = document.getElementById("messageSymbolsChart");
+        var messageSymbolsChart = new Chart(messageSymbolsChartCtx, {
+            type: 'line',
+            data:
+            {
+                labels: dates,
+                datasets: [
+                {
+                    label: "Message symbols",
+                    data: messageSymbols,
+                    backgroundColor: "rgba(2,125,197, 0.4)",
+                    borderColor: "#027DC5",
+                    pointBorderColor: "#d7e0eb",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                }]
+            }
+        });
+        var userChartCtx = document.getElementById("userChart");
+        var userChart = new Chart(userChartCtx, {
+            type: 'line',
+            data:
+            {
+                labels: dates,
+                datasets: [
+                {
+                    label: "New Users",
+                    data: newUser,
+                    backgroundColor: "rgba(218,213,190, 0.31)",
+                    borderColor: "rgba(38, 185, 154, 0.7)",
+                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
+                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    pointHoverBackgroundColor: "#fff",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointBorderWidth: 1,
+                }, {
+                    label: "Leaved Users",
+                    data: leavedUser,
+                    backgroundColor: "rgba(199,68,74, 0.31)",
+                    borderColor: "#c7444a",
+                    pointBorderColor: "#c7444a",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                }
+                ]
+            }
+        });
+        var commandChartCtx = document.getElementById("commandChart");
+        var userChart = new Chart(commandChartCtx, {
+            type: 'line',
+            data:
+            {
+                labels: dates,
+                datasets: [
+                {
+                    label: "Commands",
+                    data: commands,
+                    backgroundColor: "rgba(235,178,40, 0.31)",
+                    borderColor: "rgb(235,178,40)",
+                    pointBorderColor: "rgb(235,178,40)",
+                    pointBackgroundColor: "#fff",
+                }]
+            }
+        });
+    </script>
+}
+<div class="page-title">
+    <div class="title_left">
+        <h3>Chat statistic</h3>
+    </div>
+    <div class="title_right">
+        <div class="col-lg-5 col-md-5 col-sm-12 pull-right">
+            @using (Html.BeginForm("MyStatistic", "Statistic", FormMethod.Post, new { }))
+            {
+            <div class="input-group">
+                <select name="chatId" class="form-control">
+                    @foreach (var chat in Model.Chats)
+                        {
+                            var chatStatistic = Model.ChatStats.FirstOrDefault();
+                            if (chatStatistic != null && chat.Id == chatStatistic.ChatId)
+                            {
+                        <option value="@chat.Id" selected="selected">@chat.Title</option>
+                            }
+                            else
+                            {
+                        <option value="@chat.Id">@chat.Title</option>
+                            }
+                        }
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Show</button>
+                </span>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Messages</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <canvas id="messageChart"></canvas>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Message symbols</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <canvas id="messageSymbolsChart"></canvas>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Users</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <canvas id="userChart"></canvas>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Commands</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <canvas id="commandChart"></canvas>
+        </div>
+    </div>
+</div>

@@ -40,10 +40,10 @@
                 columnDefs: [
                     {
                         targets: [0],
-                        searchable: true
+                        searchable: true,
                     }
                 ],
-                responsive: true,
+                scrollX: true,
                 scrollY: $(window).height() - 200,
                 scrollCollapse: true,
                 dom: '<"left"B> frtl',
@@ -178,7 +178,7 @@
                             <td width="13%"><input class="form-control" disabled="disabled" type="text" name="TelegramChatId" value="@chat.value.TelegramChatId" /></td>
                             <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
                             <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" min="0" value="@chat.value.CommandTimeOut" /></td>
-                            <td class="text-center" width="7%">
+                            <td class="text-center" width="8%">
                                 <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-floppy-o"></span></a>
                                 <a class="label label-md label-warning" onclick="refreshChat(this)"><span class="fa fa-refresh"></span></a>
                                 <a class="label label-md label-danger" onclick="setDeleteData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>

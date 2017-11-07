@@ -10,11 +10,14 @@ using Ninject.Web.Common;
 using DataAccessLayer.Async;
 using Icogram.AutoMapper;
 using Icogram.DataAccessLayer.Interfaces;
+using Icogram.DataAccessLayer.Repository;
 using Icogram.DataAccessLayer.UnitOfWork;
+using Icogram.Service.ChatStatistic;
 using Icogram.Service.Login;
 using Icogram.Service.User;
 using Icogram.Telegram.BotHandler;
 using Icogram.ViewModelBuilder;
+using NLog;
 using Service;
 
 namespace Icogram.Utility
@@ -43,16 +46,19 @@ namespace Icogram.Utility
 
         private static void AddBindings()
         {
-            _kernel.Bind<IdentityDbContext<ApplicationUser>>().To<IcogramDbContext>().InSingletonScope();
-            _kernel.Bind<IUnitOfWork>().To<IcogramUnitOfWork>().InSingletonScope();
-            _kernel.Bind<IIcogramUnitOfWork>().To<IcogramUnitOfWork>().InSingletonScope();
+            _kernel.Bind<IdentityDbContext<ApplicationUser>>().To<IcogramDbContext>().InRequestScope();
+            _kernel.Bind<IUnitOfWork>().To<IcogramUnitOfWork>().InRequestScope();
+            _kernel.Bind<IIcogramUnitOfWork>().To<IcogramUnitOfWork>().InRequestScope();
             _kernel.Bind<IMapper>().ToMethod(AutoMapperModule.AutoMapper).InRequestScope();
 
             _kernel.Bind<IViewModelBuilder>().To<ViewModelBuilder.ViewModelBuilder>().InRequestScope();
             _kernel.Bind<ILoginService>().To<LoginService>().InRequestScope();
             _kernel.Bind<IUserService>().To<UserService>().InRequestScope();
             _kernel.Bind(typeof(ICrudService<>)).To(typeof(CrudService<>));
-            _kernel.Bind<IBotHandler>().To<BotHandler>().InSingletonScope();
+            _kernel.Bind<IBotHandler>().To<BotHandler>().InRequestScope();
+            _kernel.Bind<IChatStatisticRepository>().To<ChatStatisticRepository>().InRequestScope();
+            _kernel.Bind<Logger>().ToMethod(p => LogManager.GetCurrentClassLogger());
+            _kernel.Bind<IChatStatisticService>().To<ChatStatisticService>().InRequestScope();
         }
     }
 }

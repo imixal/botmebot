@@ -70,6 +70,10 @@
     <Compile Include="Migrations\201711030931219_DeleteDefaultMessages.Designer.cs">
       <DependentUpon>201711030931219_DeleteDefaultMessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711060729008_Stat.cs" />
+    <Compile Include="Migrations\201711060729008_Stat.Designer.cs">
+      <DependentUpon>201711060729008_Stat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -95,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711030931219_DeleteDefaultMessages.resx">
       <DependentUpon>201711030931219_DeleteDefaultMessages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711060729008_Stat.resx">
+      <DependentUpon>201711060729008_Stat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -54,6 +54,8 @@
     <Compile Include="AntiSpam\SettingsPageViewModel.cs" />
     <Compile Include="AntiSpam\SuspiciousUsersPageViewModel.cs" />
     <Compile Include="AntiSpam\WhiteLinkPageViewModel.cs" />
+    <Compile Include="ChatStatistic\ChatStatisticMainViewModel.cs" />
+    <Compile Include="ChatStatistic\MyStatisticPageViewModel.cs" />
     <Compile Include="Chat\ChatsPageViewModel.cs" />
     <Compile Include="Command\CreateMyCommandViewModel.cs" />
     <Compile Include="Command\MyCommandsPageViewModel.cs" />

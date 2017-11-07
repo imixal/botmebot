@@ -16,10 +16,14 @@ namespace Icogram.Models.ModuleModels.StatisticsModule
 
         public int NumberOfDeletedMessages { get; set; }
 
-        public int NumberOfUsers { get; set; }
+        public int NumberOfNewUsers { get; set; }
+
+        public int NumberOfLeavedUsers { get; set; }
 
         public int NumberOfBannedUsers { get; set; }
 
         public int NumberOfCommands { get; set; }
+
+        public long NumberOfSymbolsInMessage { get; set; }
     }
 }
