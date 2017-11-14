@@ -74,6 +74,14 @@
     <Compile Include="Migrations\201711060729008_Stat.Designer.cs">
       <DependentUpon>201711060729008_Stat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711081932442_File and Command.cs" />
+    <Compile Include="Migrations\201711081932442_File and Command.Designer.cs">
+      <DependentUpon>201711081932442_File and Command.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711120916421_TelegramFileId.cs" />
+    <Compile Include="Migrations\201711120916421_TelegramFileId.Designer.cs">
+      <DependentUpon>201711120916421_TelegramFileId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -102,6 +110,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711060729008_Stat.resx">
       <DependentUpon>201711060729008_Stat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711081932442_File and Command.resx">
+      <DependentUpon>201711081932442_File and Command.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711120916421_TelegramFileId.resx">
+      <DependentUpon>201711120916421_TelegramFileId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

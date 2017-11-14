@@ -10,6 +10,7 @@ namespace Icogram.Telegram.Bot.Bot
 
         public static async Task SetWebhookAsync()
         {
+            await _client.DeleteWebhookAsync();
             var hook = string.Format(IcogramBotSettings.Url, Url);
             GetClient();
            await _client.SetWebhookAsync(hook);

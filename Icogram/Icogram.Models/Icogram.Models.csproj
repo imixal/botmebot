@@ -65,6 +65,7 @@
     <Compile Include="EmailModels\EmailMessage.cs" />
     <Compile Include="EmailModels\EmailVariable.cs" />
     <Compile Include="EmailModels\EmailTemplate.cs" />
+    <Compile Include="FileModel\File.cs" />
     <Compile Include="ModuleModels\AntiSpamModule\AntiSpamSetting.cs" />
     <Compile Include="ModuleModels\AntiSpamModule\SuspiciousUser.cs" />
     <Compile Include="ModuleModels\AntiSpamModule\WhiteLink.cs" />

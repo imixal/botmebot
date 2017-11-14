@@ -16,6 +16,9 @@ using Icogram.Service.ChatStatistic;
 using Icogram.Service.Login;
 using Icogram.Service.User;
 using Icogram.Telegram.BotHandler;
+using Icogram.Telegram.BotHandler.CommandBotHandler;
+using Icogram.Telegram.BotHandler.StatisticBotHandler;
+using Icogram.Telegram.BotHandler.UserBotHandler;
 using Icogram.ViewModelBuilder;
 using NLog;
 using Service;
@@ -59,6 +62,9 @@ namespace Icogram.Utility
             _kernel.Bind<IChatStatisticRepository>().To<ChatStatisticRepository>().InRequestScope();
             _kernel.Bind<Logger>().ToMethod(p => LogManager.GetCurrentClassLogger());
             _kernel.Bind<IChatStatisticService>().To<ChatStatisticService>().InRequestScope();
+            _kernel.Bind<ICommandHandler>().To<CommandHandler>().InRequestScope();
+            _kernel.Bind<IStatisticHandler>().To<StatisticHandler>().InRequestScope();
+            _kernel.Bind<IUserHandler>().To<UserHandler>().InRequestScope();
         }
     }
 }

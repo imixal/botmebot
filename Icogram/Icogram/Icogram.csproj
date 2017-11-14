@@ -315,10 +315,11 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\brain.png" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Login.css" />
     <Content Include="Content\nprogress.css" />
+    <Content Include="Content\robot.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -407,6 +408,10 @@
     <Content Include="Libs\Gentelella\vendors\datatables.net\js\jquery.dataTables.js" />
     <Content Include="Libs\Gentelella\vendors\datatables.net\js\jquery.dataTables.min.js" />
     <Content Include="Libs\Gentelella\vendors\datatables.net\License.txt" />
+    <Content Include="Libs\Gentelella\vendors\dropzone\dist\min\basic.min.css" />
+    <Content Include="Libs\Gentelella\vendors\dropzone\dist\min\dropzone-amd-module.min.js" />
+    <Content Include="Libs\Gentelella\vendors\dropzone\dist\min\dropzone.min.css" />
+    <Content Include="Libs\Gentelella\vendors\dropzone\dist\min\dropzone.min.js" />
     <Content Include="Libs\Gentelella\vendors\font-awesome\css\font-awesome.css" />
     <Content Include="Libs\Gentelella\vendors\font-awesome\css\font-awesome.min.css" />
     <Content Include="Libs\Gentelella\vendors\fontawesome\css\font-awesome.css" />
@@ -611,6 +616,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Icogram.Enums\Icogram.Enums.csproj">
+      <Project>{3C67A7E3-3C8B-42A2-8EFA-E054B95DE141}</Project>
+      <Name>Icogram.Enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Icogram.Models\Icogram.Models.csproj">
       <Project>{B8D80C07-8986-4B2E-AD89-2CCADA275CEC}</Project>
       <Name>Icogram.Models</Name>

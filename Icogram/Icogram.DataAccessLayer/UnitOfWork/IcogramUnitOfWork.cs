@@ -8,10 +8,10 @@ using Icogram.DbContext;
 using Icogram.Models.ChatModels;
 using Icogram.Models.CompanyModels;
 using Icogram.Models.EmailModels;
+using Icogram.Models.FileModel;
 using Icogram.Models.ModuleModels.AntiSpamModule;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Models.ModuleModels.CustomMessageModule;
-using Icogram.Models.ModuleModels.StatisticsModule;
 using Icogram.Models.Payments;
 using Icogram.Models.ResourcesModels;
 using Icogram.Models.UserModels;
@@ -64,7 +64,8 @@ namespace Icogram.DataAccessLayer.UnitOfWork
                 { typeof(WhiteLink), typeof(WhiteLinkRepository) },
                 { typeof(IChatStatisticRepository), typeof(ChatStatisticRepository) },
                 { typeof(Payment), typeof(PaymentRepository) },
-                { typeof(PaymentType), typeof(Repository<PaymentType>) }
+                { typeof(PaymentType), typeof(Repository<PaymentType>) },
+                { typeof(File), typeof(Repository<File>) }
             };
         }
     }

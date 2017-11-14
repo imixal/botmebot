@@ -17,3 +17,20 @@
 .collapse-resource {
     display: none;
 }
+
+.logo {
+    display: block;
+    padding: 5px 0;
+    margin: auto;
+    width: 140px;
+    color: #fff;
+    font-size: 32px;
+}
+
+.logo__image {
+    display: inline-block;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    margin: 0 2px;
+    vertical-align: sub;
+}

@@ -16,5 +16,19 @@
             AntiSpamModule,
             CustomMessageModule
         }
+
+        public enum CommandType
+        {
+            NotSet = 0,
+            PlainMessage = 1,
+            PhotoMessage = 2,
+            LocationMessage = 3,
+            VenueMessage = 4
+        }
+
+        public enum FileType
+        {
+            CommandImage = 1
+        }
     }
 }

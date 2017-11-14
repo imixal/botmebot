@@ -2,6 +2,7 @@
 using Icogram.Models.ChatModels;
 using Icogram.Models.CompanyModels;
 using Icogram.Models.EmailModels;
+using Icogram.Models.FileModel;
 using Icogram.Models.ModuleModels.AntiSpamModule;
 using Icogram.Models.ModuleModels.CommandModule;
 using Icogram.Models.ModuleModels.CustomMessageModule;
@@ -42,6 +43,8 @@ namespace Icogram.DbContext
         public DbSet<PaymentType> PaymentTypes { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<File> Files { get; set; }
 
         public IcogramDbContext() : base("Connection")
         {
@@ -96,6 +99,8 @@ namespace Icogram.DbContext
                 .HasRequired(c => c.Chat)
                 .WithMany(chat => chat.Commands)
                 .WillCascadeOnDelete(true);
+            modelBuilder.Entity<Command>()
+                .HasOptional(c => c.File);
 
             modelBuilder.Entity<Payment>()
                 .HasRequired(p => p.Company)
@@ -105,6 +110,9 @@ namespace Icogram.DbContext
                 .HasRequired(p => p.PaymentType)
                 .WithMany()
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<File>()
+                .HasRequired(f => f.Chat);
         }
     }
 }

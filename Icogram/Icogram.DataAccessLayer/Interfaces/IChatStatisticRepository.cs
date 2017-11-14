@@ -11,7 +11,7 @@ namespace Icogram.DataAccessLayer.Interfaces
 
         Task AddDeletedMessage(int chatId);
 
-        Task AddNewUser(int chatId);
+        Task AddNewUsers(int chatId, int count);
 
         Task AddLeavedUser(int chatId);
 

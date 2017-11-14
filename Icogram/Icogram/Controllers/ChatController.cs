@@ -65,6 +65,7 @@ namespace Icogram.Controllers
                 oldChat.CommandTimeOut = chat.CommandTimeOut;
                 oldChat.IsApproved = chat.IsApproved;
                 oldChat.WelcomeUserMessage = chat.WelcomeUserMessage;
+                oldChat.CompanyId = chat.CompanyId;
 
                 await _chatCrudService.UpdateAsync(oldChat);
             }

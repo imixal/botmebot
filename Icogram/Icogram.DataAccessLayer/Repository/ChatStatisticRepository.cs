@@ -35,10 +35,10 @@ namespace Icogram.DataAccessLayer.Repository
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task AddNewUser(int chatId)
+        public async Task AddNewUsers(int chatId, int count)
         {
             var row = await GetStatRow(chatId);
-            row.NumberOfNewUsers++;
+            row.NumberOfNewUsers+=count;
             Update(row);
             await DbContext.SaveChangesAsync();
         }
