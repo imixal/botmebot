@@ -299,6 +299,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\LandingController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
@@ -317,9 +318,18 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\landing.css" />
+    <Content Include="Content\landing\banner.jpg" />
+    <Content Include="Scripts\landing.js" />
     <Content Include="Content\Login.css" />
     <Content Include="Content\nprogress.css" />
     <Content Include="Content\robot.png" />
+    <Content Include="Content\screens\Commands.jpg" />
+    <Content Include="Content\screens\Dashboard.jpg" />
+    <Content Include="Content\screens\MyChats.jpg" />
+    <Content Include="Content\screens\Statistic.jpg" />
+    <Content Include="Content\screens\Subscription.jpg" />
+    <Content Include="Content\screens\UserList.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -597,6 +607,7 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Repair.cshtml" />
     <Content Include="Views\Statistic\MyStatistic.cshtml" />
+    <Content Include="Views\Landing\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -612,7 +623,6 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.eot" />
-    <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>

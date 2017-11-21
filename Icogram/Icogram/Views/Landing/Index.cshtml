@@ -1,0 +1,156 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=992" />
+    <title>BotMe</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/font-awesome.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/landing.css")" />
+    <link rel="stylesheet" href="https://rawgit.com/kenwheeler/slick/master/slick/slick.css" />
+    <link rel="stylesheet" href="https://rawgit.com/kenwheeler/slick/master/slick/slick-theme.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="header__inner">
+            <div class="logo">
+                <a href="@Url.Action("Index")">
+                    B<img class="logo__image" alt="botme" src="@Url.Content("~/Content/robot.png")">T.ME
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-bar">
+                    <li class="nav-bar__item"><a href="#">Home</a></li>
+                    <li class="nav-bar__item"><a href="#">Functionality</a></li>
+                    <li class="nav-bar__item"><a href="#">Screens</a></li>
+                    <li class="nav-bar__item"><a href="#">Price</a></li>
+                    <li class="nav-bar__item nav-bar__btn"><a href="#">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="main">
+        <section class="banner paralax">
+            <div class="overlay"></div>
+            <div class="banner__inner">
+                <h1 class="banner__title">BotMe Telegram pam-pam</h1>
+                <h2 class="banner__subtitle">subtitle pamapam</h2>
+                <div class="banner__buttons">
+                    <a class="banner__btn"><span class="fa fa-telegram"></span> Telegram</a>
+                    <a class="banner__btn"><span class="fa fa-envelope"></span> Email</a>
+                </div>
+            </div>
+        </section>
+        <section class="functionality container">
+            <h2 class="functionality__title">Our Functionality</h2>
+            <div class="col-lg-3 col-md-3">
+                <span class="fa-stack fa-lg functionality__icon">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-terminal fa-stack-1x fa-inverse"></i>
+                </span>
+                <h3 class="functionality__subtiltle">Commands</h3>
+                <p class="functionality__text">
+                    "Lorem ipsum dolor sit amet, ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <span class="fa-stack fa-lg functionality__icon">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-comment fa-stack-1x fa-inverse"></i>
+                </span>
+                <h3 class="functionality__subtiltle">Welcome Users</h3>
+                <p class="functionality__text">
+                    "Lorem ipsum dolor sit amet, ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <span class="fa-stack fa-lg functionality__icon">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-ban fa-stack-1x fa-inverse"></i>
+                </span>
+                <h3 class="functionality__subtiltle">Anti-spam</h3>
+                <p class="functionality__text">
+                    "Lorem ipsum dolor sit amet, ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <span class="fa-stack fa-lg functionality__icon">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-line-chart fa-stack-1x fa-inverse"></i>
+                </span>
+                <h3 class="functionality__subtiltle">Statistic</h3>
+                <p class="functionality__text">
+                    "Lorem ipsum dolor sit amet, ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </p>
+            </div>
+        </section>
+        <section class="screens">
+            <h3 class="screens__title"> See our awesome dashboard screens</h3>
+            <div class="col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10">
+                <div class="slider">
+                    <div><img alt="dashboard" src="/Content/screens/Dashboard.jpg" /></div>
+                    <div><img alt="commands" src="/Content/screens/Commands.jpg" /></div>
+                    <div><img alt="mychats" src="/Content/screens/MyChats.jpg" /></div>
+                    <div><img alt="statistic" src="/Content/screens/Statistic.jpg" /></div>
+                    <div><img alt="subscription" src="/Content/screens/Subscription.jpg" /></div>
+                    <div><img alt="userlist" src="/Content/screens/UserList.jpg" /></div>
+                </div>
+            </div>
+        </section>
+        <section class="price container">
+            <h2 class="price__title">Price</h2>
+            <div class="col-lg-3 col-md-3">
+                <ul class="price__block">
+                    <li class="dark-blue">First week</li>
+                    <li>FREE</li>
+                    <li>FREE</li>
+                    <li><a href="#" class="button">Telegram me</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <ul class="price__block">
+                    <li class="dark-blue">Start</li>
+                    <li>1 month - 0,99 ETH</li>
+                    <li>Save 0,01 ETH!</li>
+                    <li><a href="#" class="button">Telegram me</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <ul class="price__block">
+                    <li class="dark-blue">Middle</li>
+                    <li>3 months - 2,49 ETH</li>
+                    <li>Save 0,54 ETH!</li>
+                    <li><a href="#" class="button">Telegram me</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <ul class="price__block">
+                    <li class="dark-blue">Pro</li>
+                    <li>6 months - 4,49 ETH</li>
+                    <li>Save 1,55 ETH!</li>
+                    <li><a href="#" class="button">Telegram me</a></li>
+                </ul>
+            </div>
+        </section>
+        <footer class="footer container">
+            <div class="col-lg-4 col-md-4 footer__column">
+                <a>Our Telegram Group </a>
+            </div>
+            <div class="col-lg-4 col-md-4 footer__column">
+                <a>Our Sales Email</a>
+            </div>
+            <div class="col-lg-4 col-md-4 footer__column">
+                <a>Our Sales Telegram</a>
+            </div>
+        </footer>
+    </main>
+    <script src="@Url.Content("~/Libs/Gentelella/vendors/jquery/dist/jquery.min.js")"></script>
+    <script src="https://rawgit.com/kenwheeler/slick/master/slick/slick.js"></script>
+    <script src="@Url.Content("~/Scripts/landing.js")"></script>
+</body>
+</html>

@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Icogram.Enums;
 using Icogram.Models.ModuleModels.AntiSpamModule;
 using Service;
 using Icogram.Telegram.Bot.Bot;
 using Icogram.Telegram.BotHandler.CommandBotHandler;
+using Icogram.Telegram.BotHandler.MessageBotHandler;
 using Icogram.Telegram.BotHandler.StatisticBotHandler;
 using Icogram.Telegram.BotHandler.UserBotHandler;
 using NLog;
@@ -21,8 +21,6 @@ namespace Icogram.Telegram.BotHandler
     public partial class BotHandler : IBotHandler
     {
         private readonly ICrudService<Chat> _chatCrudService;
-        private readonly ICrudService<AntiSpamSetting> _antiSpamSettingsCrudService;
-        private readonly ICrudService<WhiteLink> _whiteLinkCrudService;
         private readonly ICrudService<SuspiciousUser> _suspiciousUserCrudService;
         private readonly TelegramBotClient _telegramBotClient;
         private readonly ICommandHandler _commandHandler;
@@ -30,21 +28,21 @@ namespace Icogram.Telegram.BotHandler
         private readonly IUserHandler _userHandler;
         private Chat _chat;
         private readonly Logger _logger;
+        private readonly ILinkChecker _linkChecker;
 
 
-        public BotHandler(ICrudService<Chat> chatCrudService, ICrudService<WhiteLink> whiteLinkCrudService,
-            ICrudService<AntiSpamSetting> antiSpamSettingsCrudService,
+        public BotHandler(ICrudService<Chat> chatCrudService,
             ICrudService<SuspiciousUser> suspiciousUserCrudService,
-            Logger logger, ICommandHandler commandHandler, IStatisticHandler statisticHandler, IUserHandler userHandler)
+            Logger logger, ICommandHandler commandHandler, IStatisticHandler statisticHandler, IUserHandler userHandler,
+            ILinkChecker linkChecker)
         {
             _chatCrudService = chatCrudService;
-            _whiteLinkCrudService = whiteLinkCrudService;
-            _antiSpamSettingsCrudService = antiSpamSettingsCrudService;
             _suspiciousUserCrudService = suspiciousUserCrudService;
             _logger = logger;
             _commandHandler = commandHandler;
             _statisticHandler = statisticHandler;
             _userHandler = userHandler;
+            _linkChecker = linkChecker;
             _telegramBotClient = IcogramBot.GetClient();
         }
 
@@ -65,7 +63,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddMessageError}");
+                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddMessageError}");
                             }
                             try
                             {
@@ -73,7 +71,8 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddSymbolsInMessageError}");
+                                _logger.Error(e.InnerException,
+                                    $"{Errors.StatisticErorr}: {Errors.AddSymbolsInMessageError}");
                             }
                             if (update.Message.Entities != null)
                             {
@@ -85,12 +84,16 @@ namespace Icogram.Telegram.BotHandler
                                     }
                                     catch (Exception e)
                                     {
-                                        _logger.Error(e, $"{Errors.CommandErorr}: {Errors.ShowListCommandsError}");
+                                        _logger.Error(e.InnerException,
+                                            $"{Errors.CommandErorr}: {Errors.ShowListCommandsError}");
                                     }
                                 }
                                 if (update.Message.Entities.Any(e => e.Type == MessageEntityType.Url))
                                 {
-                                    await LinkCheck(update);
+                                    if (!IsNullOrEmpty(update.Message.Text))
+                                    {
+                                        await _linkChecker.MessageCheck(update, _chat, _telegramBotClient);
+                                    }
                                 }
                             }
                             try
@@ -99,7 +102,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e, $"{Errors.CommandErorr}: {Errors.ExecuteCommandError}");
+                                _logger.Error(e.InnerException, $"{Errors.CommandErorr}: {Errors.ExecuteCommandError}");
                             }
                         }
                         if (update.Message.LeftChatMember != null)
@@ -111,7 +114,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddLeavedUserError}");
+                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddLeavedUserError}");
                             }
                         }
 
@@ -124,7 +127,15 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddNewUsersError}");
+                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddNewUsersError}");
+                            }
+                        }
+                        if (update.Message.Entities != null &&
+                            update.Message.Entities.Any(e => e.Type == MessageEntityType.Url))
+                        {
+                            if (!IsNullOrEmpty(update.Message.Caption))
+                            {
+                                await _linkChecker.CaptionCheck(update, _chat, _telegramBotClient);
                             }
                         }
                     }
@@ -133,8 +144,44 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Message Handler");
+                _logger.Error(e.InnerException, "Message Handler");
 
+            }
+        }
+
+        public async Task UnApprovedChatHandler(Update update, Chat chat)
+        {
+            try
+            {
+                _chat = chat;
+                if (update.Type == UpdateType.MessageUpdate)
+                {
+                    if (update.Message?.NewChatMembers?.Length > 0)
+                    {
+                        await _userHandler.UsersAddAsync(update, _chat, _telegramBotClient);
+                    }
+                    if (!IsNullOrEmpty(update.Message?.Text))
+                    {
+                        if (update.Message.Entities.Any(e => e.Type == MessageEntityType.BotCommand))
+                        {
+                            try
+                            {
+                                await _commandHandler.ShowListCommandsAsync(update, chat);
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.Error(e.InnerException, $"{Errors.CommandErorr}: {Errors.ShowListCommandsError}");
+                            }
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                
+                _logger.Error(e.InnerException, "Can't handle UnApprovedChat");
             }
         }
 
@@ -158,9 +205,17 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Get Approved Chat");
+                _logger.Error(e.InnerException, "Get Approved Chat");
             }
             return null;
+        }
+
+        public async Task<Chat> GetUnApprovedChatAsync(long telegramChatId)
+        {
+            var chats = await _chatCrudService.GetAllAsync();
+            var chat = chats.FirstOrDefault(c => c.TelegramChatId == telegramChatId);
+
+            return chat;
         }
 
         public async Task UpdateChatFieldsAsync(int icogramChatId)
@@ -183,7 +238,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Update chat fields");
+                _logger.Error(e.InnerException, "Update chat fields");
             }
         }
 
@@ -196,7 +251,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Leave chat");
+                _logger.Error(e.InnerException, "Leave chat");
             }
         }
 
@@ -211,7 +266,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Send message");
+                _logger.Error(e.InnerException, "Send message");
             }
         }
 
@@ -231,12 +286,12 @@ namespace Icogram.Telegram.BotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddBannedUserError}");
+                    _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddBannedUserError}");
                 }
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Ban user");
+                _logger.Error(e.InnerException, "Ban user");
             }
         }
 
@@ -251,108 +306,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unban user");
-            }
-        }
-
-        private async Task LinkCheck(Update update)
-        {
-            var whiteLinks = await _whiteLinkCrudService.GetAllAsync();
-            var settings = await _antiSpamSettingsCrudService.GetAllAsync();
-            var setting = settings.FirstOrDefault(s => s.ChatId == _chat.Id);
-            if (setting != null && setting.IsModuleIncluded)
-            {
-
-                whiteLinks = whiteLinks.Where(wl => wl.ChatId == _chat.Id).ToList();
-                try
-                {
-                    var isNeedToDelete = false;
-
-                    foreach (var entity in update.Message.Entities.Where(e => e.Type == MessageEntityType.Url))
-                    {
-                        var item = update.Message.Text.Substring(entity.Offset, entity.Length);
-                        var link = "";
-                        if (!item.Contains("http") && !item.Contains("https") && !item.Contains("www"))
-                        {
-                            link = "www." + item;
-                        }
-                        else
-                        {
-                            var url = item.StartsWith("www.") ? new Uri("http://" + item) : new Uri(item);
-                            link = url.Host;
-                        }
-                        var isWhiteLink = false;
-                        if (!IsNullOrEmpty(link) && link.Contains("."))
-                        {
-                            var words = link.Split('.');
-                            if (words.Length > 1)
-                            {
-                                var word = words[words.Length - 2].ToLower();
-                                var isAny = whiteLinks.Any(wl => wl.Link.ToLower() == word);
-                                if (isAny && whiteLinks.Count > 0)
-                                {
-                                    isWhiteLink = true;
-                                }
-                            }
-                        }
-                        if (!isWhiteLink)
-                        {
-                            isNeedToDelete = true;
-                        }
-                    }
-
-                    if (isNeedToDelete)
-                    {
-                        var users = await _suspiciousUserCrudService.GetAllAsync();
-                        var user =
-                            users.FirstOrDefault(u => u.TelegramUserId == update.Message.From.Id && u.ChatId == _chat.Id);
-                        if (user == null)
-                        {
-                            user = new SuspiciousUser
-                            {
-                                FirstName = update.Message.From.FirstName ?? "",
-                                LastName = update.Message.From.LastName ?? "",
-                                UserName = update.Message.From.Username ?? "",
-                                ChatId = _chat.Id,
-                                NumberOfAttempts = 1,
-                                TelegramUserId = update.Message.From.Id
-                            };
-
-                            await _suspiciousUserCrudService.CreateAsync(user);
-                        }
-                        else
-                        {
-                            user.NumberOfAttempts++;
-                            var oldUser = await _suspiciousUserCrudService.GetByIdAsync(user.Id);
-                            await _suspiciousUserCrudService.UpdateAsync(oldUser);
-                        }
-
-                        await _telegramBotClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
-                        try
-                        {
-                            await _statisticHandler.AddDeletedMessageAsync(_chat.Id);
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddDeletedMessageError}");
-                        }
-                        var mess = new StringBuilder(setting.WarningMessage);
-                        ParamsSetter.SetUserParams(ref mess, update.Message.From);
-                        mess.Replace("[NumberOfAttempts]", user.NumberOfAttempts.ToString());
-                        await
-                            _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, mess.ToString());
-
-                        if (setting.IsNeededToBanUser && setting.NumberOfAttempts <= user.NumberOfAttempts)
-                        {
-                            await BanUserAsync(user);
-                        }
-
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "Link check");
-                }
+                _logger.Error(e.InnerException, "Unban user");
             }
         }
     }

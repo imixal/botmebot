@@ -1,0 +1,15 @@
+2017-11-20 21:28:41.5333|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:34:43.9700|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:35:51.0029|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:44:48.5376|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:44:59.9183|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:45:01.4934|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:45:04.1445|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 21:45:06.6857|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 22:40:04.6281|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 23:01:00.2089|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 23:03:09.4083|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 23:03:12.4855|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 23:03:14.8776|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 23:03:17.5228|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Link check
+2017-11-20 23:11:33.8012|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|Ban user

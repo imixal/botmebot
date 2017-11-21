@@ -9,6 +9,8 @@ namespace Icogram.Telegram.BotHandler
     {
         Task<Chat> GetApprovedChatAsync(long telegramChatId);
 
+        Task<Chat> GetUnApprovedChatAsync(long telegramChatId);
+
         Task UpdateChatFieldsAsync(int icogramChatId);
 
         Task LeaveChatAsync(int icogramChatId);
@@ -16,6 +18,8 @@ namespace Icogram.Telegram.BotHandler
         Task SendMessageAsync(int icogramChatId, string message);
 
         Task MessageHandler(Update update, Chat chat);
+
+        Task UnApprovedChatHandler(Update update, Chat chat);
 
         Task UnBanUserAsync(SuspiciousUser user);
 

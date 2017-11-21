@@ -1,0 +1,8 @@
+2017-11-19 14:00:39.5405|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 14:06:39.8581|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 15:58:13.6059|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 16:37:35.2460|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 16:46:01.1069|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 16:52:09.8140|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 17:16:16.8208|INFO|Icogram.MvcApplication|Application Start
+2017-11-19 18:08:45.8069|INFO|Icogram.MvcApplication|Application Start

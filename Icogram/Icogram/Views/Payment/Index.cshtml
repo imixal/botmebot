@@ -65,7 +65,7 @@
         function setDeletePaymentData(row) {
             localStorage.setItem("row", $(row).parents('tr').html().toString());
             var $row = $(row);
-            $("#deletePayment").find("#deletePaymentModalLabel").text("Delete " + $row.parent().parent().find("input[Name=Text]").val());
+            $("#deletePayment").find("#deletePaymentModalLabel").text("Delete payment from" + $row.parent().parent().find(".company-name").text());
         }
 
         function saveType(row) {
@@ -222,7 +222,7 @@
                         {
                             <tr class="">
                                 <td class="hidden"><input name="Id" value="@type.Id" disabled="disabled" /></td>
-                                <td width="10%">@type.Company.Name</td>
+                                <td width="10%" class="company-name">@type.Company.Name</td>
                                 <td width="20%">@type.TxTransaction</td>
                                 <td width="20%">@type.Comment</td>
                                 <td width="5%">@type.Email</td>
@@ -240,7 +240,7 @@
                                     {
                                         <a class="btn btn-success" onclick="aprove(this)">Aprove</a>
                                     }
-                                    <a class="label label-md label-danger" onclick="setDeletePaymentData(this)" data-toggle="modal" data-target="#delete"><span class="fa fa-trash"></span></a>
+                                    <a class="label label-md label-danger" onclick="setDeletePaymentData(this)" data-toggle="modal" data-target="#deletePayment"><span class="fa fa-trash"></span></a>
                                 </td>
                             </tr>
                         }
@@ -278,9 +278,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">×</span>
+                    <span class="fa fa-times" aria-hidden="true"></span>
                 </button>
-                <h4 class="modal-title" id="deletePaymentModalLabel">Delete type</h4>
+                <h4 class="modal-title" id="deletePaymentModalLabel">Delete</h4>
             </div>
             <div class="modal-body">
                 <input class="hidden" name="userId" />

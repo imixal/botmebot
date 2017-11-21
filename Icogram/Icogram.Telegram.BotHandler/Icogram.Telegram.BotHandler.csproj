@@ -133,6 +133,8 @@
     <Compile Include="CommandBotHandler\ICommandHandler.cs" />
     <Compile Include="Functions\ParamsSetter.cs" />
     <Compile Include="IBotHandler.cs" />
+    <Compile Include="MessageBotHandler\ILinkChecker.cs" />
+    <Compile Include="MessageBotHandler\LinkChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticBotHandler\IStatisticHandler.cs" />
     <Compile Include="StatisticBotHandler\StatisticHandler.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="UserBotHandler\UserHandler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

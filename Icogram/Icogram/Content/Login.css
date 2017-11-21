@@ -1,7 +1,6 @@
 ﻿html, body, .login {
     height: 100%;
     padding: 0;
-    overflow-x: hidden;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -10,7 +9,7 @@
 }
 
 .login__left-col {
-    height: 100%;
+    min-height: 100%;
     background-color: #153f65;
     display: flex;
     justify-content: center;
@@ -18,11 +17,12 @@
 }
 
 .login__right-col {
-    height: 100%;
+    min-height: 100%;
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .login__description {
@@ -57,4 +57,47 @@
 .login__btn {
     justify-content: center;
     display: flex;
+}
+
+.slides {
+    min-height: 100%;
+    background-color: #153f65;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.slider {
+    width: auto;
+    margin: 30px 50px 50px;
+}
+
+.slick-slide {
+    color: white;
+    padding: 40px 0;
+    font-size: 30px;
+    font-family: "Arial", "Helvetica";
+    text-align: center;
+}
+.slick-slide img {
+    width: 100%;
+}
+
+.scroll-down {
+    top: 10px;
+    left: 10px;
+    position: absolute;
+    width: 120px;
+    text-align: center;
+    color: #153f65;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.scroll-down .fa {
+    font-size: 30px;
 }

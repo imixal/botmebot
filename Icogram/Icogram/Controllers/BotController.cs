@@ -33,7 +33,12 @@ namespace Icogram.Controllers
         {
             if (update.Message == null) return Ok();
             var chat = await _botHandler.GetApprovedChatAsync(update.Message.Chat.Id);
-            if (chat == null) return Ok();
+            if (chat == null)
+            {
+                chat = await _botHandler.GetUnApprovedChatAsync(update.Message.Chat.Id);
+                await _botHandler.UnApprovedChatHandler(update, chat);
+                return Ok();
+            }
             await _botHandler.MessageHandler(update, chat);
 
             return Ok();

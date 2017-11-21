@@ -87,7 +87,6 @@ namespace Icogram.DataAccessLayer.Repository
         private async Task<ChatStatistic> GetStatRow(int chatId)
         {
             var now = DateTime.UtcNow;
-            if (_chatStatisticRow != null) return _chatStatisticRow;
             var chatStatisticRow =
                 GetAllQuery().Where(cs => DbFunctions.TruncateTime(cs.Date) == DbFunctions.TruncateTime(now)).FirstOrDefault(cs => cs.ChatId == chatId);
             if (chatStatisticRow != null)

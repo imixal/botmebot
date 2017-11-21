@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Icogram.Enums;
 using Icogram.Models.ModuleModels.CommandModule;
+using Icogram.Models.ResourcesModels;
 using Icogram.Telegram.Bot.Bot;
 using Icogram.Telegram.BotHandler.StatisticBotHandler;
 using NLog;
@@ -20,13 +21,15 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
         private readonly TelegramBotClient _telegramBotClient;
         private readonly IStatisticHandler _statisticHandler;
         private readonly Logger _logger;
+        private readonly ICrudService<Resource> _resourceCrudService;
 
 
-        public CommandHandler(CrudService<Command> commandCrudService, IStatisticHandler statisticHandler, Logger logger)
+        public CommandHandler(CrudService<Command> commandCrudService, IStatisticHandler statisticHandler, Logger logger, ICrudService<Resource> resourceCrudService)
         {
             _commandCrudService = commandCrudService;
             _statisticHandler = statisticHandler;
             _logger = logger;
+            _resourceCrudService = resourceCrudService;
             _telegramBotClient = IcogramBot.GetClient();
         }
 
@@ -36,8 +39,8 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
             var command =
                 chat.Commands.FirstOrDefault(
                     c =>
-                        $"/{c.CommandName}" == update.Message.Text ||
-                        $"/{c.CommandName}@{IcogramBotSettings.Name}" == update.Message.Text);
+                        $"/{c.CommandName.Trim()}" == update.Message.Text.Trim() ||
+                        $"/{c.CommandName.Trim()}@{IcogramBotSettings.Name}" == update.Message.Text);
             var check = Checker.AccessCheck(GlobalEnums.ModuleType.CommandModule, chat);
             if (check)
             {
@@ -62,7 +65,7 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
+                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
                             }
                         }
 
@@ -81,7 +84,7 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
+                            _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
                         }
                     }
                 }
@@ -91,12 +94,12 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
         public async Task ShowListCommandsAsync(Update update, Chat chat)
         {
             var check = Checker.AccessCheck(GlobalEnums.ModuleType.CommandModule, chat);
-            if (update.Message.Text == $"/commands@{IcogramBotSettings.Name}" || update.Message.Text == "/commands")
+            if (update.Message.Text.Trim() == $"/commands@{IcogramBotSettings.Name}" || update.Message.Text.Trim() == "/commands")
             {
-                var stringBuilder = new StringBuilder();
-                stringBuilder.Append("You can use these commands: \n");
                 if (check)
                 {
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.Append("You can use these commands: \n");
                     foreach (var command in chat.Commands)
                     {
                         if (command.IsCommandShowInList)
@@ -111,9 +114,19 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
+                        _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
                     }
                 }
+                else
+                {
+                    var resources = await _resourceCrudService.GetAllAsync();
+                    var answer = resources.FirstOrDefault(r => r.Name == "NoCommands");
+                    if (!string.IsNullOrEmpty(answer?.DefaultValue))
+                    {
+                        await _telegramBotClient.SendTextMessageAsync(chat.TelegramChatId, answer.DefaultValue);
+                    }
+                }
+
             }
         }
     }

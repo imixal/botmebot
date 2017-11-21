@@ -17,6 +17,7 @@ using Icogram.Service.Login;
 using Icogram.Service.User;
 using Icogram.Telegram.BotHandler;
 using Icogram.Telegram.BotHandler.CommandBotHandler;
+using Icogram.Telegram.BotHandler.MessageBotHandler;
 using Icogram.Telegram.BotHandler.StatisticBotHandler;
 using Icogram.Telegram.BotHandler.UserBotHandler;
 using Icogram.ViewModelBuilder;
@@ -65,6 +66,7 @@ namespace Icogram.Utility
             _kernel.Bind<ICommandHandler>().To<CommandHandler>().InRequestScope();
             _kernel.Bind<IStatisticHandler>().To<StatisticHandler>().InRequestScope();
             _kernel.Bind<IUserHandler>().To<UserHandler>().InRequestScope();
+            _kernel.Bind<ILinkChecker>().To<LinkChecker>().InRequestScope();
         }
     }
 }

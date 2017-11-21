@@ -24,11 +24,10 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
 
         public async Task UsersAddAsync(Update update, Chat chat, ITelegramBotClient telegramBotClient)
         {
-            var check = Checker.AccessCheck(GlobalEnums.ModuleType.WelcomeMessageModule, chat);
-            if (check)
+            if (!string.IsNullOrEmpty(chat.WelcomeUserMessage))
             {
                 var welcomeMessage = new StringBuilder(chat.WelcomeUserMessage);
-                if (update.Message.NewChatMembers.Length == 1 && !string.IsNullOrEmpty(chat.WelcomeUserMessage))
+                if (update.Message.NewChatMembers.Length == 1)
                 {
                     try
                     {
@@ -41,7 +40,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
+                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
                     }
 
                     try
@@ -50,7 +49,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
+                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
                     }
                 }
                 else
@@ -69,7 +68,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
+                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
                     }
                     try
                     {
@@ -77,7 +76,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
+                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
                     }
                 }
             }
@@ -97,7 +96,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, $"{Errors.UserError}: {Errors.LeavedUserError}");
+                    _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.LeavedUserError}");
                 }
             }
         }
