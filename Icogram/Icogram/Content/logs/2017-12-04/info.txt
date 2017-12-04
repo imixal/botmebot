@@ -1,0 +1,2 @@
+2017-12-04 22:31:17.3623|INFO|Icogram.MvcApplication|Application Start
+2017-12-04 22:33:43.6506|INFO|Icogram.MvcApplication|Application Start

@@ -93,9 +93,9 @@
 
         $("#deletecommand").on('click', deletecommand);
 
-        function deletecommand() {
-            setSpinner(row);
+        function deletecommand() {            
             var $row = $(localStorage.getItem("row"));
+	    setSpinner($row);
             $.post('@Url.Action("DeleteWhiteLinkCommand")', { id: $row.find("input[Name=Id]").val() })
             .done(function () {
                 location.reload();

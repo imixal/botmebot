@@ -37,12 +37,12 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
 
         public async Task MessageCheck(Update update, Chat chat, ITelegramBotClient telegramBotClient)
         {
-            await LinkCheck(chat, update, telegramBotClient, update.Message.Text, update.Message.Entities);
+            await LinkCheck(chat, update, telegramBotClient, update.Message.Text.ToLower(), update.Message.Entities);
         }
 
         public async Task CaptionCheck(Update update, Chat chat, ITelegramBotClient telegramBotClient)
         {
-            await LinkCheck(chat, update, telegramBotClient, update.Message.Caption, update.Message.Entities);
+            await LinkCheck(chat, update, telegramBotClient, update.Message.Caption.ToLower(), update.Message.Entities);
         }
 
         private async Task LinkCheck(Chat chat, Update update, ITelegramBotClient telegramBotClient, string message, List<MessageEntity> messageEntities)
