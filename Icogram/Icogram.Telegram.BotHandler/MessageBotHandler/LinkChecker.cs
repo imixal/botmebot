@@ -132,11 +132,15 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                         {
                             _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddDeletedMessageError}");
                         }
-                        var mess = new StringBuilder(setting.WarningMessage);
-                        ParamsSetter.SetUserParams(ref mess, update.Message.From);
-                        mess.Replace("[NumberOfAttempts]", user.NumberOfAttempts.ToString());
-                        await
-                            telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, mess.ToString());
+                        
+                        if (!string.IsNullOrEmpty(setting.WarningMessage))
+                        {
+                            var mess = new StringBuilder(setting.WarningMessage);
+                            ParamsSetter.SetUserParams(ref mess, update.Message.From);
+                            mess.Replace("[NumberOfAttempts]", user.NumberOfAttempts.ToString());
+                            await
+                                telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, mess.ToString());
+                        }
 
                         if (setting.IsNeededToBanUser && setting.NumberOfAttempts <= user.NumberOfAttempts)
                         {
@@ -147,7 +151,7 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.StackTrace, "Link check");
+                    _logger.Error(e.StackTrace, "Link check - " + Newtonsoft.Json.JsonConvert.SerializeObject(setting));
                 }
             }
         }
@@ -159,9 +163,10 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                 await
                     telegramBotClient.KickChatMemberAsync(user.Chat.TelegramChatId, user.TelegramUserId,
                         DateTime.UtcNow.AddDays(30));
-                user.IsUserBanned = true;
-                user.BannedDate = DateTime.UtcNow;
-                await _suspiciousUserCrudService.UpdateAsync(user);
+                var suspUser = await _suspiciousUserCrudService.GetByIdAsync(user.Id);
+                suspUser.IsUserBanned = true;
+                suspUser.BannedDate = DateTime.UtcNow;
+                await _suspiciousUserCrudService.UpdateAsync(suspUser);
                 try
                 {
                     await _statisticHandler.AddBannedUserAsync(chat.Id);

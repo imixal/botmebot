@@ -26,9 +26,8 @@ namespace DataAccessLayer.Async
 
         public virtual void Update(T entity)
         {
-            DbContext.Set<T>().Attach(entity);
-            var entry = DbContext.Entry(entity);
-            entry.State = EntityState.Modified;
+            EnsureEntityAttached(entity);
+            DbContext.Entry(entity).State = EntityState.Modified;
         }
 
         public virtual void Delete(T entity)
@@ -61,6 +60,15 @@ namespace DataAccessLayer.Async
         public void Dispose()
         {
             DbContext.Dispose();
+        }
+
+        private void EnsureEntityAttached(T entity)
+        {
+            var entry = DbContext.Entry(entity);
+            if (entry.State == EntityState.Detached)
+            {
+                DbContext.Set<T>().Attach(entity);
+            }
         }
     }
 }

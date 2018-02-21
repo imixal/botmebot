@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataAccessLayer.Async, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Icogram\Bin\DataAccessLayer.Async.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -146,6 +142,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer.Async\DataAccessLayer.Async.csproj">
+      <Project>{627524B9-F449-410D-AD4B-AC8382D1CDCC}</Project>
+      <Name>DataAccessLayer.Async</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Icogram.DataAccessLayer\Icogram.DataAccessLayer.csproj">
       <Project>{1003DC36-D7B4-4E86-A7C2-5477EECE1114}</Project>
       <Name>Icogram.DataAccessLayer</Name>
