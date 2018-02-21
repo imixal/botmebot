@@ -87,7 +87,12 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                         }
                         if (!isWhiteLink)
                         {
-                            isNeedToDelete = true;
+                            var chatMember =
+                                await telegramBotClient.GetChatMemberAsync(chat.TelegramChatId, update.Message.From.Id);
+                            if (chatMember.Status != ChatMemberStatus.Administrator && chatMember.Status != ChatMemberStatus.Creator)
+                            {
+                                isNeedToDelete = true;
+                            }
                         }
                     }
 
@@ -125,7 +130,7 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddDeletedMessageError}");
+                            _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddDeletedMessageError}");
                         }
                         var mess = new StringBuilder(setting.WarningMessage);
                         ParamsSetter.SetUserParams(ref mess, update.Message.From);
@@ -142,7 +147,7 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.InnerException, "Link check");
+                    _logger.Error(e.StackTrace, "Link check");
                 }
             }
         }
@@ -163,12 +168,12 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddBannedUserError}");
+                    _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddBannedUserError}");
                 }
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Ban user");
+                _logger.Error(e.StackTrace, "Ban user");
             }
         }
 

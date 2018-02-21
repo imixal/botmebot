@@ -40,7 +40,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
+                        _logger.Error(e.StackTrace, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
                     }
 
                     try
@@ -49,7 +49,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
+                        _logger.Error(e.StackTrace, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
                     }
                 }
                 else
@@ -68,7 +68,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
+                        _logger.Error(e.StackTrace, $"{Errors.UserError}: {Errors.WelcomeMessageSetParams}");
                     }
                     try
                     {
@@ -76,7 +76,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
+                        _logger.Error(e.StackTrace, $"{Errors.UserError}: {Errors.SendWelcomeMessage}");
                     }
                 }
             }
@@ -96,7 +96,7 @@ namespace Icogram.Telegram.BotHandler.UserBotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.InnerException, $"{Errors.UserError}: {Errors.LeavedUserError}");
+                    _logger.Error(e.StackTrace, $"{Errors.UserError}: {Errors.LeavedUserError}");
                 }
             }
         }

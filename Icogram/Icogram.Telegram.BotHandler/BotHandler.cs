@@ -55,6 +55,23 @@ namespace Icogram.Telegram.BotHandler
                 {
                     if (update.Message != null)
                     {
+                        if (_chat.IsNeededToDeleteAllMessages)
+                        {
+                            try
+                            {
+                                var chatMember = await _telegramBotClient.GetChatMemberAsync(_chat.TelegramChatId,update.Message.From.Id);
+                                if (chatMember.Status != ChatMemberStatus.Administrator &&
+                                    chatMember.Status != ChatMemberStatus.Creator)
+                                {
+                                    await _telegramBotClient.DeleteMessageAsync(_chat.TelegramChatId, update.Message.MessageId);
+                                    return;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                
+                            }
+                        }
                         if (!IsNullOrEmpty(update.Message.Text))
                         {
                             try
@@ -63,7 +80,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddMessageError}");
+                                _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddMessageError}");
                             }
                             try
                             {
@@ -71,7 +88,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException,
+                                _logger.Error(e.StackTrace,
                                     $"{Errors.StatisticErorr}: {Errors.AddSymbolsInMessageError}");
                             }
                             if (update.Message.Entities != null)
@@ -84,7 +101,7 @@ namespace Icogram.Telegram.BotHandler
                                     }
                                     catch (Exception e)
                                     {
-                                        _logger.Error(e.InnerException,
+                                        _logger.Error(e.StackTrace,
                                             $"{Errors.CommandErorr}: {Errors.ShowListCommandsError}");
                                     }
                                 }
@@ -102,7 +119,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException, $"{Errors.CommandErorr}: {Errors.ExecuteCommandError}");
+                                _logger.Error(e.StackTrace, $"{Errors.CommandErorr}: {Errors.ExecuteCommandError}");
                             }
                         }
                         if (update.Message.LeftChatMember != null)
@@ -114,7 +131,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddLeavedUserError}");
+                                _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddLeavedUserError}");
                             }
                         }
 
@@ -127,7 +144,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddNewUsersError}");
+                                _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddNewUsersError}");
                             }
                         }
                         if (update.Message.Entities != null &&
@@ -144,7 +161,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Message Handler");
+                _logger.Error(e.StackTrace, "Message Handler");
 
             }
         }
@@ -170,7 +187,7 @@ namespace Icogram.Telegram.BotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException, $"{Errors.CommandErorr}: {Errors.ShowListCommandsError}");
+                                _logger.Error(e.StackTrace, $"{Errors.CommandErorr}: {Errors.ShowListCommandsError}");
                             }
                         }
                     }
@@ -181,7 +198,7 @@ namespace Icogram.Telegram.BotHandler
             catch (Exception e)
             {
                 
-                _logger.Error(e.InnerException, "Can't handle UnApprovedChat");
+                _logger.Error(e.StackTrace, "Can't handle UnApprovedChat");
             }
         }
 
@@ -205,7 +222,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Get Approved Chat");
+                _logger.Error(e.StackTrace, "Get Approved Chat");
             }
             return null;
         }
@@ -238,7 +255,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Update chat fields");
+                _logger.Error(e.StackTrace, "Update chat fields");
             }
         }
 
@@ -251,7 +268,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Leave chat");
+                _logger.Error(e.StackTrace, "Leave chat");
             }
         }
 
@@ -266,7 +283,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Send message");
+                _logger.Error(e.StackTrace, "Send message");
             }
         }
 
@@ -286,12 +303,12 @@ namespace Icogram.Telegram.BotHandler
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddBannedUserError}");
+                    _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddBannedUserError}");
                 }
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Ban user");
+                _logger.Error(e.StackTrace, "Ban user");
             }
         }
 
@@ -306,7 +323,7 @@ namespace Icogram.Telegram.BotHandler
             }
             catch (Exception e)
             {
-                _logger.Error(e.InnerException, "Unban user");
+                _logger.Error(e.StackTrace, "Unban user");
             }
         }
     }

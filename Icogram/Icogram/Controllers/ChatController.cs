@@ -86,6 +86,7 @@ namespace Icogram.Controllers
             chat.CommandTimeOut = newChat.CommandTimeOut;
             chat.IsNeededToDeleteLeaveUserMessage = newChat.IsNeededToDeleteLeaveUserMessage;
             chat.IsNeededToDeleteNewUserMessage = newChat.IsNeededToDeleteNewUserMessage;
+            chat.IsNeededToDeleteAllMessages = newChat.IsNeededToDeleteAllMessages;
 
             await _chatCrudService.UpdateAsync(chat);
         }

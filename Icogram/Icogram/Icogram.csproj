@@ -337,7 +337,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Libs\Gentelella\css\custom.css" />
-    <Content Include="Libs\Gentelella\css\custom.min.css" />
     <Content Include="Libs\Gentelella\css\datatable.css" />
     <Content Include="Libs\Gentelella\images\back_disabled.png" />
     <Content Include="Libs\Gentelella\images\back_enabled.png" />

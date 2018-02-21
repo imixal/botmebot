@@ -65,7 +65,7 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
+                                _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
                             }
                         }
 
@@ -84,7 +84,7 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
+                            _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
                         }
                     }
                 }
@@ -114,7 +114,7 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e.InnerException, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
+                        _logger.Error(e.StackTrace, $"{Errors.StatisticErorr}: {Errors.AddCommandError}");
                     }
                 }
                 else

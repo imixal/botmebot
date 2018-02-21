@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201711120916421_TelegramFileId.Designer.cs">
       <DependentUpon>201711120916421_TelegramFileId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802051712213_deleted all messages.cs" />
+    <Compile Include="Migrations\201802051712213_deleted all messages.Designer.cs">
+      <DependentUpon>201802051712213_deleted all messages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -116,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711120916421_TelegramFileId.resx">
       <DependentUpon>201711120916421_TelegramFileId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051712213_deleted all messages.resx">
+      <DependentUpon>201802051712213_deleted all messages.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

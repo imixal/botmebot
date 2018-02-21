@@ -25,6 +25,8 @@ namespace Icogram.Models.ChatModels
 
         public bool IsNeededToDeleteNewUserMessage { get; set; }
 
+        public bool IsNeededToDeleteAllMessages { get; set; }
+
         public bool IsNeededToDeleteLeaveUserMessage { get; set; }
 
         public List<Command> Commands { get; set; }

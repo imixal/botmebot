@@ -26,7 +26,9 @@ namespace DataAccessLayer.Async
 
         public virtual void Update(T entity)
         {
-            DbContext.Entry(entity).State = EntityState.Modified;
+            DbContext.Set<T>().Attach(entity);
+            var entry = DbContext.Entry(entity);
+            entry.State = EntityState.Modified;
         }
 
         public virtual void Delete(T entity)

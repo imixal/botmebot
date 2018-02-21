@@ -70,6 +70,7 @@
                     CommandTimeOut: $row.find("input[Name=CommandTimeOut]").val(),
                     IsNeededToDeleteLeaveUserMessage: $row.find("input[Name=IsNeededToDeleteLeaveUserMessage]").is(':checked'),
                     IsNeededToDeleteNewUserMessage: $row.find("input[Name=IsNeededToDeleteNewUserMessage]").is(':checked'),
+                    IsNeededToDeleteAllMessages: $row.find("input[Name=IsNeededToDeleteAllMessages]").is(':checked'),
                 })
                 .done(function () {
                     location.reload();
@@ -131,6 +132,7 @@
                     }
                     <th class="column-title text-center">Delete New User Message</th>
                     <th class="column-title text-center">Delete Leave User Message</th>
+                    <th class="column-title text-center">Delete All Messages</th>
                     <th class="column-title text-center">Command Time out</th>
                     <th class="column-title text-center last">Actions</th>
                 </tr>
@@ -166,7 +168,17 @@
                                 <input type="checkbox" name="IsNeededToDeleteLeaveUserMessage" />
                             }
                         </td>
-                        <td width="11%"><input class="form-control" type="number" name="CommandTimeOut" min="0" value="@chat.value.CommandTimeOut" /></td>
+                        <td width="5%" class="text-center">
+                            @if (chat.value.IsNeededToDeleteAllMessages)
+                            {
+                                <input type="checkbox" name="IsNeededToDeleteAllMessages" checked="checked" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="IsNeededToDeleteAllMessages" />
+                            }
+                        </td>
+                        <td width="7%"><input class="form-control" type="number" name="CommandTimeOut" min="0" value="@chat.value.CommandTimeOut" /></td>
                         <td class="text-center" width="7%">
                             <a class="label label-md label-success" onclick="saveUpdates(this)"><span class="fa fa-save"></span></a>
                             @if (Model.UserProfileViewModel.Company.IsCustomMessageModuleActivated && Model.UserProfileViewModel.Company.End.HasValue)
