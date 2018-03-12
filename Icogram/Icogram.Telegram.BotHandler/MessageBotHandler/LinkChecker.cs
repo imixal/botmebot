@@ -35,17 +35,17 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
         }
 
 
-        public async Task MessageCheck(Update update, Chat chat, ITelegramBotClient telegramBotClient)
+        public async Task MessageCheck(Update update, Message message, Chat chat, ITelegramBotClient telegramBotClient)
         {
-            await LinkCheck(chat, update, telegramBotClient, update.Message.Text.ToLower(), update.Message.Entities);
+            await LinkCheck(chat, message, telegramBotClient, update.Message.Text.ToLower(), update.Message.Entities);
         }
 
         public async Task CaptionCheck(Update update, Chat chat, ITelegramBotClient telegramBotClient)
         {
-            await LinkCheck(chat, update, telegramBotClient, update.Message.Caption.ToLower(), update.Message.Entities);
+            await LinkCheck(chat, update.Message, telegramBotClient, update.Message.Caption.ToLower(), update.Message.Entities);
         }
 
-        private async Task LinkCheck(Chat chat, Update update, ITelegramBotClient telegramBotClient, string message, List<MessageEntity> messageEntities)
+        private async Task LinkCheck(Chat chat, Message tmessage, ITelegramBotClient telegramBotClient, string message, List<MessageEntity> messageEntities)
         {
             var whiteLinks = await _whiteLinkCrudService.GetAllAsync();
             var settings = await _antiSpamSettingsCrudService.GetAllAsync();
@@ -88,7 +88,7 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                         if (!isWhiteLink)
                         {
                             var chatMember =
-                                await telegramBotClient.GetChatMemberAsync(chat.TelegramChatId, update.Message.From.Id);
+                                await telegramBotClient.GetChatMemberAsync(chat.TelegramChatId, tmessage.From.Id);
                             if (chatMember.Status != ChatMemberStatus.Administrator && chatMember.Status != ChatMemberStatus.Creator)
                             {
                                 isNeedToDelete = true;
@@ -100,17 +100,17 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                     {
                         var users = await _suspiciousUserCrudService.GetAllAsync();
                         var user =
-                            users.FirstOrDefault(u => u.TelegramUserId == update.Message.From.Id && u.ChatId == chat.Id);
+                            users.FirstOrDefault(u => u.TelegramUserId == tmessage.From.Id && u.ChatId == chat.Id);
                         if (user == null)
                         {
                             user = new SuspiciousUser
                             {
-                                FirstName = update.Message.From.FirstName ?? "",
-                                LastName = update.Message.From.LastName ?? "",
-                                UserName = update.Message.From.Username ?? "",
+                                FirstName = tmessage.From.FirstName ?? "",
+                                LastName = tmessage.From.LastName ?? "",
+                                UserName = tmessage.From.Username ?? "",
                                 ChatId = chat.Id,
                                 NumberOfAttempts = 1,
-                                TelegramUserId = update.Message.From.Id
+                                TelegramUserId = tmessage.From.Id
                             };
 
                             await _suspiciousUserCrudService.CreateAsync(user);
@@ -123,7 +123,7 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                             await _suspiciousUserCrudService.UpdateAsync(oldUser);
                         }
 
-                        await telegramBotClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
+                        await telegramBotClient.DeleteMessageAsync(tmessage.Chat.Id, tmessage.MessageId);
                         try
                         {
                             await _statisticHandler.AddDeletedMessageAsync(chat.Id);
@@ -136,10 +136,10 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
                         if (!string.IsNullOrEmpty(setting.WarningMessage))
                         {
                             var mess = new StringBuilder(setting.WarningMessage);
-                            ParamsSetter.SetUserParams(ref mess, update.Message.From);
+                            ParamsSetter.SetUserParams(ref mess, tmessage.From);
                             mess.Replace("[NumberOfAttempts]", user.NumberOfAttempts.ToString());
                             await
-                                telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, mess.ToString());
+                                telegramBotClient.SendTextMessageAsync(tmessage.Chat.Id, mess.ToString());
                         }
 
                         if (setting.IsNeededToBanUser && setting.NumberOfAttempts <= user.NumberOfAttempts)

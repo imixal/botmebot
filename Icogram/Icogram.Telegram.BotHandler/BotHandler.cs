@@ -109,7 +109,7 @@ namespace Icogram.Telegram.BotHandler
                                 {
                                     if (!IsNullOrEmpty(update.Message.Text))
                                     {
-                                        await _linkChecker.MessageCheck(update, _chat, _telegramBotClient);
+                                        await _linkChecker.MessageCheck(update, update.Message, _chat, _telegramBotClient);
                                     }
                                 }
                             }
@@ -153,6 +153,14 @@ namespace Icogram.Telegram.BotHandler
                             if (!IsNullOrEmpty(update.Message.Caption))
                             {
                                 await _linkChecker.CaptionCheck(update, _chat, _telegramBotClient);
+                            }
+                        }
+
+                        if(update.EditedMessage != null)
+                        {
+                            if (!IsNullOrEmpty(update.EditedMessage.Text))
+                            {
+                                await _linkChecker.MessageCheck(update, update.EditedMessage, _chat, _telegramBotClient);
                             }
                         }
                     }
