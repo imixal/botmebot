@@ -37,7 +37,7 @@ namespace Icogram.Telegram.BotHandler.MessageBotHandler
 
         public async Task MessageCheck(Update update, Message message, Chat chat, ITelegramBotClient telegramBotClient)
         {
-            await LinkCheck(chat, message, telegramBotClient, update.Message.Text.ToLower(), update.Message.Entities);
+            await LinkCheck(chat, message, telegramBotClient, message.Text.ToLower(), message.Entities);
         }
 
         public async Task CaptionCheck(Update update, Chat chat, ITelegramBotClient telegramBotClient)

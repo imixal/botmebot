@@ -1,0 +1,6 @@
+2018-03-12 22:09:10.5200|ERROR|Icogram.Utility.NinjectDependencyResolver+<>c|   at Icogram.Telegram.BotHandler.MessageBotHandler.LinkChecker.<MessageCheck>d__6.MoveNext() in F:\Site\icogram\Icogram\Icogram.Telegram.BotHandler\MessageBotHandler\LinkChecker.cs:line 40
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at Icogram.Telegram.BotHandler.BotHandler.<MessageHandler>d__10.MoveNext() in F:\Site\icogram\Icogram\Icogram.Telegram.BotHandler\BotHandler.cs:line 164

@@ -31,11 +31,11 @@ namespace Icogram.Controllers
 
         public async Task<OkResult> Update([FromBody]Update update)
         {
-            if (update.Message == null) return Ok();
-            var chat = await _botHandler.GetApprovedChatAsync(update.Message.Chat.Id);
+            if (update.Message == null && update.EditedMessage == null) return Ok();
+            var chat = await _botHandler.GetApprovedChatAsync(update.Message?.Chat.Id ?? update.EditedMessage.Chat.Id);
             if (chat == null)
             {
-                chat = await _botHandler.GetUnApprovedChatAsync(update.Message.Chat.Id);
+                chat = await _botHandler.GetUnApprovedChatAsync(update.Message?.Chat.Id ?? update.EditedMessage.Chat.Id);
                 await _botHandler.UnApprovedChatHandler(update, chat);
                 return Ok();
             }

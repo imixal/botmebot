@@ -86,6 +86,10 @@
     <Compile Include="Migrations\201802051712213_deleted all messages.Designer.cs">
       <DependentUpon>201802051712213_deleted all messages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803201905484_AdminCommands.cs" />
+    <Compile Include="Migrations\201803201905484_AdminCommands.Designer.cs">
+      <DependentUpon>201803201905484_AdminCommands.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -123,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802051712213_deleted all messages.resx">
       <DependentUpon>201802051712213_deleted all messages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803201905484_AdminCommands.resx">
+      <DependentUpon>201803201905484_AdminCommands.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

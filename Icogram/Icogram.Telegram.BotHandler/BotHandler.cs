@@ -155,16 +155,14 @@ namespace Icogram.Telegram.BotHandler
                                 await _linkChecker.CaptionCheck(update, _chat, _telegramBotClient);
                             }
                         }
-
-                        if(update.EditedMessage != null)
-                        {
-                            if (!IsNullOrEmpty(update.EditedMessage.Text))
-                            {
-                                await _linkChecker.MessageCheck(update, update.EditedMessage, _chat, _telegramBotClient);
-                            }
-                        }
                     }
-
+                }
+                if (update.EditedMessage != null)
+                {
+                    if (!IsNullOrEmpty(update.EditedMessage.Text))
+                    {
+                        await _linkChecker.MessageCheck(update, update.EditedMessage, _chat, _telegramBotClient);
+                    }
                 }
             }
             catch (Exception e)

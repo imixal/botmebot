@@ -71,6 +71,8 @@
                     IsNeededToDeleteLeaveUserMessage: $row.find("input[Name=IsNeededToDeleteLeaveUserMessage]").is(':checked'),
                     IsNeededToDeleteNewUserMessage: $row.find("input[Name=IsNeededToDeleteNewUserMessage]").is(':checked'),
                     IsNeededToDeleteAllMessages: $row.find("input[Name=IsNeededToDeleteAllMessages]").is(':checked'),
+                    IsNeedToDeleteUserCommands: $row.find("input[Name=IsNeedToDeleteUserCommands]").is(':checked'),
+                    IsCommandForAdminOnly: $row.find("input[Name=IsCommandForAdminOnly]").is(':checked'),
                 })
                 .done(function () {
                     location.reload();
@@ -133,6 +135,8 @@
                     <th class="column-title text-center">Delete New User Message</th>
                     <th class="column-title text-center">Delete Leave User Message</th>
                     <th class="column-title text-center">Delete All Messages</th>
+                    <th class="column-title text-center">Delete User Commands</th>
+                    <th class="column-title text-center">Commands only for Admins</th>
                     <th class="column-title text-center">Command Time out</th>
                     <th class="column-title text-center last">Actions</th>
                 </tr>
@@ -142,8 +146,8 @@
                 {
                     <tr class="">
                         <td width="5%"><input class="hidden" name="icogramChatId" value="@chat.value.Id"/> @chat.j</td>
-                        <td width="15%"><input class="form-control" disabled="disabled" type="text" name="Title" value="@chat.value.Title"/></td>
-                        <td width="15%"><input class="form-control" disabled="disabled" type="text" name="Type" value="@chat.value.Type"/></td>
+                        <td width="10%"><input class="form-control" disabled="disabled" type="text" name="Title" value="@chat.value.Title"/></td>
+                        <td width="10%"><input class="form-control" disabled="disabled" type="text" name="Type" value="@chat.value.Type"/></td>
                         @if (Model.UserProfileViewModel.Company.IsWelcomeMessageModuleActivated)
                         {
                             <td width="15%"><textarea class="form-control" type="text" name="WelcomeUserMessage" placeholder="Welcome Message">@chat.value.WelcomeUserMessage</textarea></td>
@@ -176,6 +180,26 @@
                             else
                             {
                                 <input type="checkbox" name="IsNeededToDeleteAllMessages" />
+                            }
+                        </td>
+                        <td width="5%" class="text-center">
+                            @if (chat.value.IsNeedToDeleteUserCommands)
+                            {
+                                <input type="checkbox" name="IsNeedToDeleteUserCommands" checked="checked" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="IsNeedToDeleteUserCommands" />
+                            }
+                        </td>
+                        <td width="5%" class="text-center">
+                            @if (chat.value.IsCommandForAdminOnly)
+                            {
+                                <input type="checkbox" name="IsCommandForAdminOnly" checked="checked" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="IsCommandForAdminOnly" />
                             }
                         </td>
                         <td width="7%"><input class="form-control" type="number" name="CommandTimeOut" min="0" value="@chat.value.CommandTimeOut" /></td>

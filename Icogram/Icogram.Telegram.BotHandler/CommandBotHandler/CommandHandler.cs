@@ -11,6 +11,7 @@ using NLog;
 using Service;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Chat = Icogram.Models.ChatModels.Chat;
 
 namespace Icogram.Telegram.BotHandler.CommandBotHandler
@@ -36,6 +37,18 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
 
         public async Task ExecuteCommandAsync(Update update, Chat chat)
         {
+            var chatMember = await _telegramBotClient.GetChatMemberAsync(chat.TelegramChatId, update.Message.From.Id);
+            if (chat.IsNeedToDeleteUserCommands && chatMember != null && chatMember.Status != ChatMemberStatus.Administrator && chatMember.Status != ChatMemberStatus.Creator)
+            {
+                await _telegramBotClient.DeleteMessageAsync(chat.TelegramChatId, update.Message.MessageId);
+                await _statisticHandler.AddDeletedMessageAsync(chat.Id);
+
+                return;
+            }
+            if (chat.IsCommandForAdminOnly && chatMember != null && chatMember.Status != ChatMemberStatus.Administrator && chatMember.Status != ChatMemberStatus.Creator)
+            {
+                return;
+            }
             var command =
                 chat.Commands.FirstOrDefault(
                     c =>
@@ -93,6 +106,18 @@ namespace Icogram.Telegram.BotHandler.CommandBotHandler
 
         public async Task ShowListCommandsAsync(Update update, Chat chat)
         {
+            var chatMember = await _telegramBotClient.GetChatMemberAsync(chat.TelegramChatId, update.Message.From.Id);
+            if (chat.IsNeedToDeleteUserCommands && chatMember != null && chatMember.Status != ChatMemberStatus.Administrator && chatMember.Status != ChatMemberStatus.Creator)
+            {
+                await _telegramBotClient.DeleteMessageAsync(chat.TelegramChatId, update.Message.MessageId);
+                await _statisticHandler.AddDeletedMessageAsync(chat.Id);
+
+                return;
+            }
+            if (chat.IsCommandForAdminOnly && chatMember != null && chatMember.Status != ChatMemberStatus.Administrator && chatMember.Status != ChatMemberStatus.Creator)
+            {
+                return;
+            }
             var check = Checker.AccessCheck(GlobalEnums.ModuleType.CommandModule, chat);
             if (update.Message.Text.Trim() == $"/commands@{IcogramBotSettings.Name}" || update.Message.Text.Trim() == "/commands")
             {
